@@ -302,17 +302,17 @@ input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(45
   <!-- KPI ROW -->
   <div class="kpi-row">
     <div class="kpi">
-      <div class="kpi-label">Deals</div>
+      <div class="kpi-label">Pendientes</div>
       <div class="kpi-value" id="kpiTotal">—</div>
       <div class="kpi-sub" id="kpiSubTotal">pendientes</div>
     </div>
     <div class="kpi won">
-      <div class="kpi-label">Won</div>
+      <div class="kpi-label">Resueltos</div>
       <div class="kpi-value" id="kpiDone">—</div>
       <div class="kpi-sub" id="kpiSubDone">completados</div>
     </div>
     <div class="kpi lost">
-      <div class="kpi-label">Lost</div>
+      <div class="kpi-label">Urgentes</div>
       <div class="kpi-value" id="kpiUrgent">—</div>
       <div class="kpi-sub" id="kpiSubUrgent">urgentes</div>
     </div>
@@ -383,6 +383,12 @@ input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(45
   <div class="modal-body">
     <div id="tmSummary" class="modal-summary">Cargando contexto preliminar...</div>
     <div id="tmSnippet" class="modal-snippet"></div>
+  </div>
+  <div id="tmWriteback" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding-top:16px;margin-top:4px;border-top:1px solid var(--border)">
+    <label style="font-size:11px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:1px">Prioridad</label>
+    <select id="tmPrio" style="min-width:110px"><option value="Alta">Alta</option><option value="Media">Media</option><option value="Baja">Baja</option></select>
+    <div style="flex:1"></div>
+    <button class="btn-new" id="tmDone" style="background:var(--navy)">✓ Marcar Atendido</button>
   </div>
   <div style="display:flex;justify-content:flex-end;gap:12px;margin-top:8px">
     <button class="btn-ghost" onclick="closeTaskModal()">Cerrar</button>
@@ -866,24 +872,35 @@ async function draftAI(){
 
 function hideDraft(){document.getElementById('draftBox').style.display='none';}
 
-/* ACTIONS */
-async 
 /* TASK MODAL LOGIC */
 function openTaskModal(idx){
   var r=ITEMS[idx];
   document.getElementById('taskModalOverlay').classList.add('show');
   document.getElementById('taskModal').classList.add('show');
   document.getElementById('tmTitle').textContent=r[0]||'Sin título';
-  
+
   var tags='<span class="tag">'+tipoIcon(r[1])+' '+esc(r[1])+'</span>';
   if(r[3])tags+='<span class="tag" style="background:rgba(255,107,107,0.1);color:var(--red);border-color:rgba(255,107,107,0.3)">'+esc(r[3])+'</span>';
   if(r[4])tags+='<span class="tag">'+esc(String(r[4]).slice(0,10))+'</span>';
   document.getElementById('tmTags').innerHTML=tags;
-  
+
   var sumEl=document.getElementById('tmSummary');
   var snipEl=document.getElementById('tmSnippet');
   var btn=document.getElementById('tmAction');
-  
+
+  var done=norm(r[2])==='atendido'||norm(r[2])==='completado';
+  var wb=document.getElementById('tmWriteback');
+  var prioSel=document.getElementById('tmPrio');
+  var doneBtn=document.getElementById('tmDone');
+  if(done){
+    wb.style.display='none';
+  }else{
+    wb.style.display='flex';
+    prioSel.value=(norm(r[3])==='alta')?'Alta':(norm(r[3])==='baja')?'Baja':'Media';
+    prioSel.onchange=function(){setPrio(idx,prioSel.value);};
+    doneBtn.onclick=function(){markDone(idx);closeTaskModal();};
+  }
+
   sumEl.innerHTML='⏳ Analizando información...';
   snipEl.textContent='';
   
