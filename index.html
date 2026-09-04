@@ -202,8 +202,9 @@ input:focus,select:focus{border-color:var(--lime)}
   <!-- HEADER WORKSPACE -->
   <div class="hdr">
     <div style="display:flex;flex-direction:column;gap:6px">
-      <div class="hdr-badge">WORKSPACE</div>
+      <div class="hdr-badge">WORKSPACE <span id="hdrDate" style="color:var(--text-3);margin-left:12px;font-weight:600;letter-spacing:1px"></span></div>
       <div class="hdr-greet" id="greet">Buenas tardes, Pedro</div>
+      <div class="hdr-sub" id="hdrSub" style="font-size:12px;color:var(--text-3);margin-top:2px">Cargando…</div>
     </div>
     <button class="btn-new" onclick="showView('delegar')">+ Nueva Tarea</button>
   </div>
