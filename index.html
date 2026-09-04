@@ -46,6 +46,12 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--blue);outline-offse
 .hdr-btn:hover{background:var(--warm)}
 .hdr-btn.primary{background:var(--blue);color:var(--white);border-color:var(--blue)}
 .hdr-btn.primary:hover{background:var(--blue-dark)}
+.quick-add{display:flex;gap:6px;margin-top:10px}
+.quick-add input{
+  flex:1;padding:8px 10px;border:1px solid var(--border);border-radius:4px;
+  font-size:13px;font-family:inherit;color:var(--ink);background:var(--white);
+}
+.quick-add input:focus{outline:none;border-color:var(--blue)}
 
 /* === STRIP CALENDAR (7 días) === */
 .cal-strip{
@@ -87,6 +93,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--blue);outline-offse
 .item-card:hover{box-shadow:var(--shadow-deep)}
 .item-card.ahora{border-left:3px solid var(--red)}
 .item-card.hoy{border-left:3px solid var(--orange)}
+.item-card.sinprioridad{border-left:3px solid var(--muted)}
 .item-card.semana{border-left:3px solid var(--teal)}
 .item-card.done{opacity:.35}
 .item-body{flex:1;min-width:0}
@@ -184,6 +191,10 @@ footer{text-align:center;padding:16px;color:var(--muted);font-size:11px;border-t
   <div class="hdr-actions">
     <button class="hdr-btn" onclick="load()">⟳ Actualizar</button>
   </div>
+  <div class="quick-add">
+    <input id="qaInput" type="text" placeholder="+ Agregar tarea rápida…" onkeydown="if(event.key==='Enter')quickAdd()">
+    <button class="hdr-btn primary" onclick="quickAdd()">Agregar</button>
+  </div>
 </div>
 
 <!-- Calendar strip -->
@@ -208,15 +219,32 @@ var ITEMS=[];
 
 function esc(s){return(s||'').replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]});}
 function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2200);}
-function diasDesde(f){if(!f)return null;try{var d=new Date(f);if(isNaN(d))return null;return Math.max(0,Math.floor((Date.now()-d)/86400000));}catch(e){return null;}}
-function diasHasta(f){if(!f)return null;try{var d=new Date(f);if(isNaN(d))return null;return Math.ceil((d-Date.now())/86400000);}catch(e){return null;}}
-function esHoy(f){if(!f)return false;var t=new Date();var d=new Date(f);return t.toDateString()===d.toDateString();}
-function fechaStr(f){if(!f)return'';try{return new Date(f).toLocaleDateString('es-CL',{weekday:'short',day:'numeric',month:'short'});}catch(e){return f.slice(0,10);}}
-function tipoIcon(t){t=(t||'').toLowerCase();return t==='correo'?'✉':t==='caso'?'🗂':t==='evento'?'📅':t==='tarea'?'✅':'📄';}
-function tipoColor(t){t=(t||'').toLowerCase();return t==='correo'?'blue':t==='caso'?'teal':t==='evento'?'purple':'gray';}
-function prioColor(n){n=(n||'').toLowerCase();return n==='alta'?'red':n==='media'?'orange':'teal';}
-function estColor(s){s=(s||'').toLowerCase();return s==='en seguimiento'||s==='en curso'?'green':s==='nuevo'?'blue':s==='atendido'?'gray':'blue';}
-function prioOrd(n){n=(n||'').toLowerCase();return n==='alta'?0:n==='media'?1:n==='baja'?2:3;}
+// Parser tolerante: normaliza "YYYY-MM-DD HH:MM[:SS]" a ISO con 'T' — Safari/iOS
+// no interpreta el formato con espacio y devuelve Invalid Date silenciosamente.
+function parseFecha(f){
+  if(!f)return null;
+  var s=String(f).trim();
+  // Captura fecha+hora hasta segundos, y preserva 'Z'/offset si existía (ej.
+  // toISOString() del backend) — descartar la 'Z' reinterpretaría un UTC como
+  // hora local y desplazaría la fecha varias horas (bug real: quickAdd).
+  var m=s.match(/^(\d{4}-\d{2}-\d{2})[ T](\d{2}:\d{2}(?::\d{2})?)(?:\.\d+)?(Z|[+-]\d{2}:?\d{2})?/);
+  if(m)s=m[1]+'T'+m[2]+(m[3]||'');
+  else if(/^\d{4}-\d{2}-\d{2}$/.test(s))s=s+'T00:00:00';
+  var d=new Date(s);
+  return isNaN(d)?null:d;
+}
+function diasDesde(f){var d=parseFecha(f);if(!d)return null;return Math.max(0,Math.floor((Date.now()-d)/86400000));}
+function diasHasta(f){var d=parseFecha(f);if(!d)return null;return Math.ceil((d-Date.now())/86400000);}
+function esHoy(f){var d=parseFecha(f);if(!d)return false;return new Date().toDateString()===d.toDateString();}
+function fechaStr(f){var d=parseFecha(f);if(!d)return String(f||'').slice(0,10);return d.toLocaleDateString('es-CL',{weekday:'short',day:'numeric',month:'short'});}
+// Normaliza para comparar: recorta espacios accidentales (edición manual del
+// Sheet) y pasa a minúsculas — el mismo tipo de dato sucio que motivó parseFecha.
+function norm(s){return(s||'').toString().trim().toLowerCase();}
+function tipoIcon(t){t=norm(t);return t==='correo'?'✉':t==='caso'?'🗂':t==='evento'?'📅':t==='tarea'?'✅':'📄';}
+function tipoColor(t){t=norm(t);return t==='correo'?'blue':t==='caso'?'teal':t==='evento'?'purple':'gray';}
+function prioColor(n){n=norm(n);return n==='alta'?'red':n==='media'?'orange':'teal';}
+function estColor(s){s=norm(s);return s==='en seguimiento'||s==='en curso'?'green':s==='nuevo'?'blue':s==='atendido'?'gray':'blue';}
+function prioOrd(n){n=norm(n);return n==='alta'?0:n==='media'?1:n==='baja'?2:3;}
 
 async function api(p){try{var r=await fetch(API+'?'+new URLSearchParams(p).toString());return await r.json();}catch(e){return{ok:false,error:String(e)};}}
 
@@ -235,25 +263,31 @@ function getGreeting(){
 }
 
 function urgency(r){
-  // Returns: 'ahora' | 'hoy' | 'semana' | 'despues' | 'done'
-  var est=(r[2]||'').toLowerCase();
+  // Returns: 'ahora' | 'hoy' | 'sinprioridad' | 'semana' | 'done'
+  var est=norm(r[2]);
   if(est==='atendido'||est==='completado')return'done';
-  var pri=(r[3]||'').toLowerCase();
-  var vence=r[5]||r[4];
+  var pri=norm(r[3]);
+  var prioridadValida=(pri==='alta'||pri==='media'||pri==='baja');
+  // OJO: Vence es un vencimiento real; Fecha es cuándo el ítem entró al sistema.
+  // Nunca usar Fecha como respaldo de Vence aquí — eso fue el bug original
+  // (fecha de registro de un Caso interpretada como si ya hubiera vencido).
+  var vence=r[5];
   var dh=vence?diasHasta(vence):null;
   var di=r[4]?diasDesde(r[4]):null;
   if(pri==='alta')return'ahora';
-  if(dh!==null&&dh<=0)return'ahora'; // vencido
-  if(dh!==null&&dh<=1)return'ahora'; // vence hoy/mañana
+  if(dh!==null&&dh<=1)return'ahora'; // ya venció, vence hoy o mañana
   if(pri==='media')return'hoy';
   if(dh!==null&&dh<=3)return'hoy';
-  if(di!==null&&di>30&&(r[1]||'').toLowerCase()==='caso')return'hoy'; // inactivo
+  if(di!==null&&di>30&&norm(r[1])==='caso')return'hoy'; // inactivo
+  // Nunca se le asignó una prioridad real (ej. import con placeholder) y no hay
+  // fecha que lo ordene — no lo escondemos en "semana", se marca para triage.
+  if(!prioridadValida&&dh===null)return'sinprioridad';
   return'semana';
 }
 
 function render(){
   // Greeting
-  var active=ITEMS.filter(function(r){var e=(r[2]||'').toLowerCase();return e!=='atendido'&&e!=='completado';});
+  var active=ITEMS.filter(function(r){var e=norm(r[2]);return e!=='atendido'&&e!=='completado';});
   var urgentes=active.filter(function(r){return urgency(r)==='ahora';});
   var hoy=active.filter(function(r){return urgency(r)==='hoy';});
 
@@ -297,10 +331,10 @@ function renderCalStrip(){
 function renderQueue(){
   var el=document.getElementById('actionQueue');
   // Group by urgency
-  var groups={ahora:[],hoy:[],semana:[]};
+  var groups={ahora:[],hoy:[],sinprioridad:[],semana:[]};
   ITEMS.forEach(function(r){
     var u=urgency(r);
-    if(u==='done'||u==='despues')return;
+    if(u==='done')return;
     groups[u].push(r);
   });
   // Sort within groups by priority
@@ -312,6 +346,7 @@ function renderQueue(){
   var sections=[
     {key:'ahora',label:'Hacer ahora',dot:'dot-red'},
     {key:'hoy',label:'Para hoy',dot:'dot-orange'},
+    {key:'sinprioridad',label:'Sin priorizar',dot:'dot-muted'},
     {key:'semana',label:'Esta semana',dot:'dot-teal'}
   ];
 
@@ -336,7 +371,7 @@ function renderQueue(){
 
 function itemCard(r,urg){
   var idx=ITEMS.indexOf(r);
-  var done=(r[2]||'').toLowerCase()==='atendido'||(r[2]||'').toLowerCase()==='completado';
+  var done=norm(r[2])==='atendido'||norm(r[2])==='completado';
   var fecha=r[4];if(fecha&&fecha.length>10)fecha=fecha.slice(0,10);
   var vence=r[5];if(vence&&vence.length>10)vence=vence.slice(0,10);
   var di=r[4]?diasDesde(r[4]):null;
@@ -355,9 +390,12 @@ function itemCard(r,urg){
   if(ctx)h+='<div class="item-detail">'+ctx+'</div>';
 
   // Meta pills
+  var priVal=norm(r[3]);
+  var prioridadValida=(priVal==='alta'||priVal==='media'||priVal==='baja');
   h+='<div class="item-meta">';
   h+='<span class="pill pill-'+tipoColor(r[1])+'">'+tipoIcon(r[1])+' '+esc(r[1])+'</span>';
-  h+='<span class="pill pill-'+prioColor(r[3])+'">'+esc(r[3])+'</span>';
+  if(prioridadValida)h+='<span class="pill pill-'+prioColor(r[3])+'">'+esc(r[3])+'</span>';
+  else if(!done&&urg==='sinprioridad')h+='<span class="pill pill-gray">⚑ sin prioridad</span>';
   h+='<span class="pill pill-'+estColor(r[2])+'">'+esc(r[2])+'</span>';
   if(fecha)h+='<span class="item-date">📅 '+fechaStr(fecha)+'</span>';
   if(vence){
@@ -366,7 +404,7 @@ function itemCard(r,urg){
     else if(dh!==null&&dh<=1)vLabel+=' ⚠ vence pronto';
     h+='<span class="item-date">'+vLabel+'</span>';
   }
-  if(di!==null&&di>30&&(r[1]||'').toLowerCase()==='caso')
+  if(di!==null&&di>30&&norm(r[1])==='caso')
     h+='<span class="pill pill-purple">⚠ sin actividad '+di+'d</span>';
   h+='</div></div>';
 
@@ -376,9 +414,9 @@ function itemCard(r,urg){
     h+='<span class="pill pill-gray">✓</span>';
   }else{
     h+='<div class="act-sm"><select onchange="setPrio('+idx+',this.value)">';
-    h+='<option value="Alta"'+((r[3]||'').toLowerCase()==='alta'?' selected':'')+'>Alta</option>';
-    h+='<option value="Media"'+((r[3]||'').toLowerCase()==='media'?' selected':'')+'>Media</option>';
-    h+='<option value="Baja"'+((r[3]||'').toLowerCase()==='baja'?' selected':'')+'>Baja</option>';
+    h+='<option value="Alta"'+(priVal==='alta'?' selected':'')+'>Alta</option>';
+    h+='<option value="Media"'+(priVal==='media'?' selected':'')+'>Media</option>';
+    h+='<option value="Baja"'+(priVal==='baja'?' selected':'')+'>Baja</option>';
     h+='</select></div>';
     h+='<button class="act-sm green" onclick="markDone('+idx+')">✓ Listo</button>';
   }
@@ -390,9 +428,9 @@ function renderDelegate(){
   var el=document.getElementById('delegateSection');
   // Find items that could be delegated (correos clasificados, informativos, etc.)
   var delegable=ITEMS.filter(function(r){
-    var t=(r[1]||'').toLowerCase();
-    var p=(r[3]||'').toLowerCase();
-    var e=(r[2]||'').toLowerCase();
+    var t=norm(r[1]);
+    var p=norm(r[3]);
+    var e=norm(r[2]);
     if(e==='atendido'||e==='completado')return false;
     if(t==='correo'&&p==='baja')return true;
     if(t==='evento')return true;
@@ -419,13 +457,27 @@ function renderDelegate(){
 
 async function setPrio(idx,val){
   var row=idx+2;
-  await api({action:'update',sheet:'Base',row:row,col:'D',value:val});
+  var r=ITEMS[idx];
+  var res=await api({action:'update',sheet:'Base',row:row,col:'D',value:val,expect:r[3]||'',expectNombre:r[0]||''});
+  if(!res.ok){toast('⚠ '+(res.error==='stale'||res.error==='fila movida'?'Alguien más lo modificó — recargando':(res.error||'Error al guardar')));load();return;}
   toast('Prioridad → '+val);load();
 }
 async function markDone(idx){
   var row=idx+2;
-  await api({action:'update',sheet:'Base',row:row,col:'C',value:'Atendido'});
+  var r=ITEMS[idx];
+  var res=await api({action:'update',sheet:'Base',row:row,col:'C',value:'Atendido',expect:r[2]||'',expectNombre:r[0]||''});
+  if(!res.ok){toast('⚠ '+(res.error==='stale'||res.error==='fila movida'?'Alguien más lo modificó — recargando':(res.error||'Error al guardar')));load();return;}
   toast('✓ Completado');load();
+}
+async function quickAdd(){
+  var inp=document.getElementById('qaInput');
+  var val=(inp.value||'').trim();
+  if(!val)return;
+  inp.disabled=true;
+  var res=await api({action:'append',sheet:'Base',nombre:val,tipo:'Tarea'});
+  inp.disabled=false;
+  if(res.ok){inp.value='';toast('✓ Tarea agregada');load();}
+  else{toast('⚠ '+(res.error||'Error al agregar'));}
 }
 
 load();
