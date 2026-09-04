@@ -445,7 +445,7 @@ function showView(v){
 }
 
 /* DATE */
-function parseFecha(f){if(!f)return null;var s=String(f).trim();var m=s.match(/^(\d{4}-\d{2}-\d{2})[ T](\d{2}:\d{2}(?::\d{2})?)/);if(m)s=m[1]+'T'+m[2];else if(/^\d{4}-\d{2}-\d{2}$/.test(s))s=s+'T00:00:00';var d=new Date(s);return isNaN(d)?null:d;}
+function parseFecha(f){if(!f)return null;var s=String(f).trim();if(/^\d{4}-\d{2}-\d{2}$/.test(s)){s=s+'T00:00:00';}else if(/^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}/.test(s)&&!/[zZ]|[+-]\d{2}:?\d{2}$/.test(s)){s=s.replace(' ','T');}var d=new Date(s);return isNaN(d)?null:d;}
 function diasDesde(f){var d=parseFecha(f);if(!d)return null;return Math.max(0,Math.floor((Date.now()-d)/86400000));}
 function diasHasta(f){var d=parseFecha(f);if(!d)return null;return Math.ceil((d-Date.now())/86400000);}
 function norm(s){return(s||'').toString().trim().toLowerCase();}
@@ -779,9 +779,10 @@ var TRAZA_LIMIT=12;
 
 function fmtFechaHora(f){var d=parseFecha(f);if(!d)return'—';return d.toLocaleDateString('es-CL',{day:'2-digit',month:'short'})+' '+d.toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'});}
 function horasDesde(f){var d=parseFecha(f);if(!d)return null;return(Date.now()-d.getTime())/3600000;}
+function relTime(f){var h=horasDesde(f);if(h===null)return null;if(h<1)return'hace '+Math.max(1,Math.round(h*60))+' min';if(h<24)return'hace '+Math.round(h)+'h';return'hace '+Math.round(h/24)+'d';}
 
-function trazaNode(icon,title,sub,color){
-  return '<div class="traza-node"><div class="traza-node-icon" style="color:'+(color||'var(--navy)')+'">'+icon+'</div><div class="traza-node-body"><div class="traza-node-title">'+esc(String(title||'—'))+'</div>'+(sub?'<div class="traza-node-sub">'+esc(String(sub))+'</div>':'')+'</div></div>';
+function trazaNode(icon,title,sub,color,tooltip){
+  return '<div class="traza-node"'+(tooltip?' title="'+esc(String(tooltip))+'"':'')+'><div class="traza-node-icon" style="color:'+(color||'var(--navy)')+'">'+icon+'</div><div class="traza-node-body"><div class="traza-node-title">'+esc(String(title||'—'))+'</div>'+(sub?'<div class="traza-node-sub">'+esc(String(sub))+'</div>':'')+'</div></div>';
 }
 function trazaCard(nodes,activo,statusLabel,onclick){
   var h='<div class="traza-card laser-card"'+(onclick?' style="cursor:pointer" onclick="'+onclick+'"':'')+'>';
@@ -841,7 +842,7 @@ function paintTrazabilidad(){
       var nodes=[
         trazaNode(tipoIcon(r[1]),String(r[0]||'—').slice(0,42),(r[7]||'—')+' · '+fmtFechaHora(r[4]),'var(--navy)'),
         trazaNode('⚙',r[6]||'Sin categoría',r[3]||'Sin prioridad',prioColor),
-        trazaNode(activo?'●':'✓',estado,r[5]?('vence '+String(r[5]).slice(0,10)):'',activo?'var(--accent)':'var(--text-3)')
+        trazaNode(activo?'●':'✓',estado,relTime(r[9])?('cambiado '+relTime(r[9])):(r[5]?('vence '+String(r[5]).slice(0,10)):'sin registro de cambio'),activo?'var(--accent)':'var(--text-3)',r[9]?('Última modificación: '+fmtFechaHora(r[9])):null)
       ];
       h+=trazaCard(nodes,activo,activo?'Activo':'Cerrado','openTaskModal('+idx+')');
     });
