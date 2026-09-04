@@ -44,7 +44,7 @@ a:hover{text-decoration:underline}
 ::-webkit-scrollbar-thumb:hover{background:var(--text-3)}
 
 /* ===== SIDEBAR ===== */
-.sidebar{position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;background:var(--bg-elev);border-right:1px solid var(--border);z-index:100;display:flex;flex-direction:column;align-items:stretch;box-shadow:var(--shadow-sm)}
+.sidebar{position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;background:var(--bg-elev);border-right:1px solid var(--border);z-index:100;display:flex;flex-direction:column;align-items:stretch;box-shadow:var(--shadow-sm);transform:translateX(-100%);transition:transform .3s cubic-bezier(0.16,1,0.3,1)}
 .sidebar-brand{height:60px;width:100%;display:flex;align-items:center;justify-content:flex-start;padding-left:24px;border-bottom:1px solid var(--border);font-size:16px;font-weight:800;letter-spacing:-.5px;gap:8px;color:var(--navy)}
 .sidebar-nav{flex:1;padding:20px 16px;display:flex;flex-direction:column;gap:6px;overflow-y:auto}
 .nav-item{width:100%;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:flex-start;padding-left:14px;background:none;border:none;color:var(--text-2);font-size:14px;font-weight:600;cursor:pointer;transition:all .2s ease;position:relative;gap:12px}
@@ -52,17 +52,19 @@ a:hover{text-decoration:underline}
 .nav-item.active{background:var(--navy);color:#FFFFFF;box-shadow:0 8px 20px rgba(26,36,86,0.15)}
 .nav-item .icon{font-size:18px;width:24px;text-align:center}
 .nav-item .tip{display:none}
+.sidebar.open{transform:translateX(0)}
 .nav-sep{height:1px;background:var(--border);margin:10px 12px}
 .sidebar-footer{padding:20px;border-top:1px solid var(--border);display:flex;align-items:center;gap:12px}
 .avatar{width:40px;height:40px;border-radius:50%;background:var(--accent-light);color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;flex-shrink:0}
 .user-info{display:flex;flex-direction:column;min-width:0}
 .user-name{font-size:13px;font-weight:800;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .user-role{font-size:11px;color:var(--text-3);margin-top:2px}
-.hamburger{display:none;position:fixed;top:14px;left:14px;z-index:200;width:44px;height:44px;background:var(--bg-elev);border:1px solid var(--border);border-radius:12px;color:var(--navy);font-size:20px;cursor:pointer;align-items:center;justify-content:center;box-shadow:var(--shadow-sm)}
+.hamburger{display:flex;position:fixed;top:16px;left:16px;z-index:200;width:44px;height:44px;background:var(--bg-elev);border:1px solid var(--border-strong);border-radius:12px;color:var(--navy);font-size:20px;cursor:pointer;align-items:center;justify-content:center;box-shadow:var(--shadow-sm);transition:all .2s}
+.hamburger:hover{background:var(--bg-hover);transform:translateY(-1px)}
 .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(26,36,86,.4);backdrop-filter:blur(4px);z-index:90}
 
 /* ===== MAIN ===== */
-.main{margin-left:var(--sidebar-w);padding:0 36px 60px;position:relative;z-index:1;max-width:1400px;width:calc(100% - var(--sidebar-w))}
+.main{margin:0 auto;padding:80px 36px 60px;position:relative;z-index:1;max-width:1400px;width:100%}
 
 /* ===== HEADER WORKSPACE ===== */
 .hdr{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:32px;padding-top:36px}
@@ -220,6 +222,20 @@ a:hover{text-decoration:underline}
 .draft-box{background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:18px;font-size:13px;color:var(--text-2);line-height:1.7;max-height:260px;overflow-y:auto;white-space:pre-wrap;margin-top:12px;display:none}
 .draft-box.show{display:block}
 
+
+/* ===== TASK MODAL ===== */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(26,36,86,.6);backdrop-filter:blur(6px);z-index:400;opacity:0;transition:opacity .3s}
+.modal-overlay.show{display:block;opacity:1}
+.modal{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-45%);width:90%;max-width:640px;background:var(--bg-elev);border:1px solid var(--border-strong);border-radius:24px;z-index:401;box-shadow:var(--shadow-lg);padding:32px;flex-direction:column;gap:16px;opacity:0;transition:all .3s cubic-bezier(0.16,1,0.3,1)}
+.modal.show{display:flex;transform:translate(-50%,-50%);opacity:1}
+.modal-close{position:absolute;top:20px;right:20px;width:32px;height:32px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-3);font-weight:bold;border:1px solid var(--border)}
+.modal-close:hover{background:var(--bg-hover);color:var(--navy)}
+.modal-title{font-size:22px;font-weight:900;color:var(--navy);padding-right:32px;line-height:1.3;letter-spacing:-.5px}
+.modal-tags{display:flex;gap:8px;flex-wrap:wrap}
+.modal-body{background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:20px;max-height:50vh;overflow-y:auto}
+.modal-summary{font-size:13px;color:var(--navy);line-height:1.6;font-weight:500;padding-bottom:16px;border-bottom:1px solid var(--border);margin-bottom:16px}
+.modal-snippet{font-size:12px;color:var(--text-2);line-height:1.6;white-space:pre-wrap;font-style:italic}
+
 /* ===== TOAST ===== */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--navy);backdrop-filter:blur(20px);border:none;border-radius:14px;padding:14px 24px;font-size:13px;font-weight:600;color:#FFFFFF;z-index:300;transition:transform .4s cubic-bezier(0.16,1,0.3,1);white-space:nowrap;box-shadow:0 16px 40px rgba(26,36,86,0.3)}
 .toast.show{transform:translateX(-50%) translateY(0)}
@@ -357,6 +373,22 @@ input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(45
   </div>
 </div>
 
+
+<!-- TASK MODAL -->
+<div class="modal-overlay" id="taskModalOverlay" onclick="closeTaskModal()"></div>
+<div class="modal" id="taskModal">
+  <div class="modal-close" onclick="closeTaskModal()">✕</div>
+  <div class="modal-title" id="tmTitle">Título de la tarea</div>
+  <div class="modal-tags" id="tmTags"></div>
+  <div class="modal-body">
+    <div id="tmSummary" class="modal-summary">Cargando contexto preliminar...</div>
+    <div id="tmSnippet" class="modal-snippet"></div>
+  </div>
+  <div style="display:flex;justify-content:flex-end;gap:12px;margin-top:8px">
+    <button class="btn-ghost" onclick="closeTaskModal()">Cerrar</button>
+    <button class="btn-new" id="tmAction" style="display:none">Ir a Acción</button>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -509,7 +541,7 @@ function itemCard(r,urg,hot){
   var idx=ITEMS.indexOf(r);var done=norm(r[2])==='atendido'||norm(r[2])==='completado';
   var cls='task-card laser-card '+(done?'done ':'')+(hot?'hot ':'');
   var ls=leadScore(r);
-  var h='<div class="'+cls+'" data-idx="'+idx+'">';h+='<div class="task-icon">'+tipoIcon(r[1])+'</div>';
+  var h='<div class="'+cls+'" data-idx="'+idx+'" onclick="openTaskModal('+idx+')">';h+='<div class="task-icon">'+tipoIcon(r[1])+'</div>';
   h+='<div class="task-title">'+esc(r[0])+'</div>';
   var ctx='';if(r[8])ctx=esc(r[8]);else if(r[6])ctx=esc(r[6]);
   if(ctx)h+='<div class="task-meta">'+ctx+'</div>';
@@ -522,7 +554,7 @@ function itemCard(r,urg,hot){
   if(r[4])h+='<span class="tag">'+esc(String(r[4]).slice(0,10))+'</span>';
   h+='</div>';
   if(norm(r[1])==='caso'){
-    h+='<a class="task-link" href="#" onclick="openDrive(event)">📂 Abrir en Drive</a>';
+    h+='<a class="task-link" href="#" onclick="event.stopPropagation();openDrive(event)">📂 Abrir en Drive</a>';
   }
   h+='</div>';return h;
 }
@@ -565,8 +597,9 @@ function renderCorreos(){
   h+='</div></div>';el.innerHTML=h;
 }
 function leadCard(r){
+  var idx=ITEMS.indexOf(r);
   var ls=leadScore(r);
-  var h='<div class="lead-card laser-card">';
+  var h='<div class="lead-card laser-card" onclick="openTaskModal('+idx+')">';
   h+='<div class="lead-head"><div class="lead-avatar"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></div><div class="lead-info">';
   h+='<div class="lead-name">'+esc(r[0])+'</div>';
   h+='<div class="lead-role">Correo</div>';
@@ -599,8 +632,9 @@ function renderCasos(){
   h+='</div></div>';el.innerHTML=h;
 }
 function casoCard(r){
+  var idx=ITEMS.indexOf(r);
   var ls=leadScore(r);
-  var h='<div class="lead-card laser-card">';
+  var h='<div class="lead-card laser-card" onclick="openTaskModal('+idx+')">';
   h+='<div class="lead-head"><div class="lead-avatar"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg></div><div class="lead-info">';
   h+='<div class="lead-name">'+esc(r[0])+'</div>';
   h+='<div class="lead-role">Caso</div>';
@@ -608,7 +642,7 @@ function casoCard(r){
   h+='</div></div>';
   var summary=statusSummary(r);
   if(summary)h+='<div style="font-size:10px;background:rgba(45,130,211,0.05);border:1px solid rgba(45,130,211,0.15);border-radius:8px;padding:8px 10px;color:var(--text-2);line-height:1.5;margin:10px 0">'+statusSummaryHtml(r)+'</div>';
-  h+='<a class="task-link" href="#" onclick="openDrive(event)" style="margin-top:8px">📂 Abrir carpeta en Drive</a>';
+  h+='<a class="task-link" href="#" onclick="event.stopPropagation();openDrive(event)" style="margin-top:8px">📂 Abrir carpeta en Drive</a>';
   h+='<div class="lead-score">';
   for(var i=1;i<=4;i++)h+='<div class="pt'+(i<=ls.on?' on':'')+'" style="'+(i<=ls.on?'--ptc:'+ls.color:'')+'"></div>';
   h+='</div></div>';return h;
@@ -833,6 +867,61 @@ async function draftAI(){
 function hideDraft(){document.getElementById('draftBox').style.display='none';}
 
 /* ACTIONS */
+async 
+/* TASK MODAL LOGIC */
+function openTaskModal(idx){
+  var r=ITEMS[idx];
+  document.getElementById('taskModalOverlay').classList.add('show');
+  document.getElementById('taskModal').classList.add('show');
+  document.getElementById('tmTitle').textContent=r[0]||'Sin título';
+  
+  var tags='<span class="tag">'+tipoIcon(r[1])+' '+esc(r[1])+'</span>';
+  if(r[3])tags+='<span class="tag" style="background:rgba(255,107,107,0.1);color:var(--red);border-color:rgba(255,107,107,0.3)">'+esc(r[3])+'</span>';
+  if(r[4])tags+='<span class="tag">'+esc(String(r[4]).slice(0,10))+'</span>';
+  document.getElementById('tmTags').innerHTML=tags;
+  
+  var sumEl=document.getElementById('tmSummary');
+  var snipEl=document.getElementById('tmSnippet');
+  var btn=document.getElementById('tmAction');
+  
+  sumEl.innerHTML='⏳ Analizando información...';
+  snipEl.textContent='';
+  
+  if(norm(r[1])==='correo'){
+    btn.style.display='block';
+    btn.textContent='Responder con IA';
+    btn.onclick=function(){ closeTaskModal(); showView('delegar'); selectDeleg(idx); };
+    
+    var gmailId=extractGmailId(r[8]||'');
+    if(gmailId){
+      fetch(API+'?action=getEmail&gmailId='+gmailId).then(function(res){return res.json();}).then(function(d){
+        if(d.ok){
+          var tips=analyzeEmail(d.subject||'', d.body||'', d.from||'');
+          var sumHtml='<div style="color:var(--accent);font-weight:800;margin-bottom:6px;font-size:14px">🧠 Resumen y Motivo de Urgencia:</div>';
+          if(tips) sumHtml+=tips;
+          else sumHtml+='Requiere tu revisión manual. Este correo entró a la bandeja y necesita atención, pero no detecté palabras clave críticas automáticamente.';
+          sumEl.innerHTML=sumHtml;
+          snipEl.textContent='Extracto del correo:\n"'+(d.body||'').substring(0,300)+'..."';
+        }else{
+          sumEl.innerHTML='No se pudo extraer el cuerpo del correo.';
+        }
+      }).catch(function(){sumEl.innerHTML='Error de conexión al cargar correo.';});
+    }else{
+      sumEl.innerHTML='Sin ID de Gmail. Revisa directamente en tu bandeja.';
+    }
+  }else{
+    btn.style.display='none';
+    var sumHtml='<div style="color:var(--accent);font-weight:800;margin-bottom:6px;font-size:14px">🧠 Estado del Caso/Evento:</div>';
+    sumHtml+=statusSummaryHtml(r);
+    if(r[8]) sumHtml+='<br><br><b>Notas adicionales:</b> '+esc(r[8]);
+    sumEl.innerHTML=sumHtml;
+  }
+}
+function closeTaskModal(){
+  document.getElementById('taskModalOverlay').classList.remove('show');
+  document.getElementById('taskModal').classList.remove('show');
+}
+
 async function setPrio(idx,val){var r=ITEMS[idx];var res=await api({action:'update',sheet:'Base',row:idx+2,col:'D',value:val,expect:r[3]||'',expectNombre:r[0]||''});if(!res.ok){toast('Error');load();return;}toast('Prioridad → '+val);load();}
 async function markDone(idx){var r=ITEMS[idx];var res=await api({action:'update',sheet:'Base',row:idx+2,col:'C',value:'Atendido',expect:r[2]||'',expectNombre:r[0]||''});if(!res.ok){toast('Error');load();return;}toast('✓ '+r[0]);load();}
 
