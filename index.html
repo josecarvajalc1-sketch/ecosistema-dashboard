@@ -542,28 +542,44 @@ function filterUrgentes(){
   document.getElementById('completadosSection').innerHTML='';
 }
 
-/* STATUS SUMMARY */
+/* STATUS SUMMARY — contexto para cada ítem */
 function statusSummary(r){
-  var est=norm(r[2]);var tipo=norm(r[1]);var nombre=r[0]||'';var notas=r[8]||'';
+  var est=norm(r[2]);var tipo=norm(r[1]);var nombre=r[0]||'';var notas=r[8]||'';var cat=r[6]||'';var cuenta=r[7]||'';
   var lines=[];
   if(tipo==='caso'){
-    if(est==='atendido')lines.push('✓ Caso atendido — sin acciones pendientes');
-    else if(est==='en seguimiento'){lines.push('⚙ En seguimiento — requiere revisión periódica');lines.push('📌 Verificar: ¿hay actualizaciones recientes en Drive?');}
-    else if(est==='nuevo'){lines.push('🆕 Caso nuevo — revisar carpeta en Drive');lines.push('📌 Pendiente: apertura, diagnóstico inicial, plan de acción');}
+    if(est==='atendido')lines.push('✓ Caso cerrado — sin pendientes');
+    else if(est==='en seguimiento'){lines.push('⚙ En seguimiento — requiere revisión');lines.push('📌 Verificar: ¿hay actualizaciones en Drive? ¿Algún cambio desde la última revisión?');}
+    else if(est==='nuevo'){lines.push('🆕 Caso nuevo sin atención — REVISAR URGENTE');lines.push('📌 Pendiente: abrir carpeta, diagnóstico inicial, definir plan de acción');}
     else lines.push('Estado: '+r[2]);
   }else if(tipo==='correo'){
-    if(est==='atendido')lines.push('✓ Correo respondido');
+    if(est==='atendido')lines.push('✓ Respondido — sin pendientes');
     else if(est==='nuevo'){
-      lines.push('✉ Correo nuevo — sin responder');
-      if(notas.indexOf('De:')!==-1){var rem=notas.match(/De:\s*([^|]+)/);if(rem)lines.push('De: '+rem[1].trim());}
+      // Extraer contexto del remitente y contenido
+      var remitente='';if(notas.indexOf('De:')!==-1){var m=notas.match(/De:\s*([^|]+)/);if(m)remitente=m[1].trim();}
+      if(remitente)lines.push('De: '+remitente);
+      // Detectar categoría para dar contexto
+      var cl=cat.toLowerCase();
+      if(cl==='convivencia')lines.push('⚠ Situación de convivencia — revisar antes de responder');
+      else if(cl==='apoderados')lines.push('👨‍👩‍👦 Comunicación con familia — requiere respuesta institucional');
+      else if(cl==='operaciones')lines.push('📋 Logística escolar — verificar calendario y coordinación');
+      else if(cl==='académico')lines.push('📚 Tema académico — coordinar con equipo directivo');
+      else lines.push('✉ Correo nuevo — sin responder');
+      // Detectar urgencia en contenido
+      if(notas.toLowerCase().indexOf('urgente')!==-1)lines.push('⚡ Contiene palabra "urgente"');
     }
   }else if(tipo==='evento'){
     if(est==='programado'){
-      var vence=r[5];if(vence)lines.push('📅 Evento programado para '+String(vence).slice(0,16));
-      lines.push('📌 Confirmar asistencia y preparar material');
+      var vence=r[5];if(vence)lines.push('📅 '+String(vence).slice(0,16));
+      lines.push('📌 Preparar: asistencia, material, sala');
+    }
+  }else if(tipo==='tarea'){
+    if(est==='nuevo'){
+      lines.push('📌 Tarea pendiente');
+      if(notas)lines.push('📝 '+notas.slice(0,80));
     }
   }
-  if(r[4]){var dd=diasDesde(r[4]);if(dd!==null&&dd>0)lines.push('⏱ En el sistema hace '+dd+' día'+(dd>1?'s':''));}
+  if(r[4]){var dd=diasDesde(r[4]);if(dd!==null&&dd>0)lines.push('⏱ En sistema: '+dd+' día'+(dd>1?'s':''));}
+  if(r[5]){var dh=diasHasta(r[5]);if(dh!==null&&dh<=0)lines.push('🔴 VENCIDO — requiere atención inmediata');else if(dh!==null&&dh<=2)lines.push('⚠ Vence en '+dh+' día'+(dh>1?'s':''));}
   return lines.join('\n');
 }
 function statusSummaryHtml(r){return esc(statusSummary(r)).replace(/\n/g,'<br>');}
