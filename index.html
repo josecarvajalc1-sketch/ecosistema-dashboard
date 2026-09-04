@@ -12,44 +12,47 @@
   --accent:var(--accent,#38bdf8); --inac:#8b5cf6;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',system-ui,sans-serif;padding:20px;background:transparent;color:var(--text)}
-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px}
-header h1{font-size:18px;font-weight:700}
-header .sub{color:var(--muted);font-size:12px}
-.badge{background:var(--accent);font-weight:700;padding:3px 10px;border-radius:20px;font-size:11px}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:18px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px}
-.card .num{font-size:26px;font-weight:800}
-.card .lbl{font-size:11px;color:var(--muted)}
+body{font-family:'Segoe UI',system-ui,sans-serif;padding:0;background:transparent;color:var(--text)}
+header{padding:20px 20px 12px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+header h1{font-size:18px;font-weight:800}
+header .sub{color:var(--muted);font-size:12px;margin-top:2px}
+.refresh{background:var(--card2);border:1px solid var(--border);color:var(--text);padding:6px 14px;border-radius:8px;font-size:12px;cursor:pointer}
+.refresh:hover{border-color:var(--accent)}
+/* tabs tipo Notion */
+.tabs{display:flex;gap:6px;padding:10px 20px;border-bottom:1px solid var(--border);overflow-x:auto;flex-wrap:wrap}
+.tab{background:var(--card);border:1px solid var(--border);color:var(--muted);padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
+.tab.active{background:var(--accent);color:#06283d;border-color:var(--accent)}
+.tab .n{opacity:.7;font-weight:400;margin-left:4px}
+/* cards superiores */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;padding:16px 20px;border-bottom:1px solid var(--border)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 12px}
+.card .num{font-size:24px;font-weight:800}
+.card .lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
 .b-alta{color:var(--alta)}.b-media{color:var(--media)}.b-baja{color:var(--baja)}.b-total{color:var(--accent)}.b-inac{color:var(--inac)}
-h2.sec{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:16px 0 8px}
+/* lista ítems */
+.panel{padding:12px 20px 30px}
 .list{display:flex;flex-direction:column;gap:8px}
-.row{background:var(--card);border:1px solid var(--border);border-left:4px solid var(--neutral);border-radius:10px;padding:10px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-.row.alta{border-left-color:var(--alta)}
-.row.media{border-left-color:var(--media)}
-.row.baja{border-left-color:var(--baja)}
-.row.inactivo{border-left-color:var(--inac);background:rgba(139,92,246,.08)}
-.row.done{opacity:.5}
-.row .main{flex:1;min-width:180px}
-.row .asunto{font-weight:600;font-size:13px}
-.row .asunto .resumen{color:var(--muted);font-weight:400;font-size:12px;display:block;margin-top:2px}
-.row .meta{font-size:11px;color:var(--muted);margin-top:4px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.item{background:var(--card);border:1px solid var(--border);border-left:4px solid var(--neutral);border-radius:10px;padding:12px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.item.alta{border-left-color:var(--alta)}.item.media{border-left-color:var(--media)}.item.baja{border-left-color:var(--baja)}.item.inac{border-left-color:var(--inac);background:rgba(139,92,246,.06)}
+.item.done{opacity:.5}
+.item .main{flex:1;min-width:180px}
+.item .nom{font-weight:600;font-size:13px}
+.item .nom .extra{color:var(--muted);font-weight:400;font-size:11px;display:block;margin-top:2px}
+.item .meta{font-size:11px;color:var(--muted);margin-top:5px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .pill{display:inline-block;font-size:10px;padding:1px 8px;border-radius:12px;font-weight:700;white-space:nowrap}
-.p-alta{background:var(--alta);color:#fff}.p-media{background:var(--media);color:#111}.p-baja{background:var(--baja);color:#041}.p-otro{background:var(--neutral);color:#fff}.p-done{background:var(--neutral);color:#fff}
-.p-inac{background:var(--inac);color:#fff}
-.p-nuevo{background:var(--accent);color:#06283d}
+.t-correo{background:var(--accent);color:#06283d}.t-caso{background:var(--media);color:#111}.t-evento{background:#0ea5e9;color:#082f49}.t-tarea{background:#22c55e;color:#041}
+.p-alta{background:var(--alta);color:#fff}.p-media{background:var(--media);color:#111}.p-baja{background:var(--baja);color:#041}.p-otro{background:var(--neutral);color:#fff}.p-done{background:var(--neutral);color:#fff}.p-inac{background:var(--inac);color:#fff}.p-nuevo{background:var(--accent);color:#06283d}
+.s-en{background:#22c55e;color:#041}.s-nuev{background:var(--card2);color:var(--text);border:1px solid var(--border)}.s-prog{background:#0ea5e9;color:#082f49}.s-aten{background:#64748b;color:#fff}
 .cat{background:var(--card2);color:var(--muted);border:1px solid var(--border)}
 .actions{display:flex;gap:5px;align-items:center}
-.btn{background:var(--card2);border:1px solid var(--border);color:var(--text);padding:5px 9px;border-radius:8px;font-size:11px;cursor:pointer}
-.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn{background:var(--card2);border:1px solid var(--border);color:var(--text);padding:4px 9px;border-radius:8px;font-size:11px;cursor:pointer}
+.btn:hover{border-color:var(--accent)}
 .btn.done-btn{background:rgba(34,197,94,.18);border-color:var(--baja);color:var(--baja)}
-.sel{background:var(--card2);border:1px solid var(--border);color:var(--text);padding:4px;border-radius:8px;font-size:11px}
-.empty{color:var(--muted);font-size:12px;padding:14px;text-align:center;border:1px dashed var(--border);border-radius:10px}
-footer{color:var(--muted);font-size:10px;margin-top:20px;text-align:center}
+.sel{background:var(--card2);border:1px solid var(--border);color:var(--text);padding:3px;border-radius:8px;font-size:11px}
+.empty{color:var(--muted);font-size:12px;padding:20px;text-align:center;border:1px dashed var(--border);border-radius:10px}
+footer{color:var(--muted);font-size:10px;text-align:center;padding:12px;border-top:1px solid var(--border)}
 .toast{position:fixed;bottom:18px;right:18px;background:var(--card2);border:1px solid var(--border);padding:10px 14px;border-radius:10px;font-size:12px;opacity:0;transition:opacity .3s;z-index:10}
 .toast.show{opacity:1}
-.refresh{background:var(--card2);border:1px solid var(--border);color:var(--text);padding:6px 12px;border-radius:8px;font-size:12px;cursor:pointer}
-.refresh:hover{border-color:var(--accent)}
 </style>
 </head>
 <body>
@@ -60,43 +63,43 @@ footer{color:var(--muted);font-size:10px;margin-top:20px;text-align:center}
   </div>
   <div style="display:flex;gap:8px;align-items:center">
     <button class="refresh" onclick="load()">⟳ Actualizar</button>
-    <span class="badge" style="color:var(--bg)">SALESIANOS V.</span>
   </div>
 </header>
 
+<div class="tabs" id="tabs">
+  <div class="tab active" data-v="inbox" onclick="setView('inbox')">📥 Inbox</div>
+  <div class="tab" data-v="urgente" onclick="setView('urgente')">🔥 Urgente</div>
+  <div class="tab" data-v="calendario" onclick="setView('calendario')">📅 Próximos</div>
+  <div class="tab" data-v="casos" onclick="setView('casos')">🗂 Casos</div>
+  <div class="tab" data-v="todos" onclick="setView('todos')">☰ Todos</div>
+</div>
+
 <div class="cards">
-  <div class="card"><div class="num b-total" id="cTotal">–</div><div class="lbl">Urgentes</div></div>
+  <div class="card"><div class="num b-total" id="cTotal">–</div><div class="lbl">Ítems</div></div>
   <div class="card"><div class="num b-alta" id="cAlta">–</div><div class="lbl">Alta</div></div>
   <div class="card"><div class="num b-media" id="cMedia">–</div><div class="lbl">Media</div></div>
   <div class="card"><div class="num b-baja" id="cBaja">–</div><div class="lbl">Baja</div></div>
-  <div class="card"><div class="num b-total" id="cCasos">–</div><div class="lbl">Casos</div></div>
-  <div class="card"><div class="num b-inac" id="cInactivos">–</div><div class="lbl">Inactivos</div></div>
+  <div class="card"><div class="num b-inac" id="cInac">–</div><div class="lbl">Inactivos</div></div>
 </div>
 
-<h2 class="sec">Correos por prioridad</h2>
-<div class="list" id="correos"><div class="empty">Cargando…</div></div>
+<div class="panel"><div class="list" id="lista"><div class="empty">Cargando…</div></div></div>
 
-<h2 class="sec">Casos en seguimiento</h2>
-<div class="list" id="casos"><div class="empty">Cargando…</div></div>
-
-<footer>Ecosistema Coordinación · ordena por prioridad · detecta inactividad · escribe a Google Sheets</footer>
+<footer>Ecosistema Coordinación · base tipo Notion · lee y escribe Google Sheets</footer>
 <div class="toast" id="toast"></div>
 
 <script>
 var API='https://script.google.com/macros/s/AKfycbzjdrQlGLdTH8mQ2wnj8H3jtgoZWRBnDY0yOMUlHHl8ZUlxThI-rJacQWpPhdtQ1VMI/exec';
-var T_INACT=30; // dias sin movimiento -> alerta
-var CORREOS=[];
+var ITEMS=[]; var VIEW='inbox'; var T_INACT=30;
 
 function esc(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
-function pil(n){n=(n||'').toLowerCase();return n==='alta'?'p-alta':n==='media'?'p-media':n==='baja'?'p-baja':'p-otro';}
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2200);}
+function diasDesde(f){if(!f)return null;try{var d=new Date(f);if(isNaN(d))return null;return Math.max(0,Math.floor((Date.now()-d)/86400000));}catch(e){return null;}}
+function tipoPill(t){t=(t||'').toLowerCase();return t==='correo'?'t-correo':t==='caso'?'t-caso':t==='evento'?'t-evento':t==='tarea'?'t-tarea':'cat';}
+function prioPill(n){n=(n||'').toLowerCase();return n==='alta'?'p-alta':n==='media'?'p-media':n==='baja'?'p-baja':'p-otro';}
+function estPill(s){s=(s||'').toLowerCase();return s==='en seguimiento'||s==='en curso'?'s-en':s==='nuevo'?'s-nuev':s==='programado'||s==='pendiente'?'s-prog':s==='atendido'?'s-aten':'s-nuev';}
 function prioOrd(n){n=(n||'').toLowerCase();return n==='alta'?0:n==='media'?1:n==='baja'?2:3;}
 function rcl(n){n=(n||'').toLowerCase();return n==='alta'?'alta':n==='media'?'media':n==='baja'?'baja':'';}
-function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2200);}
-function diasDesde(fechaStr){
-  if(!fechaStr) return null;
-  try{var d=new Date(fechaStr);if(isNaN(d))return null;return Math.max(0,Math.floor((Date.now()-d.getTime())/86400000));}
-  catch(e){return null;}
-}
+function inac(r){var f=r[5]||r[4];var d=diasDesde(f);return d!==null&&d>T_INACT && (r[1]||'').toLowerCase()==='caso';}
 
 async function api(params){
   try{var r=await fetch(API+'?'+new URLSearchParams(params).toString());return await r.json();}
@@ -104,79 +107,78 @@ async function api(params){
 }
 
 async function load(){
-  var d=await api({action:'read',sheet:'Correos'});
-  if(!d.ok){document.getElementById('correos').innerHTML='<div class="empty">Error: '+(d.error||'?')+'</div>';return;}
-  CORREOS=(d.rows||[]).slice(1);
-  var dc=await api({action:'read',sheet:'Casos'});
-  renderCorreos(CORREOS);
-  renderCasos(dc.ok?dc.rows.slice(1):[]);
+  var d=await api({action:'read',sheet:'Base'});
+  if(!d.ok){document.getElementById('lista').innerHTML='<div class="empty">Error: '+(d.error||'?')+'</div>';return;}
+  ITEMS=(d.rows||[]).slice(1);
+  render();
   document.getElementById('updatedAt').textContent='Actualizado: '+new Date().toLocaleTimeString();
 }
 
-function renderCorreos(rows){
-  // MOTOR DE PRIORIZACION: ordenar Alta->Media->Baja, dentro por antiguedad fecha
-  var s=rows.slice().sort(function(a,b){return prioOrd(a[4])-prioOrd(b[4]);});
-  var a=0,m=0,b=0;
-  s.forEach(function(r){var p=(r[4]||'').toLowerCase();if(p==='alta')a++;else if(p==='media')m++;else if(p==='baja')b++;});
-  document.getElementById('cTotal').textContent=s.length;
+function setView(v){
+  VIEW=v;
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.toggle('active',t.getAttribute('data-v')===v);});
+  render();
+}
+
+function filtered(){
+  var s=ITEMS.slice();
+  if(VIEW==='casos') s=s.filter(function(r){return (r[1]||'').toLowerCase()==='caso';});
+  else if(VIEW==='calendario') s=s.filter(function(r){return r[4]||r[5];}).sort(function(a,b){return (a[4]||'').localeCompare(b[4]||'');});
+  else if(VIEW==='urgente') s=s.filter(function(r){return (r[3]||'').toLowerCase()==='alta';});
+  else if(VIEW==='inbox') s=s.filter(function(r){var e=(r[2]||'').toLowerCase();return e!=='atendido'&&e!=='completado';});
+  s.sort(function(a,b){return prioOrd(a[3])-prioOrd(b[3]);});
+  return s;
+}
+
+function render(){
+  var a=0,m=0,b=0,inx=0;
+  ITEMS.forEach(function(r){var p=(r[3]||'').toLowerCase();if(p==='alta')a++;else if(p==='media')m++;else if(p==='baja')b++;if(inac(r))inx++;});
+  document.getElementById('cTotal').textContent=ITEMS.length;
   document.getElementById('cAlta').textContent=a;
   document.getElementById('cMedia').textContent=m;
   document.getElementById('cBaja').textContent=b;
-  var el=document.getElementById('correos');
-  if(!s.length){el.innerHTML='<div class="empty">Aún no llegan correos. El clasificador activo los irá trayendo cada ~10 min.</div>';return;}
-  el.innerHTML=s.map(function(r,i){
-    var done=(r[9]||'').toLowerCase()==='atendido';
-    return '<div class="row '+rcl(r[4])+(done?' done':'')+'">'+
-      '<div class="main"><div class="asunto">'+esc(r[3])+'<span class="resumen">'+esc(r[7])+'</span></div>'+
-      '<div class="meta"><span class="pill '+pil(r[4])+'">'+esc(r[4])+'</span>'+
-      '<span class="pill cat">'+esc(r[5])+'</span><span>'+esc(r[2])+'</span></div></div>'+
+  document.getElementById('cInac').textContent=inx;
+  var list=filtered();
+  var el=document.getElementById('lista');
+  if(!list.length){el.innerHTML='<div class="empty">Sin ítems en esta vista.</div>';return;}
+  el.innerHTML=list.map(function(r,i){
+    var idx=ITEMS.indexOf(r);
+    var done=(r[2]||'').toLowerCase()==='atendido'||(r[2]||'').toLowerCase()==='completado';
+    var fecha=r[4]; if(fecha&&fecha.length>10)fecha=fecha.slice(0,10);
+    var vence=r[5]; if(vence&&vence.length>10)vence=vence.slice(0,10);
+    var ia=inac(r);
+    return '<div class="item '+rcl(r[3])+(ia?' inac':'')+(done?' done':'')+'">'+
+      '<div class="main"><div class="nom">'+esc(r[0])+
+      (r[8]?'<span class="extra">'+esc(r[8])+'</span>':'')+'</div>'+
+      '<div class="meta"><span class="pill '+tipoPill(r[1])+'">'+esc(r[1])+'</span>'+
+      '<span class="pill '+prioPill(r[3])+'">'+esc(r[3])+'</span>'+
+      '<span class="pill '+estPill(r[2])+'">'+esc(r[2])+'</span>'+
+      (fecha?'<span>📅 '+esc(fecha)+'</span>':'')+
+      (vence?'<span>⏰ '+esc(vence)+'</span>':'')+
+      (r[6]?'<span class="pill cat">'+esc(r[6])+'</span>':'')+
+      (ia?'<span class="pill p-inac">⚠ inactivo '+diasDesde(r[5]||r[4])+'d</span>':'')+
+      '</div></div>'+
       '<div class="actions">'+
-      (done?'<span class="pill p-done">✓ Atendido</span>':
-        '<select class="sel" onchange="setPrio('+i+',this.value)">'+
-        '<option value="Alta" '+((r[4]||'').toLowerCase()==='alta'?'selected':'')+'>Alta</option>'+
-        '<option value="Media" '+((r[4]||'').toLowerCase()==='media'?'selected':'')+'>Media</option>'+
-        '<option value="Baja" '+((r[4]||'').toLowerCase()==='baja'?'selected':'')+'>Baja</option></select>'+
-        '<button class="btn done-btn" onclick="markDone('+i+')">✓ atendido</button>')+
+        (done?'<span class="pill s-aten">✓</span>':
+          '<select class="sel" onchange="setPrio('+idx+',this.value)">'+
+          '<option value="Alta" '+((r[3]||'').toLowerCase()==='alta'?'selected':'')+'>Alta</option>'+
+          '<option value="Media" '+((r[3]||'').toLowerCase()==='media'?'selected':'')+'>Media</option>'+
+          '<option value="Baja" '+((r[3]||'').toLowerCase()==='baja'?'selected':'')+'>Baja</option></select>'+
+          '<button class="btn done-btn" onclick="markDone('+idx+')">✓ estado</button>')+
       '</div></div>';
   }).join('');
 }
 
-function renderCasos(rows){
-  var el=document.getElementById('casos');
-  document.getElementById('cCasos').textContent=rows.length;
-  // deteccion de inactividad: marcamos los que llevan >T_INACT dias
-  var inactivos=0;
-  rows.forEach(function(r){var d=diasDesde(r[6]);if(d!==null&&d>T_INACT)inactivos++;});
-  document.getElementById('cInactivos').textContent=inactivos;
-  if(!rows.length){el.innerHTML='<div class="empty">Casos cargados desde Drive de acompañamiento.</div>';return;}
-  el.innerHTML=rows.map(function(r){
-    var d=diasDesde(r[6]);
-    var inactivo=(d!==null&&d>T_INACT);
-    var prioP=(r[7]||'').toLowerCase();
-    var clasePri=prioP==='alta'?'p-alta':prioP==='media'?'p-media':prioP==='baja'?'p-baja':prioP==='nuevo'?'p-nuevo':'p-otro';
-    return '<div class="row'+(inactivo?' inactivo':'')+'">'+
-      '<div class="main"><div class="asunto">'+esc(r[0])+
-      (inactivo?'<span class="resumen" style="color:var(--inac)">⚠ Inactivo '+(d===null?'':d)+' días</span>':'<span class="resumen">'+esc(r[8])+'</span>')+
-      '</div><div class="meta"><span class="pill '+clasePri+'">'+esc(r[7])+'</span>'+
-      '<span class="pill cat">'+esc(r[2])+'</span>'+
-      '<span>'+(r[6]?'Últ.act: '+diasDesde(r[6])+' días':'')+'</span></div></div></div>';
-  }).join('');
-}
-
 async function setPrio(idx,val){
-  if(!CORREOS[idx])return;
-  var r=CORREOS[idx], row=idx+2;
-  var res=await api({action:'update',sheet:'Correos',row:row,col:'E',value:val});
-  toast(res.ok?('Prioridad → '+val+' ✓'):('Error'));
-  load();
+  var row=idx+2;
+  await api({action:'update',sheet:'Base',row:row,col:'D',value:val});
+  toast('Prioridad → '+val+' ✓'); load();
 }
 async function markDone(idx){
-  if(!CORREOS[idx])return;
-  var r=CORREOS[idx], row=idx+2;
-  var res1=await api({action:'update',sheet:'Correos',row:row,col:'J',value:'Atendido'});
-  await api({action:'update',sheet:'Correos',row:row,col:'K',value:new Date().toISOString()});
-  toast(res1.ok?'✓ Marcado atendido':'Error');
-  load();
+  var row=idx+2, cur=(ITEMS[idx][2]||'').toLowerCase();
+  var nuevo=cur==='atendido'||cur==='completado'?'Nuevo':'Atendido';
+  await api({action:'update',sheet:'Base',row:row,col:'C',value:nuevo});
+  toast((nuevo==='Atendido'?'✓ Completado':'Reabierto')); load();
 }
 
 load();
