@@ -3,271 +3,307 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Coordinación — Qué hacer ahora</title>
+<title>Coordinación Pedagógica</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-/* === Notion design system — Operate surface === */
-:root{
-  --white:#ffffff; --warm:#f6f5f4;
-  --ink:rgba(0,0,0,.95); --text:#615d59; --muted:#a39e98;
-  --border:rgba(0,0,0,.1); --border-light:rgba(0,0,0,.06);
-  --blue:#0075de; --blue-light:#f2f9ff; --blue-dark:#005bab;
-  --red:#dc3545; --red-bg:rgba(220,53,69,.08);
-  --orange:#dd5b00; --orange-bg:rgba(221,91,0,.08);
-  --teal:#2a9d99; --teal-bg:rgba(42,157,153,.08);
-  --green:#1aae39; --green-bg:rgba(26,174,57,.08);
-  --purple:#391c57; --purple-bg:rgba(57,28,87,.06);
-  --shadow:rgba(0,0,0,.04) 0px 4px 18px,rgba(0,0,0,.027) 0px 2px 7.8px,rgba(0,0,0,.02) 0px .8px 2.9px;
-  --shadow-deep:rgba(0,0,0,.01) 0px 1px 3px,rgba(0,0,0,.02) 0px 3px 7px,rgba(0,0,0,.02) 0px 7px 15px,rgba(0,0,0,.04) 0px 14px 28px;
+/* === GLASSMORPHISM DESIGN SYSTEM === */
+:root {
+  --bg-deep: #0a0e27;
+  --bg-mid: #111638;
+  --bg-card: rgba(255,255,255,0.06);
+  --bg-card-hover: rgba(255,255,255,0.10);
+  --bg-card-active: rgba(255,255,255,0.14);
+  --glass-border: rgba(255,255,255,0.08);
+  --glass-border-hover: rgba(255,255,255,0.15);
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255,255,255,0.65);
+  --text-muted: rgba(255,255,255,0.40);
+  --accent: #4f8cff;
+  --accent-glow: rgba(79,140,255,0.25);
+  --success: #34d399;
+  --success-bg: rgba(52,211,153,0.12);
+  --warning: #f59e0b;
+  --warning-bg: rgba(245,158,11,0.12);
+  --danger: #ef4444;
+  --danger-bg: rgba(239,68,68,0.12);
+  --purple: #a78bfa;
+  --purple-bg: rgba(167,139,250,0.12);
+  --sidebar-w: 260px;
+  --blur: 20px;
 }
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html{color-scheme:light}
-body{font-family:'Inter',system-ui,-apple-system,sans-serif;color:var(--ink);background:var(--white);min-height:100vh}
+*{box-sizing:border-box;margin:0;padding:0}
+html{color-scheme:dark}
+body{font-family:'Inter',system-ui,sans-serif;color:var(--text-primary);background:var(--bg-deep);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 20% 20%,rgba(79,140,255,0.08) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(167,139,250,0.06) 0%,transparent 50%);pointer-events:none;z-index:0}
 
-/* interaction */
-button,.item-card,.cal-chip{transition:transform .1s ease,background .1s ease}
-button:active,.item-card:active{transform:scale(.97)}
-a:focus-visible,button:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:4px}
+/* === SIDEBAR === */
+.sidebar{position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;background:rgba(15,18,45,0.85);backdrop-filter:blur(var(--blur));-webkit-backdrop-filter:blur(var(--blur));border-right:1px solid var(--glass-border);z-index:100;display:flex;flex-direction:column;transition:transform .3s ease}
+.sidebar-brand{padding:24px 20px 16px;border-bottom:1px solid var(--glass-border)}
+.sidebar-brand h1{font-size:16px;font-weight:700;letter-spacing:-.3px;color:var(--text-primary)}
+.sidebar-brand p{font-size:11px;color:var(--text-muted);margin-top:2px}
+.sidebar-nav{flex:1;padding:12px 10px;overflow-y:auto}
+.nav-item{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:8px;color:var(--text-secondary);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s ease;text-decoration:none}
+.nav-item:hover{background:var(--bg-card);color:var(--text-primary)}
+.nav-item.active{background:var(--accent-glow);color:var(--accent)}
+.nav-item .icon{width:18px;text-align:center;font-size:15px}
+.sidebar-footer{padding:16px 20px;border-top:1px solid var(--glass-border)}
+.sidebar-footer .user-name{font-size:13px;font-weight:600;color:var(--text-primary)}
+.sidebar-footer .user-role{font-size:11px;color:var(--text-muted)}
 
-/* === LAYOUT === */
-.shell{max-width:720px;margin:0 auto;padding:0 16px 40px}
+/* Hamburger (mobile) */
+.hamburger{display:none;position:fixed;top:16px;left:16px;z-index:200;width:40px;height:40px;background:var(--bg-card);backdrop-filter:blur(var(--blur));border:1px solid var(--glass-border);border-radius:10px;color:var(--text-primary);font-size:20px;cursor:pointer}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:90}
+
+/* === MAIN === */
+.main{margin-left:var(--sidebar-w);padding:24px 28px 40px;position:relative;z-index:1}
 
 /* === HEADER === */
-.hdr{padding:20px 16px 16px;max-width:720px;margin:0 auto}
-.hdr-greet{font-size:22px;font-weight:700;letter-spacing:-.5px;color:var(--ink);line-height:1.2}
-.hdr-sub{font-size:13px;color:var(--text);margin-top:4px}
-.hdr-sub b{color:var(--red);font-weight:600}
-.hdr-actions{display:flex;gap:8px;margin-top:12px}
-.hdr-btn{
-  background:var(--white);border:1px solid var(--border);color:var(--text);
-  padding:7px 14px;border-radius:4px;font-size:13px;font-weight:500;cursor:pointer;
-}
-.hdr-btn:hover{background:var(--warm)}
-.hdr-btn.primary{background:var(--blue);color:var(--white);border-color:var(--blue)}
-.hdr-btn.primary:hover{background:var(--blue-dark)}
-.quick-add{display:flex;gap:6px;margin-top:10px}
-.quick-add input{
-  flex:1;padding:8px 10px;border:1px solid var(--border);border-radius:4px;
-  font-size:13px;font-family:inherit;color:var(--ink);background:var(--white);
-}
-.quick-add input:focus{outline:none;border-color:var(--blue)}
+.hdr{margin-bottom:24px}
+.hdr-greet{font-size:26px;font-weight:800;letter-spacing:-.5px;background:linear-gradient(135deg,#fff 0%,rgba(255,255,255,0.7) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hdr-sub{font-size:13px;color:var(--text-secondary);margin-top:6px}
+.hdr-sub b{color:var(--accent);font-weight:600}
 
-/* === STRIP CALENDAR (7 días) === */
-.cal-strip{
-  display:flex;gap:6px;overflow-x:auto;padding:14px 0;
-  border-bottom:1px solid var(--border-light);margin-bottom:20px;
-  scrollbar-width:none;-webkit-overflow-scrolling:touch;
-}
-.cal-strip::-webkit-scrollbar{display:none}
-.cal-chip{
-  flex:0 0 auto;min-width:68px;text-align:center;padding:10px 8px;
-  border-radius:8px;cursor:pointer;background:var(--white);border:1px solid var(--border-light);
-}
-.cal-chip:hover{background:var(--warm)}
-.cal-chip.today{border-color:var(--blue);background:var(--blue-light)}
-.cal-chip.has{border-left:3px solid var(--blue)}
-.cal-chip .cc-day{font-size:11px;color:var(--muted);text-transform:uppercase;font-weight:500;letter-spacing:.3px}
-.cal-chip .cc-num{font-size:18px;font-weight:700;color:var(--ink);margin:2px 0}
-.cal-chip .cc-count{font-size:10px;color:var(--blue);font-weight:600}
-.cal-chip.today .cc-day,.cal-chip.today .cc-num{color:var(--blue)}
+/* === STATS === */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.stat-card{background:var(--bg-card);backdrop-filter:blur(var(--blur));-webkit-backdrop-filter:blur(var(--blur));border:1px solid var(--glass-border);border-radius:14px;padding:18px 16px;transition:all .2s ease}
+.stat-card:hover{background:var(--bg-card-hover);border-color:var(--glass-border-hover);transform:translateY(-2px)}
+.stat-label{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+.stat-value{font-size:28px;font-weight:800;margin-top:6px;line-height:1}
+.stat-value.red{color:var(--danger)}
+.stat-value.blue{color:var(--accent)}
+.stat-value.green{color:var(--success)}
+.stat-value.purple{color:var(--purple)}
 
-/* === SECCIÓN DE ACCIONES === */
+/* === SECTION === */
 .section{margin-bottom:24px}
-.section-head{
-  display:flex;justify-content:space-between;align-items:baseline;
-  margin-bottom:10px;padding:0 2px;
-}
-.section-head h2{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
-.section-head .count{font-size:12px;color:var(--muted);font-weight:400}
-.section-head .dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:middle}
-.dot-red{background:var(--red)}.dot-orange{background:var(--orange)}.dot-teal{background:var(--teal)}.dot-muted{background:var(--muted)}
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.section-head h2{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.dot-red{background:var(--danger);box-shadow:0 0 8px var(--danger)}
+.dot-orange{background:var(--warning);box-shadow:0 0 8px var(--warning)}
+.dot-teal{background:var(--success);box-shadow:0 0 8px var(--success)}
+.dot-muted{background:var(--text-muted)}
+.count{font-size:12px;color:var(--text-muted);font-weight:600}
 
 /* === ITEM CARD === */
-.item-card{
-  background:var(--white);border:1px solid var(--border);
-  border-radius:8px;padding:14px 16px;margin-bottom:8px;
-  display:flex;align-items:flex-start;gap:12px;cursor:default;
-  box-shadow:var(--shadow);
-}
-.item-card:hover{box-shadow:var(--shadow-deep)}
-.item-card.ahora{border-left:3px solid var(--red)}
-.item-card.hoy{border-left:3px solid var(--orange)}
-.item-card.sinprioridad{border-left:3px solid var(--muted)}
-.item-card.semana{border-left:3px solid var(--teal)}
-.item-card.done{opacity:.7}
+.item-card{background:var(--bg-card);backdrop-filter:blur(var(--blur));-webkit-backdrop-filter:blur(var(--blur));border:1px solid var(--glass-border);border-radius:12px;padding:14px 16px;margin-bottom:8px;cursor:pointer;transition:all .15s ease;display:flex;align-items:flex-start;gap:14px}
+.item-card:hover{background:var(--bg-card-hover);border-color:var(--glass-border-hover)}
+.item-card.ahora{border-left:3px solid var(--danger)}
+.item-card.hoy{border-left:3px solid var(--warning)}
+.item-card.semana{border-left:3px solid var(--success)}
+.item-card.sinprioridad{border-left:3px solid var(--text-muted)}
+.item-card.done{opacity:.5}
 .item-body{flex:1;min-width:0}
-.item-title{font-size:14px;font-weight:600;color:var(--ink);line-height:1.35}
-.item-detail{font-size:12px;color:var(--text);margin-top:3px;line-height:1.45}
-.item-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;align-items:center}
-.pill{
-  display:inline-flex;align-items:center;font-size:11px;font-weight:600;
-  padding:2px 8px;border-radius:9999px;letter-spacing:.1px;
-}
-.pill-blue{background:var(--blue-light);color:var(--blue)}
-.pill-red{background:var(--red-bg);color:var(--red)}
-.pill-orange{background:var(--orange-bg);color:var(--orange)}
-.pill-teal{background:var(--teal-bg);color:var(--teal)}
-.pill-green{background:var(--green-bg);color:var(--green)}
+.item-title{font-size:13px;font-weight:600;color:var(--text-primary);line-height:1.3}
+.item-detail{font-size:11px;color:var(--text-muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.pill{font-size:10px;font-weight:600;padding:3px 8px;border-radius:6px;white-space:nowrap}
+.pill-blue{background:rgba(79,140,255,0.15);color:var(--accent)}
+.pill-teal{background:var(--success-bg);color:var(--success)}
 .pill-purple{background:var(--purple-bg);color:var(--purple)}
-.pill-gray{background:var(--warm);color:var(--text)}
-.item-date{font-size:11px;color:var(--muted);font-weight:500}
+.pill-red{background:var(--danger-bg);color:var(--danger)}
+.pill-orange{background:var(--warning-bg);color:var(--warning)}
+.pill-gray{background:rgba(255,255,255,0.08);color:var(--text-muted)}
+.item-date{font-size:10px;color:var(--text-muted);margin-top:6px;display:block}
+.item-actions{display:flex;flex-direction:column;gap:6px;align-items:flex-end;flex-shrink:0}
+.act-sm{font-size:11px;padding:5px 10px;border-radius:6px;border:1px solid var(--glass-border);background:transparent;color:var(--text-secondary);cursor:pointer;white-space:nowrap;transition:all .15s}
+.act-sm:hover{background:var(--bg-card-hover);color:var(--text-primary)}
+.act-sm.green{border-color:var(--success);color:var(--success)}
+.act-sm.green:hover{background:var(--success-bg)}
+.act-sm select{background:transparent;border:none;color:var(--text-secondary);font-size:11px;cursor:pointer;outline:none}
+.act-sm select option{background:#1a1e3a;color:#fff}
 
-/* === ITEM ACTIONS === */
-.item-actions{display:flex;gap:4px;flex:0 0 auto;align-items:center}
-.act-sm{
-  background:var(--warm);border:1px solid var(--border-light);color:var(--text);
-  padding:5px 10px;border-radius:4px;font-size:11px;font-weight:500;cursor:pointer;
-  white-space:nowrap;
-}
-.act-sm:hover{background:var(--border-light)}
-.act-sm.primary{background:var(--blue-light);color:var(--blue);border-color:rgba(0,117,222,.15)}
-.act-sm.primary:hover{background:rgba(0,117,222,.12)}
-.act-sm.green{background:var(--green-bg);color:var(--green);border-color:rgba(26,174,57,.15)}
-.act-sm select{
-  background:transparent;border:none;color:inherit;font-size:11px;font-weight:500;
-  cursor:pointer;font-family:inherit;padding:0;
-}
-.act-sm select option{background:var(--white);color:var(--ink)}
+/* === DELEGATION === */
+.delegate{background:var(--bg-card);backdrop-filter:blur(var(--blur));-webkit-backdrop-filter:blur(var(--blur));border:1px solid var(--glass-border);border-radius:14px;padding:20px;margin-bottom:24px}
+.delegate h3{font-size:15px;font-weight:700;margin-bottom:6px}
+.delegate>p{font-size:12px;color:var(--text-muted);margin-bottom:14px}
+.deleg-items{display:flex;flex-direction:column;gap:6px}
+.deleg-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;background:rgba(255,255,255,0.03);border:1px solid var(--glass-border);cursor:pointer;transition:all .15s}
+.deleg-item:hover{background:var(--bg-card-hover);border-color:var(--glass-border-hover)}
+.deleg-ico{font-size:16px;flex-shrink:0}
+.deleg-item span:nth-child(2){flex:1;font-size:12px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-/* === EMPTY === */
-.empty-state{
-  text-align:center;padding:28px 16px;color:var(--muted);font-size:13px;
-  border:1px dashed var(--border);border-radius:8px;
-}
-.empty-state .emoji{font-size:28px;margin-bottom:8px}
-
-/* === DELEGATE HINT === */
-.delegate{
-  background:var(--purple-bg);border:1px solid rgba(57,28,87,.1);
-  border-radius:8px;padding:12px 16px;margin-top:16px;
-}
-.delegate h3{font-size:12px;font-weight:600;color:var(--purple);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px}
-.delegate p{font-size:12px;color:var(--text);line-height:1.5}
-.delegate .deleg-items{margin-top:8px;display:flex;flex-direction:column;gap:4px}
-.delegate .deleg-item{
-  display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text);
-  background:var(--white);border:1px solid var(--border-light);border-radius:6px;padding:8px 10px;
-}
-.delegate .deleg-item span{flex:1}
-.delegate .deleg-item .deleg-ico{font-size:14px}
+/* === EMAIL PANEL (expanded) === */
+.email-panel{background:rgba(10,14,39,0.9);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);border:1px solid var(--glass-border);border-radius:14px;padding:20px;margin-top:12px;display:none}
+.email-panel.open{display:block}
+.email-panel .ep-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
+.email-panel .ep-subject{font-size:15px;font-weight:700}
+.email-panel .ep-close{background:none;border:none;color:var(--text-muted);font-size:18px;cursor:pointer;padding:4px}
+.email-panel .ep-meta{font-size:11px;color:var(--text-muted);margin-bottom:12px}
+.email-panel .ep-body{background:rgba(255,255,255,0.04);border:1px solid var(--glass-border);border-radius:8px;padding:14px;font-size:12px;color:var(--text-secondary);line-height:1.6;max-height:200px;overflow-y:auto;white-space:pre-wrap;margin-bottom:16px}
+.email-panel .ep-label{font-size:11px;color:var(--text-muted);font-weight:600;margin-bottom:6px;text-transform:uppercase;letter-spacing:.3px}
+.email-panel textarea{width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--glass-border);border-radius:8px;padding:12px;font-size:13px;color:var(--text-primary);font-family:inherit;resize:vertical;min-height:60px;outline:none;transition:border-color .2s}
+.email-panel textarea:focus{border-color:var(--accent)}
+.email-panel textarea::placeholder{color:var(--text-muted)}
+.ep-actions{display:flex;gap:8px;margin-top:10px}
+.btn{padding:8px 16px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .15s}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:#3d7aee}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed}
+.btn-ghost{background:transparent;border:1px solid var(--glass-border);color:var(--text-secondary)}
+.btn-ghost:hover{background:var(--bg-card)}
+.btn-success{background:var(--success);color:#0a0e27}
+.btn-success:hover{background:#2bc48a}
+.draft-preview{background:rgba(255,255,255,0.04);border:1px solid var(--glass-border);border-radius:8px;padding:14px;font-size:12px;color:var(--text-secondary);line-height:1.6;max-height:250px;overflow-y:auto;white-space:pre-wrap;margin-top:12px;display:none}
+.draft-preview.show{display:block}
 
 /* === TOAST === */
-.toast{
-  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
-  background:var(--ink);color:var(--white);
-  padding:10px 18px;border-radius:8px;font-size:13px;font-weight:500;
-  opacity:0;transition:opacity .3s;z-index:50;pointer-events:none;
-  box-shadow:var(--shadow-deep);
-}
-.toast.show{opacity:1;pointer-events:auto}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:rgba(20,24,50,0.95);backdrop-filter:blur(20px);border:1px solid var(--glass-border);border-radius:10px;padding:12px 20px;font-size:13px;color:var(--text-primary);z-index:300;transition:transform .3s ease;white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0)}
 
 /* === FOOTER === */
-footer{text-align:center;padding:16px;color:var(--muted);font-size:11px;border-top:1px solid var(--border-light)}
+footer{text-align:center;padding:20px;font-size:11px;color:var(--text-muted)}
 
-/* === MOBILE === */
-@media(max-width:600px){
-  .hdr{padding:16px 14px 12px}
-  .hdr-greet{font-size:19px}
-  .shell{padding:0 14px 32px}
-  .item-card{padding:12px 14px}
-  .item-title{font-size:13.5px}
-  .cal-chip{min-width:60px;padding:8px 6px}
-  .cal-chip .cc-num{font-size:16px}
-  .item-actions{width:100%;justify-content:flex-end;margin-top:6px}
-  .act-sm{min-height:36px;display:flex;align-items:center}
+/* === EMPTY STATE === */
+.empty-state{text-align:center;padding:40px 20px;color:var(--text-muted)}
+.empty-state .emoji{font-size:36px;margin-bottom:12px}
+
+/* === RESPONSIVE === */
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .sidebar-overlay.show{display:block}
+  .hamburger{display:flex;align-items:center;justify-content:center}
+  .main{margin-left:0;padding:70px 16px 40px}
+  .stats{grid-template-columns:repeat(2,1fr);gap:10px}
+  .stat-card{padding:14px 12px}
+  .stat-value{font-size:22px}
+  .item-card{padding:12px}
+  .item-actions{flex-direction:row;align-items:center}
 }
-@media(min-width:721px){
-  .hdr{padding:28px 0 20px}
-  .shell{padding:0 0 40px}
+@media(max-width:480px){
+  .stats{grid-template-columns:1fr 1fr}
+  .stat-value{font-size:20px}
 }
 </style>
 </head>
 <body>
 
-<div class="hdr" id="hdr">
-  <div class="hdr-greet" id="greet">Cargando…</div>
-  <div class="hdr-sub" id="hdrSub"></div>
-  <div class="hdr-actions">
-    <button class="hdr-btn" onclick="load()">⟳ Actualizar</button>
+<!-- Sidebar -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+<button class="hamburger" id="hamburger" onclick="toggleSidebar()">☰</button>
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <h1>🎓 Coordinación</h1>
+    <p>Salesiano Valparaíso</p>
   </div>
-  <div class="quick-add">
-    <input id="qaInput" type="text" placeholder="+ Agregar tarea rápida…" onkeydown="if(event.key==='Enter')quickAdd()">
-    <button class="hdr-btn primary" onclick="quickAdd()">Agregar</button>
+  <div class="sidebar-nav">
+    <a class="nav-item active" href="#" onclick="showView('dashboard')">
+      <span class="icon">◉</span> Dashboard
+    </a>
+    <a class="nav-item" href="#" onclick="showView('correos')">
+      <span class="icon">✉</span> Correos
+    </a>
+    <a class="nav-item" href="#" onclick="showView('casos')">
+      <span class="icon">📂</span> Casos
+    </a>
+    <a class="nav-item" href="#" onclick="showView('calendario')">
+      <span class="icon">📅</span> Calendario
+    </a>
+    <a class="nav-item" href="#" onclick="showView('config')">
+      <span class="icon">⚙</span> Configuración
+    </a>
   </div>
+  <div class="sidebar-footer">
+    <div class="user-name">Pedro Quiroz</div>
+    <div class="user-role">Jefe de Coord. Pedagógica</div>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<div class="main">
+  <!-- Header -->
+  <div class="hdr">
+    <div class="hdr-greet" id="greet">Buenos días</div>
+    <div class="hdr-sub" id="hdrSub">Cargando…</div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats" id="statsRow">
+    <div class="stat-card"><div class="stat-label">Total</div><div class="stat-value blue" id="statTotal">—</div></div>
+    <div class="stat-card"><div class="stat-label">Urgentes</div><div class="stat-value red" id="statUrgent">—</div></div>
+    <div class="stat-card"><div class="stat-label">Correos</div><div class="stat-value purple" id="statMail">—</div></div>
+    <div class="stat-card"><div class="stat-label">Casos</div><div class="stat-value green" id="statCases">—</div></div>
+  </div>
+
+  <!-- Action Queue -->
+  <div id="actionQueue"><div class="empty-state"><div class="emoji">📋</div>Cargando tu día…</div></div>
+
+  <!-- Delegation Section -->
+  <div id="delegateSection" style="display:none"></div>
+
+  <!-- Email Panel (shown when clicking delegable item) -->
+  <div class="email-panel" id="emailPanel">
+    <div class="ep-header">
+      <div class="ep-subject" id="epSubject"></div>
+      <button class="ep-close" onclick="closeEmailPanel()">✕</button>
+    </div>
+    <div class="ep-meta" id="epMeta"></div>
+    <div class="ep-body" id="epBody"></div>
+    <div class="ep-label">Tu instrucción:</div>
+    <textarea id="epInstruction" placeholder="¿Qué quieres que responda? Ej: Responde que revisaremos el caso en la reunión de mañana"></textarea>
+    <div class="ep-actions">
+      <button class="btn btn-primary" id="btnDraft" onclick="draftWithAI()">Redactar con IA</button>
+      <button class="btn btn-ghost" onclick="closeEmailPanel()">Cancelar</button>
+    </div>
+    <div class="draft-preview" id="draftPreview">
+      <div class="ep-label">Respuesta redactada (editable):</div>
+      <div id="draftText" contenteditable="true" style="min-height:100px;outline:none;line-height:1.6;font-size:12px;color:var(--text-secondary);white-space:pre-wrap"></div>
+      <div class="ep-actions" style="margin-top:12px">
+        <button class="btn btn-success" onclick="sendDraft()">Enviar respuesta</button>
+        <button class="btn btn-ghost" onclick="hideDraft()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Completados -->
+  <div id="completadosSection"></div>
+
+  <footer>Coordinación Pedagógica · Colegio Salesiano Valparaíso</footer>
 </div>
 
-<!-- Calendar strip -->
-<div class="shell">
-  <div class="cal-strip" id="calStrip"></div>
-</div>
-
-<!-- Action queue -->
-<div class="shell" id="actionQueue">
-  <div class="empty-state"><div class="emoji">📋</div>Cargando tu día…</div>
-</div>
-
-<!-- Delegation hints -->
-<div class="shell" id="delegateSection" style="display:none"></div>
-
-<!-- Completados (colapsable) -->
-<div class="shell" id="completadosSection"></div>
-
-<footer>Coordinación Pedagógica · base tipo Notion · Google Sheets</footer>
 <div class="toast" id="toast"></div>
 
 <script>
 var API='https://script.google.com/macros/s/AKfycbzgjhOBuRRpRe4UcqQOKAjYW2FYyTjq6pL9zKZYB843Hwav0g-8GR4hS2rZD2BSZyM_/exec';
+var AI_API=''; // URL del túnel (ngrok/cloudflared) — configurar después
 var ITEMS=[];
+var currentEmail=null;
 
-function esc(s){return(s||'').replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]});}
+function esc(s){return(s||'').replace(/[&<>\"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]});}
 var toastTimer=null;
-function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(function(){t.classList.remove('show');},2200);}
-// Toast con acción "Deshacer" (patrón Gmail) — el ítem ya desapareció de la
-// lista al completarse, así que esta es la única ventana para revertir sin
-// tener que ir directo al Sheet.
-function toastUndo(m,undoFn){
-  var t=document.getElementById('toast');
-  var used=false;
-  t.innerHTML=esc(m)+' <button type="button" style="margin-left:10px;background:none;border:none;color:#8ec9ff;font-weight:700;cursor:pointer;text-decoration:underline;padding:0;font-size:inherit;font-family:inherit;">Deshacer</button>';
-  t.querySelector('button').onclick=function(){
-    if(used)return;used=true;
-    t.classList.remove('show');
-    undoFn();
-  };
-  t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer=setTimeout(function(){if(!used)t.classList.remove('show');},6000);
-}
-// Parser tolerante: normaliza "YYYY-MM-DD HH:MM[:SS]" a ISO con 'T' — Safari/iOS
-// no interpreta el formato con espacio y devuelve Invalid Date silenciosamente.
-function parseFecha(f){
-  if(!f)return null;
-  var s=String(f).trim();
-  // Captura fecha+hora hasta segundos, y preserva 'Z'/offset si existía (ej.
-  // toISOString() del backend) — descartar la 'Z' reinterpretaría un UTC como
-  // hora local y desplazaría la fecha varias horas (bug real: quickAdd).
-  var m=s.match(/^(\d{4}-\d{2}-\d{2})[ T](\d{2}:\d{2}(?::\d{2})?)(?:\.\d+)?(Z|[+-]\d{2}:?\d{2})?/);
-  if(m)s=m[1]+'T'+m[2]+(m[3]||'');
-  else if(/^\d{4}-\d{2}-\d{2}$/.test(s))s=s+'T00:00:00';
-  var d=new Date(s);
-  return isNaN(d)?null:d;
-}
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(function(){t.classList.remove('show');},2500);}
+
+/* === SIDEBAR === */
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('show');}
+function showView(v){document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active');});event.currentTarget.classList.add('active');toggleSidebar();}
+
+/* === DATE HELPERS === */
+function parseFecha(f){if(!f)return null;var s=String(f).trim();var m=s.match(/^(\d{4}-\d{2}-\d{2})[ T](\d{2}:\d{2}(?::\d{2})?)/);if(m)s=m[1]+'T'+m[2];else if(/^\d{4}-\d{2}-\d{2}$/.test(s))s=s+'T00:00:00';var d=new Date(s);return isNaN(d)?null:d;}
 function diasDesde(f){var d=parseFecha(f);if(!d)return null;return Math.max(0,Math.floor((Date.now()-d)/86400000));}
 function diasHasta(f){var d=parseFecha(f);if(!d)return null;return Math.ceil((d-Date.now())/86400000);}
-function esHoy(f){var d=parseFecha(f);if(!d)return false;return new Date().toDateString()===d.toDateString();}
-function fechaStr(f){var d=parseFecha(f);if(!d)return String(f||'').slice(0,10);return d.toLocaleDateString('es-CL',{weekday:'short',day:'numeric',month:'short'});}
-// Normaliza para comparar: recorta espacios accidentales (edición manual del
-// Sheet) y pasa a minúsculas — el mismo tipo de dato sucio que motivó parseFecha.
 function norm(s){return(s||'').toString().trim().toLowerCase();}
-function tipoIcon(t){t=norm(t);return t==='correo'?'✉':t==='caso'?'🗂':t==='evento'?'📅':t==='tarea'?'✅':'📄';}
+function tipoIcon(t){t=norm(t);return t==='correo'?'✉':t==='caso'?'📂':t==='evento'?'📅':t==='tarea'?'✓':'📄';}
 function tipoColor(t){t=norm(t);return t==='correo'?'blue':t==='caso'?'teal':t==='evento'?'purple':'gray';}
 function prioColor(n){n=norm(n);return n==='alta'?'red':n==='media'?'orange':'teal';}
 function estColor(s){s=norm(s);return s==='en seguimiento'||s==='en curso'?'green':s==='nuevo'?'blue':s==='atendido'?'gray':'blue';}
 function prioOrd(n){n=norm(n);return n==='alta'?0:n==='media'?1:n==='baja'?2:3;}
 
+function urgency(r){
+  var est=norm(r[2]);if(est==='atendido'||est==='completado')return'done';
+  var pri=norm(r[3]);var vence=r[5];var dh=vence?diasHasta(vence):null;
+  if(pri==='alta')return'ahora';
+  if(dh!==null&&dh<=1)return'ahora';
+  if(pri==='media')return'hoy';
+  if(dh!==null&&dh<=3)return'hoy';
+  return'semana';
+}
+
+/* === API === */
 async function api(p){try{var r=await fetch(API+'?'+new URLSearchParams(p).toString());return await r.json();}catch(e){return{ok:false,error:String(e)};}}
 
+/* === LOAD === */
 async function load(){
   var d=await api({action:'read',sheet:'Base'});
   if(!d.ok){document.getElementById('actionQueue').innerHTML='<div class="empty-state"><div class="emoji">⚠️</div>Error: '+(d.error||'?')+'</div>';return;}
@@ -275,41 +311,15 @@ async function load(){
   render();
 }
 
-function getGreeting(){
-  var h=new Date().getHours();
-  if(h<12)return'Buenos días';
-  if(h<19)return'Buenas tardes';
-  return'Buenas noches';
-}
+function getGreeting(){var h=new Date().getHours();if(h<12)return'Buenos días, Pedro';if(h<19)return'Buenas tardes, Pedro';return'Buenas noches, Pedro';}
 
-function urgency(r){
-  // Returns: 'ahora' | 'hoy' | 'sinprioridad' | 'semana' | 'done'
-  var est=norm(r[2]);
-  if(est==='atendido'||est==='completado')return'done';
-  var pri=norm(r[3]);
-  var prioridadValida=(pri==='alta'||pri==='media'||pri==='baja');
-  // OJO: Vence es un vencimiento real; Fecha es cuándo el ítem entró al sistema.
-  // Nunca usar Fecha como respaldo de Vence aquí — eso fue el bug original
-  // (fecha de registro de un Caso interpretada como si ya hubiera vencido).
-  var vence=r[5];
-  var dh=vence?diasHasta(vence):null;
-  var di=r[4]?diasDesde(r[4]):null;
-  if(pri==='alta')return'ahora';
-  if(dh!==null&&dh<=1)return'ahora'; // ya venció, vence hoy o mañana
-  if(pri==='media')return'hoy';
-  if(dh!==null&&dh<=3)return'hoy';
-  if(di!==null&&di>30&&norm(r[1])==='caso')return'hoy'; // inactivo
-  // Nunca se le asignó una prioridad real (ej. import con placeholder) y no hay
-  // fecha que lo ordene — no lo escondemos en "semana", se marca para triage.
-  if(!prioridadValida&&dh===null)return'sinprioridad';
-  return'semana';
-}
-
+/* === RENDER === */
 function render(){
-  // Greeting
   var active=ITEMS.filter(function(r){var e=norm(r[2]);return e!=='atendido'&&e!=='completado';});
   var urgentes=active.filter(function(r){return urgency(r)==='ahora';});
   var hoy=active.filter(function(r){return urgency(r)==='hoy';});
+  var correos=active.filter(function(r){return norm(r[1])==='correo';});
+  var casos=active.filter(function(r){return norm(r[1])==='caso';});
 
   document.getElementById('greet').textContent=getGreeting();
   var sub='';
@@ -318,50 +328,21 @@ function render(){
   if(!sub)sub=active.length+' pendiente'+(active.length>1?'s':'')+' — todo tranquilo';
   document.getElementById('hdrSub').innerHTML=sub;
 
-  renderCalStrip();
+  document.getElementById('statTotal').textContent=active.length;
+  document.getElementById('statUrgent').textContent=urgentes.length;
+  document.getElementById('statMail').textContent=correos.length;
+  document.getElementById('statCases').textContent=casos.length;
+
   renderQueue();
   renderDelegate();
   renderCompletados();
 }
 
-function renderCalStrip(){
-  var el=document.getElementById('calStrip');
-  var today=new Date();today.setHours(0,0,0,0);
-  var byDate={};
-  ITEMS.forEach(function(r){
-    var ds=r[4]||r[5];if(!ds)return;ds=ds.length>10?ds.slice(0,10):ds;
-    if(!byDate[ds])byDate[ds]=0;byDate[ds]++;
-  });
-  var h='';
-  for(var i=0;i<7;i++){
-    var d=new Date(today);d.setDate(d.getDate()+i);
-    var ds=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-    var dayNames=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
-    var cls='cal-chip';
-    if(i===0)cls+=' today';
-    if(byDate[ds])cls+=' has';
-    h+='<div class="'+cls+'">';
-    h+='<div class="cc-day">'+(i===0?'Hoy':dayNames[d.getDay()])+'</div>';
-    h+='<div class="cc-num">'+d.getDate()+'</div>';
-    if(byDate[ds])h+='<div class="cc-count">'+byDate[ds]+' ítem'+(byDate[ds]>1?'s':'')+'</div>';
-    h+='</div>';
-  }
-  el.innerHTML=h;
-}
-
 function renderQueue(){
   var el=document.getElementById('actionQueue');
-  // Group by urgency
   var groups={ahora:[],hoy:[],sinprioridad:[],semana:[]};
-  ITEMS.forEach(function(r){
-    var u=urgency(r);
-    if(u==='done')return;
-    groups[u].push(r);
-  });
-  // Sort within groups by priority
-  Object.keys(groups).forEach(function(k){
-    groups[k].sort(function(a,b){return prioOrd(a[3])-prioOrd(b[3]);});
-  });
+  ITEMS.forEach(function(r){var u=urgency(r);if(u==='done')return;groups[u].push(r);});
+  Object.keys(groups).forEach(function(k){groups[k].sort(function(a,b){return prioOrd(a[3])-prioOrd(b[3]);});});
 
   var h='';
   var sections=[
@@ -373,68 +354,33 @@ function renderQueue(){
 
   var anyItems=false;
   sections.forEach(function(s){
-    var items=groups[s.key];
-    if(!items.length)return;
-    anyItems=true;
-    h+='<div class="section">';
-    h+='<div class="section-head"><h2><span class="dot '+s.dot+'"></span>'+s.label+'</h2><span class="count">'+items.length+'</span></div>';
-    items.forEach(function(r){
-      h+=itemCard(r,s.key);
-    });
+    var items=groups[s.key];if(!items.length)return;anyItems=true;
+    h+='<div class="section"><div class="section-head"><h2><span class="dot '+s.dot+'"></span>'+s.label+'</h2><span class="count">'+items.length+'</span></div>';
+    items.forEach(function(r){h+=itemCard(r,s.key);});
     h+='</div>';
   });
-
-  if(!anyItems){
-    h='<div class="empty-state"><div class="emoji">🎉</div>Todo al día. Sin pendientes urgentes.</div>';
-  }
+  if(!anyItems)h='<div class="empty-state"><div class="emoji">🎉</div>Todo al día.</div>';
   el.innerHTML=h;
 }
 
 function itemCard(r,urg){
   var idx=ITEMS.indexOf(r);
   var done=norm(r[2])==='atendido'||norm(r[2])==='completado';
-  var fecha=r[4];if(fecha&&fecha.length>10)fecha=fecha.slice(0,10);
-  var vence=r[5];if(vence&&vence.length>10)vence=vence.slice(0,10);
-  var di=r[4]?diasDesde(r[4]):null;
-  var dh=vence?diasHasta(vence):null;
-
   var cls='item-card '+urg+(done?' done':'');
-
   var h='<div class="'+cls+'">';
   h+='<div class="item-body">';
   h+='<div class="item-title">'+esc(r[0])+'</div>';
-
-  // Context line
-  var ctx='';
-  if(r[8])ctx=esc(r[8]);
-  else if(r[6])ctx=esc(r[6]);
+  var ctx='';if(r[8])ctx=esc(r[8]);else if(r[6])ctx=esc(r[6]);
   if(ctx)h+='<div class="item-detail">'+ctx+'</div>';
-
-  // Meta pills
-  var priVal=norm(r[3]);
-  var prioridadValida=(priVal==='alta'||priVal==='media'||priVal==='baja');
   h+='<div class="item-meta">';
   h+='<span class="pill pill-'+tipoColor(r[1])+'">'+tipoIcon(r[1])+' '+esc(r[1])+'</span>';
-  if(prioridadValida)h+='<span class="pill pill-'+prioColor(r[3])+'">'+esc(r[3])+'</span>';
-  else if(!done&&urg==='sinprioridad')h+='<span class="pill pill-gray">⚑ sin prioridad</span>';
+  var priVal=norm(r[3]);
+  if(priVal==='alta'||priVal==='media'||priVal==='baja')h+='<span class="pill pill-'+prioColor(r[3])+'">'+esc(r[3])+'</span>';
   h+='<span class="pill pill-'+estColor(r[2])+'">'+esc(r[2])+'</span>';
-  if(fecha)h+='<span class="item-date">📅 '+fechaStr(fecha)+'</span>';
-  if(vence){
-    var vLabel='⏰ '+fechaStr(vence);
-    if(dh!==null&&dh<=0)vLabel+=' ⚠ vencido';
-    else if(dh!==null&&dh<=1)vLabel+=' ⚠ vence pronto';
-    h+='<span class="item-date">'+vLabel+'</span>';
-  }
-  if(di!==null&&di>30&&norm(r[1])==='caso')
-    h+='<span class="pill pill-purple">⚠ sin actividad '+di+'d</span>';
   h+='</div></div>';
-
-  // Actions
   h+='<div class="item-actions">';
-  if(done){
-    h+='<span class="pill pill-green">✓ Listo</span>';
-    h+='<button class="act-sm" onclick="reabrir('+idx+')">↩ Reabrir</button>';
-  }else{
+  if(done){h+='<span class="pill pill-gray">✓ Listo</span>';}
+  else{
     h+='<div class="act-sm"><select onchange="setPrio('+idx+',this.value)">';
     h+='<option value="Alta"'+(priVal==='alta'?' selected':'')+'>Alta</option>';
     h+='<option value="Media"'+(priVal==='media'?' selected':'')+'>Media</option>';
@@ -446,100 +392,136 @@ function itemCard(r,urg){
   return h;
 }
 
+/* === DELEGATION === */
 function renderDelegate(){
   var el=document.getElementById('delegateSection');
-  // Find items that could be delegated (correos clasificados, informativos, etc.)
   var delegable=ITEMS.filter(function(r){
-    var t=norm(r[1]);
-    var p=norm(r[3]);
-    var e=norm(r[2]);
+    var t=norm(r[1]);var p=norm(r[3]);var e=norm(r[2]);
     if(e==='atendido'||e==='completado')return false;
     if(t==='correo'&&p==='baja')return true;
-    if(t==='evento')return true;
     return false;
   });
-
   if(!delegable.length){el.style.display='none';return;}
   el.style.display='block';
-
-  var h='<div class="delegate">';
-  h+='<h3>🤖 Posibles para delegar con IA</h3>';
-  h+='<p>Estos ítems son informativos o de baja prioridad — la IA puede procesarlos o preparar respuestas.</p>';
+  var h='<div class="delegate"><h3>Posibles para delegar con IA</h3>';
+  h+='<p>'+delegable.length+' correos de baja prioridad — la IA puede redactar respuestas.</p>';
   h+='<div class="deleg-items">';
   delegable.forEach(function(r){
-    h+='<div class="deleg-item">';
-    h+='<span class="deleg-ico">'+tipoIcon(r[1])+'</span>';
+    var idx=ITEMS.indexOf(r);
+    h+='<div class="deleg-item" onclick="openEmail('+idx+')">';
+    h+='<span class="deleg-ico">✉</span>';
     h+='<span>'+esc(r[0])+'</span>';
-    h+='<span class="pill pill-'+prioColor(r[3])+'" style="font-size:10px">'+esc(r[3])+'</span>';
+    h+='<span class="pill pill-teal" style="font-size:10px">'+esc(r[3]||'Baja')+'</span>';
     h+='</div>';
   });
   h+='</div></div>';
   el.innerHTML=h;
 }
 
+/* === EMAIL PANEL === */
+function openEmail(idx){
+  currentEmail=ITEMS[idx];
+  var panel=document.getElementById('emailPanel');
+  document.getElementById('epSubject').textContent=currentEmail[0];
+  document.getElementById('epMeta').textContent='De: '+(currentEmail[8]||'desconocido')+' · '+currentEmail[2];
+  document.getElementById('epBody').textContent='Cargando contenido del correo…';
+  document.getElementById('epInstruction').value='';
+  document.getElementById('draftPreview').classList.remove('show');
+  panel.classList.add('open');
+  panel.scrollIntoView({behavior:'smooth',block:'start'});
+
+  // Fetch email content
+  var gmailId=extractGmailId(currentEmail[8]||'');
+  if(gmailId){
+    fetch(API+'?action=getEmail&gmailId='+gmailId).then(function(r){return r.json();}).then(function(d){
+      if(d.ok){
+        document.getElementById('epMeta').textContent='De: '+d.from+' · '+d.subject;
+        document.getElementById('epBody').textContent=d.body||'(sin contenido)';
+      }else{
+        document.getElementById('epBody').textContent='No se pudo cargar el correo: '+(d.error||'?');
+      }
+    }).catch(function(e){
+      document.getElementById('epBody').textContent='Error al cargar: '+String(e);
+    });
+  }else{
+    document.getElementById('epBody').textContent=currentEmail[8]||'(sin datos de correo)';
+  }
+}
+
+function extractGmailId(notas){
+  var m=notas.match(/ID:\s*([a-f0-9]+)/i);
+  return m?m[1]:'';
+}
+
+function closeEmailPanel(){document.getElementById('emailPanel').classList.remove('open');currentEmail=null;}
+
+async function draftWithAI(){
+  var instruction=document.getElementById('epInstruction').value.trim();
+  if(!instruction){toast('Escribe una instrucción primero');return;}
+  if(!AI_API){toast('⚠ API de IA no configurada aún — pendiente el túnel');return;}
+  var btn=document.getElementById('btnDraft');
+  btn.disabled=true;btn.textContent='Redactando…';
+  try{
+    var gmailId=extractGmailId(currentEmail[8]||'');
+    var body=document.getElementById('epBody').textContent;
+    var resp=await fetch(AI_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({gmailId:instruction,emailBody:body,emailFrom:currentEmail[8]||'',emailSubject:currentEmail[0],instruction:instruction})});
+    var data=await resp.json();
+    if(data.ok&&data.draft){
+      document.getElementById('draftText').textContent=data.draft;
+      document.getElementById('draftPreview').classList.add('show');
+    }else{toast('Error: '+(data.error||'?'));}
+  }catch(e){toast('Error de conexión: '+String(e));}
+  btn.disabled=false;btn.textContent='Redactar con IA';
+}
+
+function hideDraft(){document.getElementById('draftPreview').classList.remove('show');}
+
+async function sendDraft(){
+  var body=document.getElementById('draftText').textContent.trim();
+  if(!body){toast('No hay respuesta para enviar');return;}
+  var gmailId=extractGmailId(currentEmail[8]||'');
+  if(!gmailId){toast('No se encontró el Gmail ID');return;}
+  try{
+    var resp=await fetch(API+'?action=sendReply&gmailId='+gmailId+'&body='+encodeURIComponent(body));
+    var data=await resp.json();
+    if(data.ok){toast('✓ Respuesta enviada');closeEmailPanel();load();}
+    else{toast('Error: '+(data.error||'?'));}
+  }catch(e){toast('Error: '+String(e));}
+}
+
+/* === ACTIONS === */
+function estadoReapertura(tipo){var t=norm(tipo);if(t==='evento')return'Programado';if(t==='caso')return'En seguimiento';return'Nuevo';}
+async function reabrir(idx){
+  var row=idx+2;var r=ITEMS[idx];var nuevoEstado=estadoReapertura(r[1]);
+  var res=await api({action:'update',sheet:'Base',row:row,col:'C',value:nuevoEstado,expect:r[2]||'',expectNombre:r[0]||''});
+  if(!res.ok){toast('⚠ '+(res.error||'Error'));load();return;}
+  toast('↩ Reabierto → '+nuevoEstado);load();
+}
+async function setPrio(idx,val){
+  var row=idx+2;var r=ITEMS[idx];
+  var res=await api({action:'update',sheet:'Base',row:row,col:'D',value:val,expect:r[3]||'',expectNombre:r[0]||''});
+  if(!res.ok){toast('⚠ '+(res.error||'Error'));load();return;}
+  toast('Prioridad → '+val);load();
+}
+async function markDone(idx){
+  var row=idx+2;var r=ITEMS[idx];
+  var res=await api({action:'update',sheet:'Base',row:row,col:'C',value:'Atendido',expect:r[2]||'',expectNombre:r[0]||''});
+  if(!res.ok){toast('⚠ '+(res.error||'Error'));load();return;}
+  toast('✓ Completado: "'+r[0]+'"');load();
+}
+
+/* === COMPLETADOS === */
 var completadosOpen=false;
 function toggleCompletados(){completadosOpen=!completadosOpen;renderCompletados();}
 function renderCompletados(){
   var el=document.getElementById('completadosSection');
   var done=ITEMS.filter(function(r){var e=norm(r[2]);return e==='atendido'||e==='completado';});
   if(!done.length){el.innerHTML='';return;}
-  var h='<div class="section">';
-  h+='<div class="section-head" style="cursor:pointer" onclick="toggleCompletados()">';
-  h+='<h2><span class="dot dot-muted"></span>Mis completados</h2>';
+  var h='<div class="section"><div class="section-head" style="cursor:pointer" onclick="toggleCompletados()">';
+  h+='<h2><span class="dot dot-muted"></span>Completados</h2>';
   h+='<span class="count">'+done.length+' '+(completadosOpen?'▲ ocultar':'▼ ver')+'</span></div>';
-  if(completadosOpen){
-    done.forEach(function(r){h+=itemCard(r,'done');});
-  }
-  h+='</div>';
-  el.innerHTML=h;
-}
-// Estado al que vuelve un ítem reabierto — no guardamos cuál era su Estado
-// previo exacto (esto es para reabrir horas/días después, no el "Deshacer"
-// de 6s de markDone), así que se usa un default razonable según el Tipo.
-function estadoReapertura(tipo){
-  var t=norm(tipo);
-  if(t==='evento')return'Programado';
-  if(t==='caso')return'En seguimiento';
-  return'Nuevo';
-}
-async function reabrir(idx){
-  var row=idx+2;
-  var r=ITEMS[idx];
-  var nuevoEstado=estadoReapertura(r[1]);
-  var res=await api({action:'update',sheet:'Base',row:row,col:'C',value:nuevoEstado,expect:r[2]||'',expectNombre:r[0]||''});
-  if(!res.ok){toast('⚠ '+(res.error==='stale'||res.error==='fila movida'?'Alguien más lo modificó — recargando':(res.error||'Error al reabrir')));load();return;}
-  toast('↩ Reabierto → '+nuevoEstado);load();
-}
-async function setPrio(idx,val){
-  var row=idx+2;
-  var r=ITEMS[idx];
-  var res=await api({action:'update',sheet:'Base',row:row,col:'D',value:val,expect:r[3]||'',expectNombre:r[0]||''});
-  if(!res.ok){toast('⚠ '+(res.error==='stale'||res.error==='fila movida'?'Alguien más lo modificó — recargando':(res.error||'Error al guardar')));load();return;}
-  toast('Prioridad → '+val);load();
-}
-async function markDone(idx){
-  var row=idx+2;
-  var r=ITEMS[idx];
-  var prevEstado=r[2]||'';
-  var nombre=r[0]||'';
-  var res=await api({action:'update',sheet:'Base',row:row,col:'C',value:'Atendido',expect:prevEstado,expectNombre:nombre});
-  if(!res.ok){toast('⚠ '+(res.error==='stale'||res.error==='fila movida'?'Alguien más lo modificó — recargando':(res.error||'Error al guardar')));load();return;}
-  toastUndo('✓ Completado: "'+nombre+'"',async function(){
-    var undo=await api({action:'update',sheet:'Base',row:row,col:'C',value:prevEstado,expect:'Atendido',expectNombre:nombre});
-    if(undo.ok){toast('↩ Deshecho');load();}
-    else{toast('⚠ No se pudo deshacer: '+(undo.error||'?'));}
-  });
-  load();
-}
-async function quickAdd(){
-  var inp=document.getElementById('qaInput');
-  var val=(inp.value||'').trim();
-  if(!val)return;
-  inp.disabled=true;
-  var res=await api({action:'append',sheet:'Base',nombre:val,tipo:'Tarea'});
-  inp.disabled=false;
-  if(res.ok){inp.value='';toast('✓ Tarea agregada');load();}
-  else{toast('⚠ '+(res.error||'Error al agregar'));}
+  if(completadosOpen){done.forEach(function(r){h+=itemCard(r,'done');});}
+  h+='</div>';el.innerHTML=h;
 }
 
 load();
