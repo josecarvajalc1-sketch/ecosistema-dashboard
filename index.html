@@ -7,87 +7,67 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-/* === GLASSMORPHISM DESIGN SYSTEM === */
 :root {
-  --bg-deep: #0a0e27;
-  --bg-mid: #111638;
-  --bg-card: rgba(255,255,255,0.06);
-  --bg-card-hover: rgba(255,255,255,0.10);
-  --bg-card-active: rgba(255,255,255,0.14);
-  --glass-border: rgba(255,255,255,0.08);
-  --glass-border-hover: rgba(255,255,255,0.15);
-  --text-primary: #ffffff;
-  --text-secondary: rgba(255,255,255,0.65);
-  --text-muted: rgba(255,255,255,0.40);
-  --accent: #4f8cff;
-  --accent-glow: rgba(79,140,255,0.25);
-  --success: #34d399;
-  --success-bg: rgba(52,211,153,0.12);
-  --warning: #f59e0b;
-  --warning-bg: rgba(245,158,11,0.12);
-  --danger: #ef4444;
-  --danger-bg: rgba(239,68,68,0.12);
-  --purple: #a78bfa;
-  --purple-bg: rgba(167,139,250,0.12);
-  --sidebar-w: 260px;
-  --blur: 20px;
+  --bg-deep:#0a0e27;--bg-card:rgba(255,255,255,.06);--bg-card-hover:rgba(255,255,255,.10);
+  --glass-border:rgba(255,255,255,.08);--glass-border-hover:rgba(255,255,255,.15);
+  --text-primary:#fff;--text-secondary:rgba(255,255,255,.65);--text-muted:rgba(255,255,255,.40);
+  --accent:#4f8cff;--accent-glow:rgba(79,140,255,.25);
+  --success:#34d399;--success-bg:rgba(52,211,153,.12);
+  --warning:#f59e0b;--warning-bg:rgba(245,158,11,.12);
+  --danger:#ef4444;--danger-bg:rgba(239,68,68,.12);
+  --purple:#a78bfa;--purple-bg:rgba(167,139,250,.12);
+  --sidebar-w:250px;--blur:20px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{color-scheme:dark}
 body{font-family:'Inter',system-ui,sans-serif;color:var(--text-primary);background:var(--bg-deep);min-height:100vh;overflow-x:hidden}
-body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 20% 20%,rgba(79,140,255,0.08) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(167,139,250,0.06) 0%,transparent 50%);pointer-events:none;z-index:0}
+body::before{content:'';position:fixed;inset:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 20% 20%,rgba(79,140,255,.08) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(167,139,250,.06) 0%,transparent 50%);pointer-events:none;z-index:0}
 
-/* === SIDEBAR === */
-.sidebar{position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;background:rgba(15,18,45,0.85);backdrop-filter:blur(var(--blur));-webkit-backdrop-filter:blur(var(--blur));border-right:1px solid var(--glass-border);z-index:100;display:flex;flex-direction:column;transition:transform .3s ease}
-.sidebar-brand{padding:24px 20px 16px;border-bottom:1px solid var(--glass-border)}
-.sidebar-brand h1{font-size:16px;font-weight:700;letter-spacing:-.3px;color:var(--text-primary)}
-.sidebar-brand p{font-size:11px;color:var(--text-muted);margin-top:2px}
-.sidebar-nav{flex:1;padding:12px 10px;overflow-y:auto}
-.nav-item{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:8px;color:var(--text-secondary);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s ease;text-decoration:none}
+/* SIDEBAR */
+.sidebar{position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;background:rgba(15,18,45,.92);backdrop-filter:blur(var(--blur));-webkit-backdrop-filter:blur(var(--blur));border-right:1px solid var(--glass-border);z-index:100;display:flex;flex-direction:column}
+.sidebar-brand{padding:20px 16px 14px;border-bottom:1px solid var(--glass-border)}
+.sidebar-brand h1{font-size:15px;font-weight:700}
+.sidebar-brand p{font-size:10px;color:var(--text-muted);margin-top:2px}
+.sidebar-nav{flex:1;padding:10px 8px;overflow-y:auto}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;color:var(--text-secondary);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;text-decoration:none;border:none;background:none;width:100%;text-align:left}
 .nav-item:hover{background:var(--bg-card);color:var(--text-primary)}
 .nav-item.active{background:var(--accent-glow);color:var(--accent)}
-.nav-item .icon{width:18px;text-align:center;font-size:15px}
-.sidebar-footer{padding:16px 20px;border-top:1px solid var(--glass-border)}
-.sidebar-footer .user-name{font-size:13px;font-weight:600;color:var(--text-primary)}
-.sidebar-footer .user-role{font-size:11px;color:var(--text-muted)}
+.nav-item .icon{width:18px;text-align:center;font-size:14px}
+.nav-sep{height:1px;background:var(--glass-border);margin:6px 12px}
+.sidebar-footer{padding:14px 16px;border-top:1px solid var(--glass-border)}
+.sidebar-footer .uname{font-size:12px;font-weight:600}
+.sidebar-footer .urole{font-size:10px;color:var(--text-muted)}
+.hamburger{display:none;position:fixed;top:12px;left:12px;z-index:200;width:38px;height:38px;background:var(--bg-card);backdrop-filter:blur(var(--blur));border:1px solid var(--glass-border);border-radius:8px;color:var(--text-primary);font-size:18px;cursor:pointer;align-items:center;justify-content:center}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:90}
 
-/* Hamburger (mobile) */
-.hamburger{display:none;position:fixed;top:16px;left:16px;z-index:200;width:40px;height:40px;background:var(--bg-card);backdrop-filter:blur(var(--blur));border:1px solid var(--glass-border);border-radius:10px;color:var(--text-primary);font-size:20px;cursor:pointer}
-.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:90}
+/* MAIN */
+.main{margin-left:var(--sidebar-w);padding:20px 24px 40px;position:relative;z-index:1}
+.hdr{margin-bottom:20px}
+.hdr-greet{font-size:24px;font-weight:800;letter-spacing:-.5px;background:linear-gradient(135deg,#fff,rgba(255,255,255,.7));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hdr-sub{font-size:12px;color:var(--text-secondary);margin-top:4px}
+.hdr-sub b{color:var(--accent)}
 
-/* === MAIN === */
-.main{margin-left:var(--sidebar-w);padding:24px 28px 40px;position:relative;z-index:1}
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stat-card{background:var(--bg-card);backdrop-filter:blur(var(--blur));border:1px solid var(--glass-border);border-radius:12px;padding:14px;transition:all .2s}
+.stat-card:hover{background:var(--bg-card-hover);transform:translateY(-1px)}
+.stat-label{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+.stat-value{font-size:26px;font-weight:800;margin-top:4px;line-height:1}
+.stat-value.red{color:var(--danger)}.stat-value.blue{color:var(--accent)}.stat-value.green{color:var(--success)}.stat-value.purple{color:var(--purple)}
 
-/* === HEADER === */
-.hdr{margin-bottom:24px}
-.hdr-greet{font-size:26px;font-weight:800;letter-spacing:-.5px;background:linear-gradient(135deg,#fff 0%,rgba(255,255,255,0.7) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hdr-sub{font-size:13px;color:var(--text-secondary);margin-top:6px}
-.hdr-sub b{color:var(--accent);font-weight:600}
-
-/* === STATS === */
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
-.stat-card{background:var(--bg-card);backdrop-filter:blur(var(--blur));-webkit-backdrop-filter:blur(var(--blur));border:1px solid var(--glass-border);border-radius:14px;padding:18px 16px;transition:all .2s ease}
-.stat-card:hover{background:var(--bg-card-hover);border-color:var(--glass-border-hover);transform:translateY(-2px)}
-.stat-label{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
-.stat-value{font-size:28px;font-weight:800;margin-top:6px;line-height:1}
-.stat-value.red{color:var(--danger)}
-.stat-value.blue{color:var(--accent)}
-.stat-value.green{color:var(--success)}
-.stat-value.purple{color:var(--purple)}
-
-/* === SECTION === */
-.section{margin-bottom:24px}
-.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.section-head h2{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px}
-.dot{width:8px;height:8px;border-radius:50%;display:inline-block}
-.dot-red{background:var(--danger);box-shadow:0 0 8px var(--danger)}
-.dot-orange{background:var(--warning);box-shadow:0 0 8px var(--warning)}
-.dot-teal{background:var(--success);box-shadow:0 0 8px var(--success)}
+/* SECTIONS */
+.section{margin-bottom:20px}
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.section-head h2{font-size:14px;font-weight:700;display:flex;align-items:center;gap:7px}
+.dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+.dot-red{background:var(--danger);box-shadow:0 0 6px var(--danger)}
+.dot-orange{background:var(--warning);box-shadow:0 0 6px var(--warning)}
+.dot-teal{background:var(--success);box-shadow:0 0 6px var(--success)}
 .dot-muted{background:var(--text-muted)}
-.count{font-size:12px;color:var(--text-muted);font-weight:600}
+.count{font-size:11px;color:var(--text-muted);font-weight:600}
 
-/* === ITEM CARD === */
-.item-card{background:var(--bg-card);backdrop-filter:blur(var(--blur));-webkit-backdrop-filter:blur(var(--blur));border:1px solid var(--glass-border);border-radius:12px;padding:14px 16px;margin-bottom:8px;cursor:pointer;transition:all .15s ease;display:flex;align-items:flex-start;gap:14px}
+/* ITEM CARD */
+.item-card{background:var(--bg-card);backdrop-filter:blur(var(--blur));border:1px solid var(--glass-border);border-radius:10px;padding:12px 14px;margin-bottom:6px;cursor:pointer;transition:all .15s;display:flex;align-items:flex-start;gap:12px}
 .item-card:hover{background:var(--bg-card-hover);border-color:var(--glass-border-hover)}
 .item-card.ahora{border-left:3px solid var(--danger)}
 .item-card.hoy{border-left:3px solid var(--warning)}
@@ -95,49 +75,50 @@ body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%
 .item-card.sinprioridad{border-left:3px solid var(--text-muted)}
 .item-card.done{opacity:.5}
 .item-body{flex:1;min-width:0}
-.item-title{font-size:13px;font-weight:600;color:var(--text-primary);line-height:1.3}
-.item-detail{font-size:11px;color:var(--text-muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.item-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.pill{font-size:10px;font-weight:600;padding:3px 8px;border-radius:6px;white-space:nowrap}
-.pill-blue{background:rgba(79,140,255,0.15);color:var(--accent)}
+.item-title{font-size:13px;font-weight:600;line-height:1.3}
+.item-detail{font-size:11px;color:var(--text-muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item-meta{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.pill{font-size:10px;font-weight:600;padding:2px 7px;border-radius:5px;white-space:nowrap}
+.pill-blue{background:rgba(79,140,255,.15);color:var(--accent)}
 .pill-teal{background:var(--success-bg);color:var(--success)}
 .pill-purple{background:var(--purple-bg);color:var(--purple)}
 .pill-red{background:var(--danger-bg);color:var(--danger)}
 .pill-orange{background:var(--warning-bg);color:var(--warning)}
-.pill-gray{background:rgba(255,255,255,0.08);color:var(--text-muted)}
-.item-date{font-size:10px;color:var(--text-muted);margin-top:6px;display:block}
-.item-actions{display:flex;flex-direction:column;gap:6px;align-items:flex-end;flex-shrink:0}
-.act-sm{font-size:11px;padding:5px 10px;border-radius:6px;border:1px solid var(--glass-border);background:transparent;color:var(--text-secondary);cursor:pointer;white-space:nowrap;transition:all .15s}
+.pill-gray{background:rgba(255,255,255,.08);color:var(--text-muted)}
+.item-actions{display:flex;flex-direction:column;gap:5px;align-items:flex-end;flex-shrink:0}
+.act-sm{font-size:10px;padding:4px 8px;border-radius:5px;border:1px solid var(--glass-border);background:transparent;color:var(--text-secondary);cursor:pointer;white-space:nowrap}
 .act-sm:hover{background:var(--bg-card-hover);color:var(--text-primary)}
 .act-sm.green{border-color:var(--success);color:var(--success)}
-.act-sm.green:hover{background:var(--success-bg)}
-.act-sm select{background:transparent;border:none;color:var(--text-secondary);font-size:11px;cursor:pointer;outline:none}
+.act-sm select{background:transparent;border:none;color:var(--text-secondary);font-size:10px;cursor:pointer}
 .act-sm select option{background:#1a1e3a;color:#fff}
+.drive-link{font-size:10px;color:var(--accent);text-decoration:none;margin-top:4px;display:inline-block}
+.drive-link:hover{text-decoration:underline}
 
-/* === DELEGATION === */
-.delegate{background:var(--bg-card);backdrop-filter:blur(var(--blur));-webkit-backdrop-filter:blur(var(--blur));border:1px solid var(--glass-border);border-radius:14px;padding:20px;margin-bottom:24px}
-.delegate h3{font-size:15px;font-weight:700;margin-bottom:6px}
-.delegate>p{font-size:12px;color:var(--text-muted);margin-bottom:14px}
-.deleg-items{display:flex;flex-direction:column;gap:6px}
-.deleg-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;background:rgba(255,255,255,0.03);border:1px solid var(--glass-border);cursor:pointer;transition:all .15s}
+/* DELEGATION — SPLIT VIEW */
+.delegate{background:var(--bg-card);backdrop-filter:blur(var(--blur));border:1px solid var(--glass-border);border-radius:12px;padding:16px;margin-bottom:20px}
+.delegate h3{font-size:14px;font-weight:700;margin-bottom:4px}
+.delegate>p{font-size:11px;color:var(--text-muted);margin-bottom:12px}
+.deleg-items{display:flex;flex-direction:column;gap:5px}
+.deleg-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;background:rgba(255,255,255,.03);border:1px solid var(--glass-border);cursor:pointer;transition:all .15s}
 .deleg-item:hover{background:var(--bg-card-hover);border-color:var(--glass-border-hover)}
-.deleg-ico{font-size:16px;flex-shrink:0}
+.deleg-item.selected{background:var(--accent-glow);border-color:var(--accent)}
+.deleg-ico{font-size:14px;flex-shrink:0}
 .deleg-item span:nth-child(2){flex:1;font-size:12px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.deleg-prio{font-size:10px;font-weight:600;padding:2px 6px;border-radius:4px;background:var(--success-bg);color:var(--success);flex-shrink:0}
 
-/* === EMAIL PANEL (expanded) === */
-.email-panel{background:rgba(10,14,39,0.9);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);border:1px solid var(--glass-border);border-radius:14px;padding:20px;margin-top:12px;display:none}
-.email-panel.open{display:block}
-.email-panel .ep-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
-.email-panel .ep-subject{font-size:15px;font-weight:700}
-.email-panel .ep-close{background:none;border:none;color:var(--text-muted);font-size:18px;cursor:pointer;padding:4px}
-.email-panel .ep-meta{font-size:11px;color:var(--text-muted);margin-bottom:12px}
-.email-panel .ep-body{background:rgba(255,255,255,0.04);border:1px solid var(--glass-border);border-radius:8px;padding:14px;font-size:12px;color:var(--text-secondary);line-height:1.6;max-height:200px;overflow-y:auto;white-space:pre-wrap;margin-bottom:16px}
-.email-panel .ep-label{font-size:11px;color:var(--text-muted);font-weight:600;margin-bottom:6px;text-transform:uppercase;letter-spacing:.3px}
-.email-panel textarea{width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--glass-border);border-radius:8px;padding:12px;font-size:13px;color:var(--text-primary);font-family:inherit;resize:vertical;min-height:60px;outline:none;transition:border-color .2s}
-.email-panel textarea:focus{border-color:var(--accent)}
-.email-panel textarea::placeholder{color:var(--text-muted)}
-.ep-actions{display:flex;gap:8px;margin-top:10px}
-.btn{padding:8px 16px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .15s}
+/* SPLIT PANEL */
+.split-panel{display:none;margin-top:14px;border-top:1px solid var(--glass-border);padding-top:14px}
+.split-panel.open{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:768px){.split-panel.open{grid-template-columns:1fr;}}
+.split-left,.split-right{min-width:0}
+.split-label{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.3px;font-weight:600;margin-bottom:6px}
+.email-meta{font-size:11px;color:var(--text-muted);margin-bottom:8px}
+.email-body{background:rgba(255,255,255,.04);border:1px solid var(--glass-border);border-radius:8px;padding:12px;font-size:12px;color:var(--text-secondary);line-height:1.6;max-height:300px;overflow-y:auto;white-space:pre-wrap}
+.split-right textarea{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--glass-border);border-radius:8px;padding:10px;font-size:12px;color:var(--text-primary);font-family:inherit;resize:vertical;min-height:80px;outline:none}
+.split-right textarea:focus{border-color:var(--accent)}
+.split-right textarea::placeholder{color:var(--text-muted)}
+.split-actions{display:flex;gap:6px;margin-top:8px}
+.btn{padding:7px 14px;border-radius:7px;font-size:11px;font-weight:600;cursor:pointer;border:none;transition:all .15s}
 .btn-primary{background:var(--accent);color:#fff}
 .btn-primary:hover{background:#3d7aee}
 .btn-primary:disabled{opacity:.5;cursor:not-allowed}
@@ -145,150 +126,129 @@ body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%
 .btn-ghost:hover{background:var(--bg-card)}
 .btn-success{background:var(--success);color:#0a0e27}
 .btn-success:hover{background:#2bc48a}
-.draft-preview{background:rgba(255,255,255,0.04);border:1px solid var(--glass-border);border-radius:8px;padding:14px;font-size:12px;color:var(--text-secondary);line-height:1.6;max-height:250px;overflow-y:auto;white-space:pre-wrap;margin-top:12px;display:none}
-.draft-preview.show{display:block}
+.draft-box{background:rgba(255,255,255,.04);border:1px solid var(--glass-border);border-radius:8px;padding:12px;font-size:12px;color:var(--text-secondary);line-height:1.6;max-height:250px;overflow-y:auto;white-space:pre-wrap;margin-top:10px;display:none}
+.draft-box.show{display:block}
 
-/* === TOAST === */
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:rgba(20,24,50,0.95);backdrop-filter:blur(20px);border:1px solid var(--glass-border);border-radius:10px;padding:12px 20px;font-size:13px;color:var(--text-primary);z-index:300;transition:transform .3s ease;white-space:nowrap}
+/* TOAST */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:rgba(20,24,50,.95);backdrop-filter:blur(20px);border:1px solid var(--glass-border);border-radius:8px;padding:10px 18px;font-size:12px;z-index:300;transition:transform .3s;white-space:nowrap}
 .toast.show{transform:translateX(-50%) translateY(0)}
-
-/* === FOOTER === */
-footer{text-align:center;padding:20px;font-size:11px;color:var(--text-muted)}
-
-/* === EMPTY STATE === */
-.empty-state{text-align:center;padding:40px 20px;color:var(--text-muted)}
-.empty-state .emoji{font-size:36px;margin-bottom:12px}
-
-/* === RESPONSIVE === */
+footer{text-align:center;padding:16px;font-size:10px;color:var(--text-muted)}
+.empty-state{text-align:center;padding:32px 16px;color:var(--text-muted)}
+.empty-state .emoji{font-size:30px;margin-bottom:8px}
 @media(max-width:768px){
-  .sidebar{transform:translateX(-100%)}
+  .sidebar{transform:translateX(-100%);transition:transform .3s}
   .sidebar.open{transform:translateX(0)}
   .sidebar-overlay.show{display:block}
-  .hamburger{display:flex;align-items:center;justify-content:center}
-  .main{margin-left:0;padding:70px 16px 40px}
-  .stats{grid-template-columns:repeat(2,1fr);gap:10px}
-  .stat-card{padding:14px 12px}
-  .stat-value{font-size:22px}
-  .item-card{padding:12px}
-  .item-actions{flex-direction:row;align-items:center}
-}
-@media(max-width:480px){
-  .stats{grid-template-columns:1fr 1fr}
+  .hamburger{display:flex}
+  .main{margin-left:0;padding:60px 14px 40px}
+  .stats{grid-template-columns:repeat(2,1fr);gap:8px}
   .stat-value{font-size:20px}
 }
 </style>
 </head>
 <body>
 
-<!-- Sidebar -->
-<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
-<button class="hamburger" id="hamburger" onclick="toggleSidebar()">☰</button>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<button class="hamburger" id="hamburger">☰</button>
 <nav class="sidebar" id="sidebar">
   <div class="sidebar-brand">
     <h1>🎓 Coordinación</h1>
     <p>Salesiano Valparaíso</p>
   </div>
   <div class="sidebar-nav">
-    <a class="nav-item active" href="#" onclick="showView('dashboard')">
-      <span class="icon">◉</span> Dashboard
-    </a>
-    <a class="nav-item" href="#" onclick="showView('correos')">
-      <span class="icon">✉</span> Correos
-    </a>
-    <a class="nav-item" href="#" onclick="showView('casos')">
-      <span class="icon">📂</span> Casos
-    </a>
-    <a class="nav-item" href="#" onclick="showView('calendario')">
-      <span class="icon">📅</span> Calendario
-    </a>
-    <a class="nav-item" href="#" onclick="showView('config')">
-      <span class="icon">⚙</span> Configuración
-    </a>
+    <button class="nav-item active" data-view="dashboard"><span class="icon">◉</span> Dashboard</button>
+    <button class="nav-item" data-view="correos"><span class="icon">✉</span> Correos</button>
+    <button class="nav-item" data-view="casos"><span class="icon">📂</span> Casos</button>
+    <button class="nav-item" data-view="calendario"><span class="icon">📅</span> Calendario</button>
+    <div class="nav-sep"></div>
+    <button class="nav-item" data-view="delegar"><span class="icon">✦</span> Redactar con IA</button>
+    <div class="nav-sep"></div>
+    <button class="nav-item" data-view="config"><span class="icon">⚙</span> Configuración</button>
   </div>
   <div class="sidebar-footer">
-    <div class="user-name">Pedro Quiroz</div>
-    <div class="user-role">Jefe de Coord. Pedagógica</div>
+    <div class="uname">Pedro Quiroz</div>
+    <div class="urole">Jefe de Coord. Pedagógica</div>
   </div>
 </nav>
 
-<!-- Main Content -->
 <div class="main">
-  <!-- Header -->
   <div class="hdr">
-    <div class="hdr-greet" id="greet">Buenos días</div>
+    <div class="hdr-greet" id="greet">Buenos días, Pedro</div>
     <div class="hdr-sub" id="hdrSub">Cargando…</div>
   </div>
-
-  <!-- Stats -->
   <div class="stats" id="statsRow">
     <div class="stat-card"><div class="stat-label">Total</div><div class="stat-value blue" id="statTotal">—</div></div>
     <div class="stat-card"><div class="stat-label">Urgentes</div><div class="stat-value red" id="statUrgent">—</div></div>
     <div class="stat-card"><div class="stat-label">Correos</div><div class="stat-value purple" id="statMail">—</div></div>
     <div class="stat-card"><div class="stat-label">Casos</div><div class="stat-value green" id="statCases">—</div></div>
   </div>
-
-  <!-- Action Queue -->
-  <div id="actionQueue"><div class="empty-state"><div class="emoji">📋</div>Cargando tu día…</div></div>
-
-  <!-- Delegation Section -->
-  <div id="delegateSection" style="display:none"></div>
-
-  <!-- Email Panel (shown when clicking delegable item) -->
-  <div class="email-panel" id="emailPanel">
-    <div class="ep-header">
-      <div class="ep-subject" id="epSubject"></div>
-      <button class="ep-close" onclick="closeEmailPanel()">✕</button>
-    </div>
-    <div class="ep-meta" id="epMeta"></div>
-    <div class="ep-body" id="epBody"></div>
-    <div class="ep-label">Tu instrucción:</div>
-    <textarea id="epInstruction" placeholder="¿Qué quieres que responda? Ej: Responde que revisaremos el caso en la reunión de mañana"></textarea>
-    <div class="ep-actions">
-      <button class="btn btn-primary" id="btnDraft" onclick="draftWithAI()">Redactar con IA</button>
-      <button class="btn btn-ghost" onclick="closeEmailPanel()">Cancelar</button>
-    </div>
-    <div class="draft-preview" id="draftPreview">
-      <div class="ep-label">Respuesta redactada (editable):</div>
-      <div id="draftText" contenteditable="true" style="min-height:100px;outline:none;line-height:1.6;font-size:12px;color:var(--text-secondary);white-space:pre-wrap"></div>
-      <div class="ep-actions" style="margin-top:12px">
-        <button class="btn btn-success" onclick="sendDraft()">Enviar respuesta</button>
-        <button class="btn btn-ghost" onclick="hideDraft()">Cancelar</button>
-      </div>
-    </div>
+  <div id="view-dashboard">
+    <div id="actionQueue"><div class="empty-state"><div class="emoji">📋</div>Cargando…</div></div>
+    <div id="completadosSection"></div>
   </div>
-
-  <!-- Completados -->
-  <div id="completadosSection"></div>
-
+  <div id="view-correos" style="display:none"></div>
+  <div id="view-casos" style="display:none"></div>
+  <div id="view-calendario" style="display:none"></div>
+  <div id="view-delegar" style="display:none"></div>
+  <div id="view-config" style="display:none"><div class="empty-state"><div class="emoji">⚙</div>Próximamente</div></div>
   <footer>Coordinación Pedagógica · Colegio Salesiano Valparaíso</footer>
 </div>
-
 <div class="toast" id="toast"></div>
 
 <script>
 var API='https://script.google.com/macros/s/AKfycbzgjhOBuRRpRe4UcqQOKAjYW2FYyTjq6pL9zKZYB843Hwav0g-8GR4hS2rZD2BSZyM_/exec';
-var AI_API=''; // URL del túnel (ngrok/cloudflared) — configurar después
+var AI_API='';
 var ITEMS=[];
-var currentEmail=null;
+var currentView='dashboard';
+var selectedDeleg=null;
 
-function esc(s){return(s||'').replace(/[&<>\"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]});}
-var toastTimer=null;
-function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(function(){t.classList.remove('show');},2500);}
+function esc(s){return(s||'').replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]});}
+var tt=null;function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){t.classList.remove('show');},2500);}
 
-/* === SIDEBAR === */
-function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('show');}
-function showView(v){document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active');});event.currentTarget.classList.add('active');toggleSidebar();}
+/* SIDEBAR */
+function setupSidebar(){
+  document.querySelectorAll('.nav-item').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var view=this.getAttribute('data-view');
+      showView(view);
+      // mobile: close sidebar
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('sidebarOverlay').classList.remove('show');
+    });
+  });
+  document.getElementById('hamburger').addEventListener('click',function(){
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('sidebarOverlay').classList.toggle('show');
+  });
+  document.getElementById('sidebarOverlay').addEventListener('click',function(){
+    document.getElementById('sidebar').classList.remove('open');
+    this.classList.remove('show');
+  });
+}
+function showView(v){
+  currentView=v;
+  document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active');});
+  document.querySelector('[data-view="'+v+'"]').classList.add('active');
+  ['dashboard','correos','casos','calendario','delegar','config'].forEach(function(id){
+    var el=document.getElementById('view-'+id);if(el)el.style.display=id===v?'block':'none';
+  });
+  if(v==='correos')renderCorreos();
+  if(v==='casos')renderCasos();
+  if(v==='calendario')renderCalendario();
+  if(v==='delegar')renderDelegar();
+}
 
-/* === DATE HELPERS === */
+/* DATE */
 function parseFecha(f){if(!f)return null;var s=String(f).trim();var m=s.match(/^(\d{4}-\d{2}-\d{2})[ T](\d{2}:\d{2}(?::\d{2})?)/);if(m)s=m[1]+'T'+m[2];else if(/^\d{4}-\d{2}-\d{2}$/.test(s))s=s+'T00:00:00';var d=new Date(s);return isNaN(d)?null:d;}
 function diasDesde(f){var d=parseFecha(f);if(!d)return null;return Math.max(0,Math.floor((Date.now()-d)/86400000));}
 function diasHasta(f){var d=parseFecha(f);if(!d)return null;return Math.ceil((d-Date.now())/86400000);}
 function norm(s){return(s||'').toString().trim().toLowerCase();}
-function tipoIcon(t){t=norm(t);return t==='correo'?'✉':t==='caso'?'📂':t==='evento'?'📅':t==='tarea'?'✓':'📄';}
+function tipoIcon(t){t=norm(t);return t==='correo'?'✉':t==='caso'?'📂':t==='evento'?'📅':'✓';}
 function tipoColor(t){t=norm(t);return t==='correo'?'blue':t==='caso'?'teal':t==='evento'?'purple':'gray';}
 function prioColor(n){n=norm(n);return n==='alta'?'red':n==='media'?'orange':'teal';}
 function estColor(s){s=norm(s);return s==='en seguimiento'||s==='en curso'?'green':s==='nuevo'?'blue':s==='atendido'?'gray':'blue';}
 function prioOrd(n){n=norm(n);return n==='alta'?0:n==='media'?1:n==='baja'?2:3;}
+function extractGmailId(n){var m=(n||'').match(/ID:\s*([a-f0-9]+)/i);return m?m[1]:'';}
 
 function urgency(r){
   var est=norm(r[2]);if(est==='atendido'||est==='completado')return'done';
@@ -300,10 +260,8 @@ function urgency(r){
   return'semana';
 }
 
-/* === API === */
 async function api(p){try{var r=await fetch(API+'?'+new URLSearchParams(p).toString());return await r.json();}catch(e){return{ok:false,error:String(e)};}}
 
-/* === LOAD === */
 async function load(){
   var d=await api({action:'read',sheet:'Base'});
   if(!d.ok){document.getElementById('actionQueue').innerHTML='<div class="empty-state"><div class="emoji">⚠️</div>Error: '+(d.error||'?')+'</div>';return;}
@@ -313,217 +271,202 @@ async function load(){
 
 function getGreeting(){var h=new Date().getHours();if(h<12)return'Buenos días, Pedro';if(h<19)return'Buenas tardes, Pedro';return'Buenas noches, Pedro';}
 
-/* === RENDER === */
 function render(){
   var active=ITEMS.filter(function(r){var e=norm(r[2]);return e!=='atendido'&&e!=='completado';});
   var urgentes=active.filter(function(r){return urgency(r)==='ahora';});
   var hoy=active.filter(function(r){return urgency(r)==='hoy';});
   var correos=active.filter(function(r){return norm(r[1])==='correo';});
   var casos=active.filter(function(r){return norm(r[1])==='caso';});
-
   document.getElementById('greet').textContent=getGreeting();
   var sub='';
   if(urgentes.length)sub+='<b>'+urgentes.length+' urgente'+(urgentes.length>1?'s':'')+'</b>';
   if(hoy.length){if(sub)sub+=' · ';sub+=hoy.length+' para hoy';}
-  if(!sub)sub=active.length+' pendiente'+(active.length>1?'s':'')+' — todo tranquilo';
+  if(!sub)sub=active.length+' pendiente'+(active.length>1?'s':'');
   document.getElementById('hdrSub').innerHTML=sub;
-
   document.getElementById('statTotal').textContent=active.length;
   document.getElementById('statUrgent').textContent=urgentes.length;
   document.getElementById('statMail').textContent=correos.length;
   document.getElementById('statCases').textContent=casos.length;
-
-  renderQueue();
-  renderDelegate();
-  renderCompletados();
+  renderQueue();renderCompletados();
 }
 
+/* DASHBOARD QUEUE */
 function renderQueue(){
   var el=document.getElementById('actionQueue');
   var groups={ahora:[],hoy:[],sinprioridad:[],semana:[]};
   ITEMS.forEach(function(r){var u=urgency(r);if(u==='done')return;groups[u].push(r);});
   Object.keys(groups).forEach(function(k){groups[k].sort(function(a,b){return prioOrd(a[3])-prioOrd(b[3]);});});
-
-  var h='';
-  var sections=[
-    {key:'ahora',label:'Hacer ahora',dot:'dot-red'},
-    {key:'hoy',label:'Para hoy',dot:'dot-orange'},
-    {key:'sinprioridad',label:'Sin priorizar',dot:'dot-muted'},
-    {key:'semana',label:'Esta semana',dot:'dot-teal'}
-  ];
-
-  var anyItems=false;
-  sections.forEach(function(s){
-    var items=groups[s.key];if(!items.length)return;anyItems=true;
+  var h='';var secs=[{key:'ahora',label:'Hacer ahora',dot:'dot-red'},{key:'hoy',label:'Para hoy',dot:'dot-orange'},{key:'sinprioridad',label:'Sin priorizar',dot:'dot-muted'},{key:'semana',label:'Esta semana',dot:'dot-teal'}];
+  var any=false;
+  secs.forEach(function(s){var items=groups[s.key];if(!items.length)return;any=true;
     h+='<div class="section"><div class="section-head"><h2><span class="dot '+s.dot+'"></span>'+s.label+'</h2><span class="count">'+items.length+'</span></div>';
-    items.forEach(function(r){h+=itemCard(r,s.key);});
-    h+='</div>';
-  });
-  if(!anyItems)h='<div class="empty-state"><div class="emoji">🎉</div>Todo al día.</div>';
+    items.forEach(function(r){h+=itemCard(r,s.key);});h+='</div>';});
+  if(!any)h='<div class="empty-state"><div class="emoji">🎉</div>Todo al día.</div>';
   el.innerHTML=h;
 }
 
 function itemCard(r,urg){
-  var idx=ITEMS.indexOf(r);
-  var done=norm(r[2])==='atendido'||norm(r[2])==='completado';
+  var idx=ITEMS.indexOf(r);var done=norm(r[2])==='atendido'||norm(r[2])==='completado';
   var cls='item-card '+urg+(done?' done':'');
-  var h='<div class="'+cls+'">';
-  h+='<div class="item-body">';
+  var h='<div class="'+cls+'"><div class="item-body">';
   h+='<div class="item-title">'+esc(r[0])+'</div>';
   var ctx='';if(r[8])ctx=esc(r[8]);else if(r[6])ctx=esc(r[6]);
   if(ctx)h+='<div class="item-detail">'+ctx+'</div>';
+  // Drive link for casos
+  if(norm(r[1])==='caso'){
+    var driveQuery=encodeURIComponent(r[0]);
+    h+='<a class="drive-link" href="https://drive.google.com/drive/folders/1PEDAGOGICO_AMBIENTE_APOYO" target="_blank" title="Abrir en Drive">📂 Abrir en Drive</a>';
+  }
   h+='<div class="item-meta">';
   h+='<span class="pill pill-'+tipoColor(r[1])+'">'+tipoIcon(r[1])+' '+esc(r[1])+'</span>';
-  var priVal=norm(r[3]);
-  if(priVal==='alta'||priVal==='media'||priVal==='baja')h+='<span class="pill pill-'+prioColor(r[3])+'">'+esc(r[3])+'</span>';
+  var pv=norm(r[3]);if(pv==='alta'||pv==='media'||pv==='baja')h+='<span class="pill pill-'+prioColor(r[3])+'">'+esc(r[3])+'</span>';
   h+='<span class="pill pill-'+estColor(r[2])+'">'+esc(r[2])+'</span>';
-  h+='</div></div>';
-  h+='<div class="item-actions">';
+  h+='</div></div><div class="item-actions">';
   if(done){h+='<span class="pill pill-gray">✓ Listo</span>';}
-  else{
-    h+='<div class="act-sm"><select onchange="setPrio('+idx+',this.value)">';
-    h+='<option value="Alta"'+(priVal==='alta'?' selected':'')+'>Alta</option>';
-    h+='<option value="Media"'+(priVal==='media'?' selected':'')+'>Media</option>';
-    h+='<option value="Baja"'+(priVal==='baja'?' selected':'')+'>Baja</option>';
-    h+='</select></div>';
-    h+='<button class="act-sm green" onclick="markDone('+idx+')">✓ Listo</button>';
-  }
-  h+='</div></div>';
-  return h;
+  else{h+='<div class="act-sm"><select onchange="setPrio('+idx+',this.value)"><option value="Alta"'+(pv==='alta'?' selected':'')+'>Alta</option><option value="Media"'+(pv==='media'?' selected':'')+'>Media</option><option value="Baja"'+(pv==='baja'?' selected':'')+'>Baja</option></select></div>';
+  h+='<button class="act-sm green" onclick="markDone('+idx+')">✓ Listo</button>';}
+  h+='</div></div>';return h;
 }
 
-/* === DELEGATION === */
-function renderDelegate(){
-  var el=document.getElementById('delegateSection');
-  var delegable=ITEMS.filter(function(r){
-    var t=norm(r[1]);var p=norm(r[3]);var e=norm(r[2]);
-    if(e==='atendido'||e==='completado')return false;
-    if(t==='correo'&&p==='baja')return true;
-    return false;
-  });
-  if(!delegable.length){el.style.display='none';return;}
-  el.style.display='block';
-  var h='<div class="delegate"><h3>Posibles para delegar con IA</h3>';
-  h+='<p>'+delegable.length+' correos de baja prioridad — la IA puede redactar respuestas.</p>';
-  h+='<div class="deleg-items">';
-  delegable.forEach(function(r){
-    var idx=ITEMS.indexOf(r);
-    h+='<div class="deleg-item" onclick="openEmail('+idx+')">';
-    h+='<span class="deleg-ico">✉</span>';
-    h+='<span>'+esc(r[0])+'</span>';
-    h+='<span class="pill pill-teal" style="font-size:10px">'+esc(r[3]||'Baja')+'</span>';
-    h+='</div>';
-  });
-  h+='</div></div>';
-  el.innerHTML=h;
-}
-
-/* === EMAIL PANEL === */
-function openEmail(idx){
-  currentEmail=ITEMS[idx];
-  var panel=document.getElementById('emailPanel');
-  document.getElementById('epSubject').textContent=currentEmail[0];
-  document.getElementById('epMeta').textContent='De: '+(currentEmail[8]||'desconocido')+' · '+currentEmail[2];
-  document.getElementById('epBody').textContent='Cargando contenido del correo…';
-  document.getElementById('epInstruction').value='';
-  document.getElementById('draftPreview').classList.remove('show');
-  panel.classList.add('open');
-  panel.scrollIntoView({behavior:'smooth',block:'start'});
-
-  // Fetch email content
-  var gmailId=extractGmailId(currentEmail[8]||'');
-  if(gmailId){
-    fetch(API+'?action=getEmail&gmailId='+gmailId).then(function(r){return r.json();}).then(function(d){
-      if(d.ok){
-        document.getElementById('epMeta').textContent='De: '+d.from+' · '+d.subject;
-        document.getElementById('epBody').textContent=d.body||'(sin contenido)';
-      }else{
-        document.getElementById('epBody').textContent='No se pudo cargar el correo: '+(d.error||'?');
-      }
-    }).catch(function(e){
-      document.getElementById('epBody').textContent='Error al cargar: '+String(e);
-    });
-  }else{
-    document.getElementById('epBody').textContent=currentEmail[8]||'(sin datos de correo)';
-  }
-}
-
-function extractGmailId(notas){
-  var m=notas.match(/ID:\s*([a-f0-9]+)/i);
-  return m?m[1]:'';
-}
-
-function closeEmailPanel(){document.getElementById('emailPanel').classList.remove('open');currentEmail=null;}
-
-async function draftWithAI(){
-  var instruction=document.getElementById('epInstruction').value.trim();
-  if(!instruction){toast('Escribe una instrucción primero');return;}
-  if(!AI_API){toast('⚠ API de IA no configurada aún — pendiente el túnel');return;}
-  var btn=document.getElementById('btnDraft');
-  btn.disabled=true;btn.textContent='Redactando…';
-  try{
-    var gmailId=extractGmailId(currentEmail[8]||'');
-    var body=document.getElementById('epBody').textContent;
-    var resp=await fetch(AI_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({gmailId:instruction,emailBody:body,emailFrom:currentEmail[8]||'',emailSubject:currentEmail[0],instruction:instruction})});
-    var data=await resp.json();
-    if(data.ok&&data.draft){
-      document.getElementById('draftText').textContent=data.draft;
-      document.getElementById('draftPreview').classList.add('show');
-    }else{toast('Error: '+(data.error||'?'));}
-  }catch(e){toast('Error de conexión: '+String(e));}
-  btn.disabled=false;btn.textContent='Redactar con IA';
-}
-
-function hideDraft(){document.getElementById('draftPreview').classList.remove('show');}
-
-async function sendDraft(){
-  var body=document.getElementById('draftText').textContent.trim();
-  if(!body){toast('No hay respuesta para enviar');return;}
-  var gmailId=extractGmailId(currentEmail[8]||'');
-  if(!gmailId){toast('No se encontró el Gmail ID');return;}
-  try{
-    var resp=await fetch(API+'?action=sendReply&gmailId='+gmailId+'&body='+encodeURIComponent(body));
-    var data=await resp.json();
-    if(data.ok){toast('✓ Respuesta enviada');closeEmailPanel();load();}
-    else{toast('Error: '+(data.error||'?'));}
-  }catch(e){toast('Error: '+String(e));}
-}
-
-/* === ACTIONS === */
-function estadoReapertura(tipo){var t=norm(tipo);if(t==='evento')return'Programado';if(t==='caso')return'En seguimiento';return'Nuevo';}
-async function reabrir(idx){
-  var row=idx+2;var r=ITEMS[idx];var nuevoEstado=estadoReapertura(r[1]);
-  var res=await api({action:'update',sheet:'Base',row:row,col:'C',value:nuevoEstado,expect:r[2]||'',expectNombre:r[0]||''});
-  if(!res.ok){toast('⚠ '+(res.error||'Error'));load();return;}
-  toast('↩ Reabierto → '+nuevoEstado);load();
-}
-async function setPrio(idx,val){
-  var row=idx+2;var r=ITEMS[idx];
-  var res=await api({action:'update',sheet:'Base',row:row,col:'D',value:val,expect:r[3]||'',expectNombre:r[0]||''});
-  if(!res.ok){toast('⚠ '+(res.error||'Error'));load();return;}
-  toast('Prioridad → '+val);load();
-}
-async function markDone(idx){
-  var row=idx+2;var r=ITEMS[idx];
-  var res=await api({action:'update',sheet:'Base',row:row,col:'C',value:'Atendido',expect:r[2]||'',expectNombre:r[0]||''});
-  if(!res.ok){toast('⚠ '+(res.error||'Error'));load();return;}
-  toast('✓ Completado: "'+r[0]+'"');load();
-}
-
-/* === COMPLETADOS === */
-var completadosOpen=false;
-function toggleCompletados(){completadosOpen=!completadosOpen;renderCompletados();}
+/* COMPLETADOS */
+var compOpen=false;
+function toggleComp(){compOpen=!compOpen;renderCompletados();}
 function renderCompletados(){
   var el=document.getElementById('completadosSection');
   var done=ITEMS.filter(function(r){var e=norm(r[2]);return e==='atendido'||e==='completado';});
   if(!done.length){el.innerHTML='';return;}
-  var h='<div class="section"><div class="section-head" style="cursor:pointer" onclick="toggleCompletados()">';
-  h+='<h2><span class="dot dot-muted"></span>Completados</h2>';
-  h+='<span class="count">'+done.length+' '+(completadosOpen?'▲ ocultar':'▼ ver')+'</span></div>';
-  if(completadosOpen){done.forEach(function(r){h+=itemCard(r,'done');});}
-  h+='</div>';el.innerHTML=h;
+  var h='<div class="section"><div class="section-head" style="cursor:pointer" onclick="toggleComp()"><h2><span class="dot dot-muted"></span>Completados</h2><span class="count">'+done.length+' '+(compOpen?'▲':'▼')+'</span></div>';
+  if(compOpen)done.forEach(function(r){h+=itemCard(r,'done');});h+='</div>';el.innerHTML=h;
 }
 
+/* CORREOS VIEW */
+function renderCorreos(){
+  var el=document.getElementById('view-correos');
+  var correos=ITEMS.filter(function(r){return norm(r[1])==='correo'&&norm(r[2])!=='atendido'&&norm(r[2])!=='completado';});
+  if(!correos.length){el.innerHTML='<div class="empty-state"><div class="emoji">✉</div>Sin correos pendientes</div>';return;}
+  var h='<div class="section"><div class="section-head"><h2><span class="dot dot-blue"></span>Correos pendientes</h2><span class="count">'+correos.length+'</span></div>';
+  correos.forEach(function(r){h+=itemCard(r,urgency(r));});h+='</div>';el.innerHTML=h;
+}
+
+/* CASOS VIEW */
+function renderCasos(){
+  var el=document.getElementById('view-casos');
+  var casos=ITEMS.filter(function(r){return norm(r[1])==='caso';});
+  if(!casos.length){el.innerHTML='<div class="empty-state"><div class="emoji">📂</div>Sin casos</div>';return;}
+  var h='<div class="section"><div class="section-head"><h2><span class="dot dot-teal"></span>Casos</h2><span class="count">'+casos.length+'</span></div>';
+  casos.forEach(function(r){
+    var idx=ITEMS.indexOf(r);
+    h+='<div class="item-card '+urgency(r)+'"><div class="item-body">';
+    h+='<div class="item-title">'+esc(r[0])+'</div>';
+    var driveQ=encodeURIComponent(r[0]);
+    h+='<a class="drive-link" href="https://drive.google.com/drive/folders/1PEDAGOGICO_AMBIENTE_APOYO" target="_blank">📂 Abrir carpeta en Drive</a>';
+    h+='<div class="item-meta">';
+    h+='<span class="pill pill-teal">📂 Caso</span>';
+    var pv=norm(r[3]);if(pv==='alta'||pv==='media'||pv==='baja')h+='<span class="pill pill-'+prioColor(r[3])+'">'+esc(r[3])+'</span>';
+    h+='<span class="pill pill-'+estColor(r[2])+'">'+esc(r[2])+'</span>';
+    if(r[4])h+='<span class="item-date" style="font-size:10px;color:var(--text-muted)">📅 '+esc(String(r[4]).slice(0,10))+'</span>';
+    h+='</div></div><div class="item-actions">';
+    if(norm(r[2])!=='atendido'){h+='<div class="act-sm"><select onchange="setPrio('+idx+',this.value)"><option value="Alta"'+(pv==='alta'?' selected':'')+'>Alta</option><option value="Media"'+(pv==='media'?' selected':'')+'>Media</option><option value="Baja"'+(pv==='baja'?' selected':'')+'>Baja</option></select></div>';
+    h+='<button class="act-sm green" onclick="markDone('+idx+')">✓ Listo</button>';}
+    h+='</div></div>';
+  });h+='</div>';el.innerHTML=h;
+}
+
+/* CALENDARIO VIEW */
+function renderCalendario(){
+  var el=document.getElementById('view-calendario');
+  var eventos=ITEMS.filter(function(r){return norm(r[1])==='evento';});
+  if(!eventos.length){el.innerHTML='<div class="empty-state"><div class="emoji">📅</div>Sin eventos próximos</div>';return;}
+  var h='<div class="section"><div class="section-head"><h2><span class="dot dot-purple"></span>Eventos</h2><span class="count">'+eventos.length+'</span></div>';
+  eventos.forEach(function(r){h+=itemCard(r,urgency(r));});h+='</div>';el.innerHTML=h;
+}
+
+/* DELEGAR VIEW — SPLIT */
+function renderDelegar(){
+  var el=document.getElementById('view-delegar');
+  var delegable=ITEMS.filter(function(r){var t=norm(r[1]);var p=norm(r[3]);var e=norm(r[2]);if(e==='atendido'||e==='completado')return false;if(t==='correo')return true;return false;});
+  if(!delegable.length){el.innerHTML='<div class="empty-state"><div class="emoji">✦</div>Sin correos para delegar</div>';return;}
+  var h='<div class="delegate"><h3>Redactar respuestas con IA</h3><p>'+delegable.length+' correos — selecciona uno para leer y redactar.</p>';
+  h+='<div class="deleg-items">';
+  delegable.forEach(function(r,i){
+    var idx=ITEMS.indexOf(r);
+    h+='<div class="deleg-item" id="deleg-'+idx+'" onclick="selectDeleg('+idx+')">';
+    h+='<span class="deleg-ico">✉</span>';
+    h+='<span>'+esc(r[0])+'</span>';
+    var pv=norm(r[3]);h+='<span class="deleg-prio">'+esc(r[3]||'Baja')+'</span>';
+    h+='</div>';
+  });
+  h+='</div>';
+  h+='<div class="split-panel" id="splitPanel">';
+  h+='<div class="split-left"><div class="split-label">Correo recibido</div><div class="email-meta" id="spMeta"></div><div class="email-body" id="spBody">Selecciona un correo…</div></div>';
+  h+='<div class="split-right"><div class="split-label">Tu instrucción</div><textarea id="spInstruc" placeholder="¿Qué quieres que responda?"></textarea>';
+  h+='<div class="split-actions"><button class="btn btn-primary" id="btnDraft" onclick="draftAI()">Redactar con IA</button></div>';
+  h+='<div class="draft-box" id="draftBox"><div class="split-label">Respuesta (editable)</div><div id="draftText" contenteditable="true" style="min-height:80px;outline:none;line-height:1.6;font-size:12px;color:var(--text-secondary);white-space:pre-wrap"></div>';
+  h+='<div class="split-actions" style="margin-top:8px"><button class="btn btn-success" onclick="sendDraft()">Enviar respuesta</button><button class="btn btn-ghost" onclick="hideDraft()">Cancelar</button></div></div>';
+  h+='</div></div></div>';
+  el.innerHTML=h;
+}
+
+function selectDeleg(idx){
+  document.querySelectorAll('.deleg-item').forEach(function(d){d.classList.remove('selected');});
+  document.getElementById('deleg-'+idx).classList.add('selected');
+  selectedDeleg=ITEMS[idx];
+  var panel=document.getElementById('splitPanel');panel.classList.add('open');
+  document.getElementById('spMeta').textContent='De: '+(selectedDeleg[8]||'desconocido')+' · '+selectedDeleg[2];
+  document.getElementById('spBody').textContent='Cargando…';
+  document.getElementById('spInstruc').value='';
+  document.getElementById('draftBox').classList.remove('show');
+
+  var gmailId=extractGmailId(selectedDeleg[8]||'');
+  if(gmailId){
+    fetch(API+'?action=getEmail&gmailId='+gmailId).then(function(r){return r.json();}).then(function(d){
+      if(d.ok){document.getElementById('spMeta').textContent='De: '+d.from+' · '+d.subject;
+        document.getElementById('spBody').textContent=d.body||'(sin contenido)';}
+      else{document.getElementById('spBody').textContent='No se pudo cargar: '+(d.error||'?');}
+    }).catch(function(e){document.getElementById('spBody').textContent='Error: '+String(e);});
+  }else{
+    document.getElementById('spBody').textContent='ID de correo no disponible.\n\nReferencia: '+(selectedDeleg[8]||'');
+  }
+}
+
+async function draftAI(){
+  if(!selectedDeleg){toast('Selecciona un correo primero');return;}
+  var instr=document.getElementById('spInstruc').value.trim();
+  if(!instr){toast('Escribe una instrucción');return;}
+  if(!AI_API){toast('API de IA no configurada — pendiente túnel');return;}
+  var btn=document.getElementById('btnDraft');btn.disabled=true;btn.textContent='Redactando…';
+  try{
+    var gmailId=extractGmailId(selectedDeleg[8]||'');
+    var body=document.getElementById('spBody').textContent;
+    var resp=await fetch(AI_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({gmailId:gmailId,instruction:instr,emailBody:body,emailFrom:selectedDeleg[8]||'',emailSubject:selectedDeleg[0]})});
+    var data=await resp.json();
+    if(data.ok&&data.draft){document.getElementById('draftText').textContent=data.draft;document.getElementById('draftBox').classList.add('show');}
+    else{toast('Error: '+(data.error||'?'));}
+  }catch(e){toast('Error: '+String(e));}
+  btn.disabled=false;btn.textContent='Redactar con IA';
+}
+
+function hideDraft(){document.getElementById('draftBox').classList.remove('show');}
+
+async function sendDraft(){
+  var body=document.getElementById('draftText').textContent.trim();
+  if(!body){toast('Sin respuesta');return;}
+  var gmailId=extractGmailId(selectedDeleg[8]||'');
+  if(!gmailId){toast('Gmail ID no encontrado');return;}
+  try{
+    var resp=await fetch(API+'?action=sendReply&gmailId='+gmailId+'&body='+encodeURIComponent(body));
+    var data=await resp.json();
+    if(data.ok){toast('✓ Enviado');selectedDeleg=null;document.getElementById('splitPanel').classList.remove('open');load();renderDelegar();}
+    else{toast('Error: '+(data.error||'?'));}
+  }catch(e){toast('Error: '+String(e));}
+}
+
+/* ACTIONS */
+function estadoReapertura(t){t=norm(t);if(t==='evento')return'Programado';if(t==='caso')return'En seguimiento';return'Nuevo';}
+async function setPrio(idx,val){var r=ITEMS[idx];var res=await api({action:'update',sheet:'Base',row:idx+2,col:'D',value:val,expect:r[3]||'',expectNombre:r[0]||''});if(!res.ok){toast('Error');load();return;}toast('Prioridad → '+val);load();}
+async function markDone(idx){var r=ITEMS[idx];var res=await api({action:'update',sheet:'Base',row:idx+2,col:'C',value:'Atendido',expect:r[2]||'',expectNombre:r[0]||''});if(!res.ok){toast('Error');load();return;}toast('✓ '+r[0]);load();}
+
+setupSidebar();
 load();
 setInterval(load,120000);
 </script>
