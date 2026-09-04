@@ -718,38 +718,7 @@ function renderCalMonth(el,title){
 }
 var todos_global=[];
 
-/* AGENDA DIARIA (Your Schedule strip) */
-function renderSchedule(){
-  var strip=document.getElementById('scheduleStrip');
-  var bar=document.getElementById('topbar');
-  if(!strip||!bar)return;
-  var hoy=new Date();
-  var hoyStr=hoy.getFullYear()+'-'+String(hoy.getMonth()+1).padStart(2,'0')+'-'+String(hoy.getDate()).padStart(2,'0');
-  var evs=ITEMS.filter(function(r){
-    var f=String(r[4]||'').slice(0,10);
-    var v=String(r[5]||'').slice(0,10);
-    return (f===hoyStr||v===hoyStr)&&norm(r[2])!=='atendido'&&norm(r[2])!=='completado';
-  });
-  if(!evs.length){bar.style.display='none';return;}
-  bar.style.display='block';
-  var h='';
-  evs.forEach(function(r){
-    var pv=norm(r[3]);var hot=pv==='alta'||pasadoHoy(r);
-    var extra=hot?' style="border-color:var(--accent);background:rgba(190,227,0,.06)"':'';
-    h+='<div class="sched-item"'+extra+'>';
-    var hora=r[5]?String(r[5]).slice(11,16):(r[4]?String(r[4]).slice(11,16):'');
-    h+='<div class="sched-time">'+esc(hora||'Hoy')+'</div>';
-    h+='<div class="sched-unit">'+esc(r[0])+'</div>';
-    h+='<div class="sched-sub">'+esc(r[1])+'</div>';
-    h+='</div>';
-  });
-  strip.innerHTML=h;
-}
-function pasadoHoy(r){
-  var v=r[5]||r[4];var d=parseFecha(v);if(!d)return false;
-  var today=new Date();today.setHours(0,0,0,0);
-  return d<today;
-}
+
 
 /* DELEGAR VIEW — SPLIT */
 function renderDelegar(){
