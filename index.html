@@ -137,6 +137,36 @@ a:hover{text-decoration:underline}
 .deleg-ico{font-size:15px;flex-shrink:0;width:28px;height:28px;border-radius:50%;background:var(--bg-hover);display:flex;align-items:center;justify-content:center}
 .deleg-prio{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;background:var(--lime-glow);color:var(--lime);flex-shrink:0;margin-left:auto}
 
+/* ===== TOP BAR / SCHEDULE (estilo "Your Schedule") ===== */
+.topbar{display:none;background:rgba(22,22,24,.6);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:24px}
+.topbar-label{font-size:9.5px;color:var(--text-3);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:12px}
+.schedule-strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.sched-item{flex-shrink:0;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:10px 12px;min-width:130px;position:relative}
+.sched-item.active{background:var(--lime);border-color:var(--lime);color:#0E0E10}
+.sched-item.active .sched-time,.sched-item.active .sched-unit{color:#0E0E10}
+.sched-time{font-size:10px;color:var(--lime);font-weight:700}
+.sched-unit{font-size:11px;font-weight:700;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sched-sub{font-size:9px;color:var(--text-3);margin-top:2px}
+.sched-item.active .sched-sub{color:rgba(14,14,16,.6)}
+.sched-line{position:absolute;left:12px;right:12px;bottom:6px;height:3px;border-radius:2px;background:var(--bg-hover)}
+.sched-item.active .sched-line{background:rgba(14,14,16,.4)}
+
+/* ===== FILTER TABS (estilo lead filters) ===== */
+.filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.filter-tab{padding:6px 13px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text-3);font-size:11px;font-weight:600;cursor:pointer;transition:all .15s}
+.filter-tab:hover{color:var(--text);border-color:var(--border-strong)}
+.filter-tab.active{background:var(--lime);border-color:var(--lime);color:#0E0E10}
+
+/* ===== TASK ACTIVE (tarjeta verde lima resaltada) ===== */
+.item-card.hot{background:var(--lime);border-color:var(--lime);color:#0E0E10}
+.item-card.hot .item-detail,.item-card.hot .item-status,.item-card.hot .item-status *{color:rgba(14,14,16,.72)}
+.item-card.hot .item-lead{background:rgba(14,14,16,.12);border-color:rgba(14,14,16,.3)}
+.item-card.hot .pill{background:rgba(14,14,16,.12);color:#0E0E10;border:1px solid rgba(14,14,16,.2)}
+.item-card.hot .act-sm{color:#0E0E10;border-color:rgba(14,14,16,.35)}
+.item-card.hot .act-sm select{color:#0E0E10}
+.item-card.hot .lead-score .pt{background:rgba(14,14,16,.25)}
+.item-card.hot .lead-score .pt.on{background:#0E0E10}
+
 /* ===== SPLIT PANEL ===== */
 .split-panel{display:none;margin-top:16px;border-top:1px solid var(--border);padding-top:16px}
 .split-panel.open{display:grid;grid-template-columns:1fr 1fr;gap:18px}
@@ -217,6 +247,11 @@ input:focus,select:focus{border-color:var(--lime)}
       </div>
       <div class="hdr-date" id="hdrDate"></div>
     </div>
+  </div>
+
+  <div class="topbar" id="topbar">
+    <div class="topbar-label">Your Schedule · hoy</div>
+    <div class="schedule-strip" id="scheduleStrip"></div>
   </div>
 
   <div class="stats" id="statsRow">
@@ -355,7 +390,41 @@ function render(){
   document.getElementById('statUrgent').textContent=urgentes.length;
   document.getElementById('statMail').textContent=correos.length;
   document.getElementById('statCases').textContent=casos.length;
-  renderQueue();renderCompletados();
+  renderQueue();renderCompletados();renderSchedule();
+}
+
+/* AGENDA DIARIA (estilo "Your Schedule") */
+function renderSchedule(){
+  var strip=document.getElementById('scheduleStrip');
+  var bar=document.getElementById('topbar');
+  if(!strip||!bar)return;
+  var hoy=new Date();
+  var hoyStr=hoy.getFullYear()+'-'+String(hoy.getMonth()+1).padStart(2,'0')+'-'+String(hoy.getDate()).padStart(2,'0');
+  // eventos que ocurren hoy
+  var evs=ITEMS.filter(function(r){
+    var f=String(r[4]||'').slice(0,10);
+    var v=String(r[5]||'').slice(0,10);
+    return (f===hoyStr||v===hoyStr)&&norm(r[2])!=='atendido'&&norm(r[2])!=='completado';
+  });
+  if(!evs.length){bar.style.display='none';return;}
+  bar.style.display='block';
+  var h='';
+  evs.forEach(function(r){
+    var pv=norm(r[3]);var hot=pv==='alta'||pasadoHoy(r);
+    h+='<div class="sched-item'+(hot?' active':'')+'">';
+    var hora=r[5]?String(r[5]).slice(11,16):(r[4]?String(r[4]).slice(11,16):'');
+    h+='<div class="sched-time">'+esc(hora||'Hoy')+'</div>';
+    h+='<div class="sched-unit">'+esc(r[0])+'</div>';
+    h+='<div class="sched-sub">'+esc(r[1])+'</div>';
+    h+='<div class="sched-line"></div>';
+    h+='</div>';
+  });
+  strip.innerHTML=h;
+}
+function pasadoHoy(r){
+  var v=r[5]||r[4];var d=parseFecha(v);if(!d)return false;
+  var today=new Date();today.setHours(0,0,0,0);
+  return d<today;
 }
 
 /* DASHBOARD QUEUE */
@@ -368,14 +437,14 @@ function renderQueue(){
   var any=false;
   secs.forEach(function(s){var items=groups[s.key];if(!items.length)return;any=true;
     h+='<div class="section"><div class="section-head"><h2><span class="dot '+s.dot+'"></span>'+s.label+'</h2><span class="count">'+items.length+'</span></div>';
-    items.forEach(function(r){h+=itemCard(r,s.key);});h+='</div>';});
+    items.forEach(function(r,i){var hot=(s.key==='ahora'&&i===0)?' hot':'';h+=itemCard(r,s.key,hot);});h+='</div>';});
   if(!any)h='<div class="empty-state"><div class="emoji">🎉</div>Todo al día.</div>';
   el.innerHTML=h;
 }
 
-function itemCard(r,urg){
+function itemCard(r,urg,hot){
   var idx=ITEMS.indexOf(r);var done=norm(r[2])==='atendido'||norm(r[2])==='completado';
-  var cls='item-card '+urg+(done?' done':'');
+  var cls='item-card '+urg+(done?' done':'')+(hot?' hot':'');
   var h='<div class="'+cls+'">';h+='<div class="item-lead'+(norm(r[3])==='alta'?' lime':'')+'">'+tipoIcon(r[1])+'</div>';
   h+='<div class="item-body">';
   h+='<div class="item-title">'+esc(r[0])+'</div>';
@@ -416,11 +485,26 @@ function renderCompletados(){
 }
 
 /* CORREOS VIEW */
+var correoFilter='all';
+function setCorreoFilter(f){
+  correoFilter=f;renderCorreos();
+}
 function renderCorreos(){
   var el=document.getElementById('view-correos');
-  var correos=ITEMS.filter(function(r){return norm(r[1])==='correo'&&norm(r[2])!=='atendido'&&norm(r[2])!=='completado';});
-  if(!correos.length){el.innerHTML='<div class="empty-state"><div class="emoji">✉</div>Sin correos pendientes</div>';return;}
-  var h='<div class="section"><div class="section-head"><h2><span class="dot dot-blue"></span>Correos pendientes</h2><span class="count">'+correos.length+'</span></div>';
+  var all=ITEMS.filter(function(r){return norm(r[1])==='correo'&&norm(r[2])!=='atendido'&&norm(r[2])!=='completado';});
+  var correos=all;
+  if(correoFilter==='urgentes')correos=all.filter(function(r){return norm(r[3])==='alta'||urgency(r)==='ahora';});
+  else if(correoFilter==='hoy')correos=all.filter(function(r){return urgency(r)==='hoy'||urgency(r)==='ahora';});
+  else if(correoFilter==='convivencia')correos=all.filter(function(r){return norm(r[6])==='convivencia';});
+  var h='<div class="section">';
+  h+='<div class="section-head"><h2><span class="dot dot-blue"></span>Correos</h2><span class="count">'+all.length+' pendientes</span></div>';
+  h+='<div class="filter-row">';
+  h+='<button class="filter-tab'+(correoFilter==='all'?' active':'')+'" onclick="setCorreoFilter(\'all\')">All</button>';
+  h+='<button class="filter-tab'+(correoFilter==='urgentes'?' active':'')+'" onclick="setCorreoFilter(\'urgentes\')">🔥 Urgentes</button>';
+  h+='<button class="filter-tab'+(correoFilter==='hoy'?' active':'')+'" onclick="setCorreoFilter(\'hoy\')">Due hoy</button>';
+  h+='<button class="filter-tab'+(correoFilter==='convivencia'?' active':'')+'" onclick="setCorreoFilter(\'convivencia\')">Convivencia</button>';
+  h+='</div>';
+  if(!correos.length){h+='<div class="empty-state"><div class="emoji">✉</div>Sin correos</div>';h+='</div>';el.innerHTML=h;return;}
   correos.forEach(function(r){h+=itemCard(r,urgency(r));});h+='</div>';el.innerHTML=h;
 }
 
