@@ -424,7 +424,8 @@ function renderDelegar(){
   });
   h+='</div>';
   h+='<div class="split-panel" id="splitPanel">';
-  h+='<div class="split-left"><div class="split-label">Correo recibido</div><div class="email-meta" id="spMeta"></div><div class="email-body" id="spBody">Selecciona un correo…</div></div>';
+  h+='<div class="split-left"><div class="split-label">Correo recibido</div><div class="email-meta" id="spMeta"></div><div class="email-body" id="spBody">Selecciona un correo…</div>';
+  h+='<div class="pre-analysis" id="spAnalysis" style="display:none;margin-top:12px;background:rgba(79,140,255,.08);border:1px solid rgba(79,140,255,.2);border-radius:8px;padding:12px"><div class="split-label" style="color:var(--accent)">🧠 Antes de responder, piensa en:</div><div id="spAnalysisText" style="font-size:12px;color:var(--text-secondary);line-height:1.6;margin-top:6px"></div></div></div>';
   h+='<div class="split-right"><div class="split-label">Tu instrucción</div><textarea id="spInstruc" placeholder="¿Qué quieres que responda?"></textarea>';
   h+='<div class="split-actions"><button class="btn btn-primary" id="btnDraft" onclick="draftAI()">Redactar con IA</button></div>';
   h+='<div class="draft-box" id="draftBox"><div class="split-label">Respuesta (editable)</div><div id="draftText" contenteditable="true" style="min-height:80px;outline:none;line-height:1.6;font-size:12px;color:var(--text-secondary);white-space:pre-wrap"></div>';
@@ -442,17 +443,52 @@ function selectDeleg(idx){
   document.getElementById('spBody').textContent='Cargando…';
   document.getElementById('spInstruc').value='';
   document.getElementById('draftBox').classList.remove('show');
+  document.getElementById('spAnalysis').style.display='none';
 
   var gmailId=extractGmailId(selectedDeleg[8]||'');
   if(gmailId){
     fetch(API+'?action=getEmail&gmailId='+gmailId).then(function(r){return r.json();}).then(function(d){
       if(d.ok){document.getElementById('spMeta').textContent='De: '+d.from+' · '+d.subject;
-        document.getElementById('spBody').textContent=d.body||'(sin contenido)';}
+        document.getElementById('spBody').textContent=d.body||'(sin contenido)';
+        var analysis=analyzeEmail(d.subject||'',d.body||'',d.from||'');
+        if(analysis){document.getElementById('spAnalysisText').innerHTML=analysis;document.getElementById('spAnalysis').style.display='block';}
+      }
       else{document.getElementById('spBody').textContent='No se pudo cargar: '+(d.error||'?');}
     }).catch(function(e){document.getElementById('spBody').textContent='Error: '+String(e);});
   }else{
     document.getElementById('spBody').textContent='ID de correo no disponible.\n\nReferencia: '+(selectedDeleg[8]||'');
   }
+}
+
+/* ANÁLISIS PRE-RESPUESTA */
+function analyzeEmail(subject,body,from){
+  var s=(subject||'').toLowerCase();var b=(body||'').toLowerCase();var f=(from||'').toLowerCase();
+  var tips=[];
+  if(s.indexOf('derivación')!==-1||s.indexOf('derivacion')!==-1||b.indexOf('derivar')!==-1)
+    tips.push('<b>Derivación:</b> Define: ¿quién lo atiende? ¿cuándo? ¿qué seguimiento al remitente?');
+  if(s.indexOf('simce')!==-1||b.indexOf('simce')!==-1)
+    tips.push('<b>SIMCE:</b> Revisa: ¿afecta calendario? ¿profesores informados? ¿preparación pendiente?');
+  if(s.indexOf('violencia')!==-1||s.indexOf('protocolo')!==-1||b.indexOf('agresión')!==-1)
+    tips.push('<b>Convivencia:</b> Verifica: ¿protocolo activado? ¿Dirección informada? ¿Plazos legales?');
+  if(s.indexOf('apoderado')!==-1||b.indexOf('familia')!==-1||b.indexOf('padre')!==-1)
+    tips.push('<b>Familia:</b> Tono empático pero firme. Menciona acciones concretas.');
+  if(s.indexOf('denuncia')!==-1||b.indexOf('denuncia')!==-1||b.indexOf('CRM')!==-1)
+    tips.push('<b>Denuncia/CRM:</b> No comprometas respuestas. Verifica equipo jurídico y plazos.');
+  if(s.indexOf('asistencia')!==-1||s.indexOf('jornada')!==-1||s.indexOf('salida')!==-1)
+    tips.push('<b>Operaciones:</b> Revisa calendario: ¿conflicto con otras actividades?');
+  if(s.indexOf('reunión')!==-1||s.indexOf('reunion')!==-1)
+    tips.push('<b>Reunión:</b> ¿Agenda disponible? ¿Quiénes asisten? ¿Documentación preparar?');
+  if(b.indexOf('urgente')!==-1||b.indexOf('inmediato')!==-1)
+    tips.push('⚡ <b>Urgencia detectada</b> — prioriza esta respuesta.');
+  if(b.indexOf('quedo atento')!==-1||b.indexOf('espero respuesta')!==-1||b.indexOf('favor confirmar')!==-1)
+    tips.push('📩 <b>Solicitan confirmación</b> — incluye confirmación explícita.');
+  if(b.indexOf('solo informar')!==-1||b.indexOf('para tu conocimiento')!==-1)
+    tips.push('ℹ️ <b>Informativo</b> — solo acuse de recibo.');
+  if(f.indexOf('rector')!==-1||f.indexOf('director')!==-1)
+    tips.push('👤 <b>Dirección:</b> Responder con prioridad. Tono formal y ejecutivo.');
+  if(tips.length===0)
+    tips.push('Revisa: ¿requiere respuesta? ¿Hay plazos? ¿Quién más debe estar informado?');
+  return tips.join('<br>');
 }
 
 async function draftAI(){
