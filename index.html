@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ecosistema Coordinación Pedagógica</title>
+<style>
+:root{
+  --bg:#0f172a; --card:#1e293b; --card2:#273549; --border:#334155;
+  --text:var(--foreground,#e2e8f0); --muted:var(--muted-foreground,#94a3b8);
+  --alta:#ef4444; --media:#f59e0b; --baja:#22c55e; --neutral:#64748b;
+  --accent:var(--accent,#38bdf8); --inac:#8b5cf6;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;padding:20px;background:transparent;color:var(--text)}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px}
+header h1{font-size:18px;font-weight:700}
+header .sub{color:var(--muted);font-size:12px}
+.badge{background:var(--accent);font-weight:700;padding:3px 10px;border-radius:20px;font-size:11px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:18px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px}
+.card .num{font-size:26px;font-weight:800}
+.card .lbl{font-size:11px;color:var(--muted)}
+.b-alta{color:var(--alta)}.b-media{color:var(--media)}.b-baja{color:var(--baja)}.b-total{color:var(--accent)}.b-inac{color:var(--inac)}
+h2.sec{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:16px 0 8px}
+.list{display:flex;flex-direction:column;gap:8px}
+.row{background:var(--card);border:1px solid var(--border);border-left:4px solid var(--neutral);border-radius:10px;padding:10px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.row.alta{border-left-color:var(--alta)}
+.row.media{border-left-color:var(--media)}
+.row.baja{border-left-color:var(--baja)}
+.row.inactivo{border-left-color:var(--inac);background:rgba(139,92,246,.08)}
+.row.done{opacity:.5}
+.row .main{flex:1;min-width:180px}
+.row .asunto{font-weight:600;font-size:13px}
+.row .asunto .resumen{color:var(--muted);font-weight:400;font-size:12px;display:block;margin-top:2px}
+.row .meta{font-size:11px;color:var(--muted);margin-top:4px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.pill{display:inline-block;font-size:10px;padding:1px 8px;border-radius:12px;font-weight:700;white-space:nowrap}
+.p-alta{background:var(--alta);color:#fff}.p-media{background:var(--media);color:#111}.p-baja{background:var(--baja);color:#041}.p-otro{background:var(--neutral);color:#fff}.p-done{background:var(--neutral);color:#fff}
+.p-inac{background:var(--inac);color:#fff}
+.p-nuevo{background:var(--accent);color:#06283d}
+.cat{background:var(--card2);color:var(--muted);border:1px solid var(--border)}
+.actions{display:flex;gap:5px;align-items:center}
+.btn{background:var(--card2);border:1px solid var(--border);color:var(--text);padding:5px 9px;border-radius:8px;font-size:11px;cursor:pointer}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.done-btn{background:rgba(34,197,94,.18);border-color:var(--baja);color:var(--baja)}
+.sel{background:var(--card2);border:1px solid var(--border);color:var(--text);padding:4px;border-radius:8px;font-size:11px}
+.empty{color:var(--muted);font-size:12px;padding:14px;text-align:center;border:1px dashed var(--border);border-radius:10px}
+footer{color:var(--muted);font-size:10px;margin-top:20px;text-align:center}
+.toast{position:fixed;bottom:18px;right:18px;background:var(--card2);border:1px solid var(--border);padding:10px 14px;border-radius:10px;font-size:12px;opacity:0;transition:opacity .3s;z-index:10}
+.toast.show{opacity:1}
+.refresh{background:var(--card2);border:1px solid var(--border);color:var(--text);padding:6px 12px;border-radius:8px;font-size:12px;cursor:pointer}
+.refresh:hover{border-color:var(--accent)}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Ecosistema Coordinación Pedagógica</h1>
+    <div class="sub" id="updatedAt">Cargando…</div>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center">
+    <button class="refresh" onclick="load()">⟳ Actualizar</button>
+    <span class="badge" style="color:var(--bg)">SALESIANOS V.</span>
+  </div>
+</header>
+
+<div class="cards">
+  <div class="card"><div class="num b-total" id="cTotal">–</div><div class="lbl">Urgentes</div></div>
+  <div class="card"><div class="num b-alta" id="cAlta">–</div><div class="lbl">Alta</div></div>
+  <div class="card"><div class="num b-media" id="cMedia">–</div><div class="lbl">Media</div></div>
+  <div class="card"><div class="num b-baja" id="cBaja">–</div><div class="lbl">Baja</div></div>
+  <div class="card"><div class="num b-total" id="cCasos">–</div><div class="lbl">Casos</div></div>
+  <div class="card"><div class="num b-inac" id="cInactivos">–</div><div class="lbl">Inactivos</div></div>
+</div>
+
+<h2 class="sec">Correos por prioridad</h2>
+<div class="list" id="correos"><div class="empty">Cargando…</div></div>
+
+<h2 class="sec">Casos en seguimiento</h2>
+<div class="list" id="casos"><div class="empty">Cargando…</div></div>
+
+<footer>Ecosistema Coordinación · ordena por prioridad · detecta inactividad · escribe a Google Sheets</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+var API='https://script.google.com/macros/s/AKfycbzjdrQlGLdTH8mQ2wnj8H3jtgoZWRBnDY0yOMUlHHl8ZUlxThI-rJacQWpPhdtQ1VMI/exec';
+var T_INACT=30; // dias sin movimiento -> alerta
+var CORREOS=[];
+
+function esc(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function pil(n){n=(n||'').toLowerCase();return n==='alta'?'p-alta':n==='media'?'p-media':n==='baja'?'p-baja':'p-otro';}
+function prioOrd(n){n=(n||'').toLowerCase();return n==='alta'?0:n==='media'?1:n==='baja'?2:3;}
+function rcl(n){n=(n||'').toLowerCase();return n==='alta'?'alta':n==='media'?'media':n==='baja'?'baja':'';}
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2200);}
+function diasDesde(fechaStr){
+  if(!fechaStr) return null;
+  try{var d=new Date(fechaStr);if(isNaN(d))return null;return Math.max(0,Math.floor((Date.now()-d.getTime())/86400000));}
+  catch(e){return null;}
+}
+
+async function api(params){
+  try{var r=await fetch(API+'?'+new URLSearchParams(params).toString());return await r.json();}
+  catch(e){return {ok:false,error:String(e)};}
+}
+
+async function load(){
+  var d=await api({action:'read',sheet:'Correos'});
+  if(!d.ok){document.getElementById('correos').innerHTML='<div class="empty">Error: '+(d.error||'?')+'</div>';return;}
+  CORREOS=(d.rows||[]).slice(1);
+  var dc=await api({action:'read',sheet:'Casos'});
+  renderCorreos(CORREOS);
+  renderCasos(dc.ok?dc.rows.slice(1):[]);
+  document.getElementById('updatedAt').textContent='Actualizado: '+new Date().toLocaleTimeString();
+}
+
+function renderCorreos(rows){
+  // MOTOR DE PRIORIZACION: ordenar Alta->Media->Baja, dentro por antiguedad fecha
+  var s=rows.slice().sort(function(a,b){return prioOrd(a[4])-prioOrd(b[4]);});
+  var a=0,m=0,b=0;
+  s.forEach(function(r){var p=(r[4]||'').toLowerCase();if(p==='alta')a++;else if(p==='media')m++;else if(p==='baja')b++;});
+  document.getElementById('cTotal').textContent=s.length;
+  document.getElementById('cAlta').textContent=a;
+  document.getElementById('cMedia').textContent=m;
+  document.getElementById('cBaja').textContent=b;
+  var el=document.getElementById('correos');
+  if(!s.length){el.innerHTML='<div class="empty">Aún no llegan correos. El clasificador activo los irá trayendo cada ~10 min.</div>';return;}
+  el.innerHTML=s.map(function(r,i){
+    var done=(r[9]||'').toLowerCase()==='atendido';
+    return '<div class="row '+rcl(r[4])+(done?' done':'')+'">'+
+      '<div class="main"><div class="asunto">'+esc(r[3])+'<span class="resumen">'+esc(r[7])+'</span></div>'+
+      '<div class="meta"><span class="pill '+pil(r[4])+'">'+esc(r[4])+'</span>'+
+      '<span class="pill cat">'+esc(r[5])+'</span><span>'+esc(r[2])+'</span></div></div>'+
+      '<div class="actions">'+
+      (done?'<span class="pill p-done">✓ Atendido</span>':
+        '<select class="sel" onchange="setPrio('+i+',this.value)">'+
+        '<option value="Alta" '+((r[4]||'').toLowerCase()==='alta'?'selected':'')+'>Alta</option>'+
+        '<option value="Media" '+((r[4]||'').toLowerCase()==='media'?'selected':'')+'>Media</option>'+
+        '<option value="Baja" '+((r[4]||'').toLowerCase()==='baja'?'selected':'')+'>Baja</option></select>'+
+        '<button class="btn done-btn" onclick="markDone('+i+')">✓ atendido</button>')+
+      '</div></div>';
+  }).join('');
+}
+
+function renderCasos(rows){
+  var el=document.getElementById('casos');
+  document.getElementById('cCasos').textContent=rows.length;
+  // deteccion de inactividad: marcamos los que llevan >T_INACT dias
+  var inactivos=0;
+  rows.forEach(function(r){var d=diasDesde(r[6]);if(d!==null&&d>T_INACT)inactivos++;});
+  document.getElementById('cInactivos').textContent=inactivos;
+  if(!rows.length){el.innerHTML='<div class="empty">Casos cargados desde Drive de acompañamiento.</div>';return;}
+  el.innerHTML=rows.map(function(r){
+    var d=diasDesde(r[6]);
+    var inactivo=(d!==null&&d>T_INACT);
+    var prioP=(r[7]||'').toLowerCase();
+    var clasePri=prioP==='alta'?'p-alta':prioP==='media'?'p-media':prioP==='baja'?'p-baja':prioP==='nuevo'?'p-nuevo':'p-otro';
+    return '<div class="row'+(inactivo?' inactivo':'')+'">'+
+      '<div class="main"><div class="asunto">'+esc(r[0])+
+      (inactivo?'<span class="resumen" style="color:var(--inac)">⚠ Inactivo '+(d===null?'':d)+' días</span>':'<span class="resumen">'+esc(r[8])+'</span>')+
+      '</div><div class="meta"><span class="pill '+clasePri+'">'+esc(r[7])+'</span>'+
+      '<span class="pill cat">'+esc(r[2])+'</span>'+
+      '<span>'+(r[6]?'Últ.act: '+diasDesde(r[6])+' días':'')+'</span></div></div></div>';
+  }).join('');
+}
+
+async function setPrio(idx,val){
+  if(!CORREOS[idx])return;
+  var r=CORREOS[idx], row=idx+2;
+  var res=await api({action:'update',sheet:'Correos',row:row,col:'E',value:val});
+  toast(res.ok?('Prioridad → '+val+' ✓'):('Error'));
+  load();
+}
+async function markDone(idx){
+  if(!CORREOS[idx])return;
+  var r=CORREOS[idx], row=idx+2;
+  var res1=await api({action:'update',sheet:'Correos',row:row,col:'J',value:'Atendido'});
+  await api({action:'update',sheet:'Correos',row:row,col:'K',value:new Date().toISOString()});
+  toast(res1.ok?'✓ Marcado atendido':'Error');
+  load();
+}
+
+load();
+setInterval(load,120000);
+</script>
+</body>
+</html>
