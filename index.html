@@ -62,7 +62,7 @@ a:hover{text-decoration:underline}
 .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(26,36,86,.4);backdrop-filter:blur(4px);z-index:90}
 
 /* ===== MAIN ===== */
-.main{margin-left:var(--sidebar-w);padding:0 36px 60px;position:relative;z-index:1;max-width:1400px}
+.main{margin-left:var(--sidebar-w);padding:0 36px 60px;position:relative;z-index:1;max-width:1400px;width:calc(100% - var(--sidebar-w))}
 
 /* ===== HEADER WORKSPACE ===== */
 .hdr{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:32px;padding-top:36px}
@@ -172,14 +172,15 @@ a:hover{text-decoration:underline}
 
 .tasks-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px}
 .task-card{padding:20px;cursor:pointer}
-.task-card.hot::after{background:var(--navy)}
-.task-card.hot .task-title,.task-card.hot .task-meta,.task-card.hot .task-type,.task-card.hot .task-status{color:#FFFFFF}
-.task-card.hot .task-icon{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.2);color:#FFFFFF}
-.task-card.hot .tag{background:rgba(255,255,255,0.1);color:#FFFFFF;border-color:rgba(255,255,255,0.2)}
-.task-card.hot .task-link{color:var(--accent-light)}
-.task-card.hot .item-status{background:rgba(0,0,0,0.2);color:rgba(255,255,255,0.8);border-left-color:var(--accent-light)}
-.task-card.hot .act-sm{background:rgba(255,255,255,0.1);color:#FFFFFF;border-color:rgba(255,255,255,0.2)}
-.task-card.hot .act-sm select{color:#FFFFFF}
+.task-card.hot::after{background:var(--bg-hover);border:1px solid var(--accent-light)}
+.task-card.hot:hover::after{background:var(--bg-hover);border-color:var(--accent)}
+.task-card.hot .task-title,.task-card.hot .task-meta,.task-card.hot .task-type,.task-card.hot .task-status{color:var(--navy)}
+.task-card.hot .task-icon{background:var(--bg);border-color:var(--border-strong);color:var(--accent)}
+.task-card.hot .tag{background:var(--bg);color:var(--text-2);border-color:var(--border)}
+.task-card.hot .task-link{color:var(--accent)}
+.task-card.hot .item-status{background:rgba(45,130,211,0.05);color:var(--text-2);border-left-color:var(--accent)}
+.task-card.hot .act-sm{background:var(--bg-elev);color:var(--text-2);border-color:var(--border-strong)}
+.task-card.hot .act-sm select{color:var(--text-2)}
 .task-icon{width:40px;height:40px;border-radius:12px;background:var(--bg);border:1px solid var(--border-strong);display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:12px;flex-shrink:0;color:var(--navy)}
 .task-title{font-size:16px;font-weight:800;line-height:1.3;margin-bottom:6px;color:var(--navy)}
 .task-meta{font-size:12px;color:var(--text-3);margin-bottom:12px;font-weight:500}
@@ -237,7 +238,7 @@ input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(45
   .sidebar.open{transform:translateX(0)}
   .sidebar-overlay.show{display:block}
   .hamburger{display:flex}
-  .main{margin-left:0;padding:0 16px 40px;margin-top:70px}
+  .main{margin-left:0;padding:0 16px 40px;margin-top:70px;width:100%}
   .kpi-row{grid-template-columns:1fr}
   .hdr-greet{font-size:26px}
   .leads-grid,.tasks-grid{grid-template-columns:1fr}
@@ -249,17 +250,16 @@ input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(45
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 <button class="hamburger" id="hamburger">☰</button>
 <nav class="sidebar" id="sidebar">
-  <div class="sidebar-brand"><span style="font-size:22px">🎓</span> Coordinación</div>
+  <div class="sidebar-brand"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg> Coord. Pedagógica</div>
   <div class="sidebar-nav">
-    <button class="nav-item active" data-view="dashboard" aria-label="Dashboard"><span class="icon">◉</span><span class="tip">Dashboard</span><span>Dashboard</span></button>
-    <button class="nav-item" data-view="correos" aria-label="Correos"><span class="icon">✉</span><span class="tip">Correos</span><span>Correos</span></button>
-    <button class="nav-item" data-view="casos" aria-label="Casos"><span class="icon">📂</span><span class="tip">Casos</span><span>Casos</span></button>
-    <button class="nav-item" data-view="calendario" aria-label="Calendario"><span class="icon">📅</span><span class="tip">Calendario</span><span>Calendario</span></button>
+    <button class="nav-item active" data-view="dashboard" aria-label="Dashboard"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg><span>Dashboard</span></button>
+    <button class="nav-item" data-view="correos" aria-label="Correos"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg><span>Correos</span></button>
+    <button class="nav-item" data-view="casos" aria-label="Casos"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg><span>Casos</span></button>
+    <button class="nav-item" data-view="calendario" aria-label="Calendario"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg><span>Calendario</span></button>
     <div class="nav-sep"></div>
-    <button class="nav-item" data-view="delegar" aria-label="Redactar con IA"><span class="icon">✦</span><span class="tip">Redactar con IA</span><span>Redactar IA</span></button>
+    <button class="nav-item" data-view="delegar" aria-label="Redactar con IA"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg><span>Redactar IA</span></button>
     <div class="nav-sep"></div>
-    <button class="nav-item" data-view="soporte" aria-label="Soporte"><span class="icon">💬</span><span class="tip">Soporte</span><span>Soporte</span></button>
-    <button class="nav-item" data-view="config" aria-label="Configuración"><span class="icon">⚙</span><span class="tip">Configuración</span><span>Ajustes</span></button>
+    <button class="nav-item" data-view="soporte" aria-label="Soporte"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg><span>Soporte</span></button>
   </div>
   <div class="sidebar-footer">
     <div class="avatar">P</div>
@@ -407,7 +407,7 @@ function parseFecha(f){if(!f)return null;var s=String(f).trim();var m=s.match(/^
 function diasDesde(f){var d=parseFecha(f);if(!d)return null;return Math.max(0,Math.floor((Date.now()-d)/86400000));}
 function diasHasta(f){var d=parseFecha(f);if(!d)return null;return Math.ceil((d-Date.now())/86400000);}
 function norm(s){return(s||'').toString().trim().toLowerCase();}
-function tipoIcon(t){t=norm(t);return t==='correo'?'✉':t==='caso'?'📂':t==='evento'?'📅':'✓';}
+function tipoIcon(t){t=norm(t);return t==='correo'?'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>':t==='caso'?'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>':t==='evento'?'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>':'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>';}
 function tipoColor(t){t=norm(t);return t==='correo'?'lime':t==='caso'?'teal':t==='evento'?'purple':'gray';}
 function prioColor(n){n=norm(n);return n==='alta'?'red':n==='media'?'orange':'teal';}
 function estColor(s){s=norm(s);return s==='en seguimiento'||s==='en curso'?'lime':s==='nuevo'?'blue':s==='atendido'?'gray':'blue';}
@@ -476,7 +476,7 @@ function renderQueue(){
   secs.forEach(function(s){var items=groups[s.key];if(!items.length)return;any=true;
     h+='<div class="section"><div class="section-head" style="margin-bottom:12px"><h2><span class="dot '+s.dot+'"></span>'+s.label+'</h2><span class="count">'+items.length+'</span></div>';
     items.forEach(function(r,i){var hot=(s.key==='ahora'&&i===0)?true:false;h+=itemCard(r,s.key,hot);});h+='</div>';});
-  if(!any)h='<div class="empty-state"><div class="emoji">🎉</div>Todo al día.</div>';
+  if(!any)h='<div class="empty-state"><div style="margin-bottom:12px;color:var(--text-3)"><svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="20 6 9 17 4 12"></polyline></svg></div>Todo al día.</div>';
   el.innerHTML=h;
 
   // Render mini boxes for Correos and Casos on the right column
@@ -488,7 +488,7 @@ function renderQueue(){
       ch+='<div style="display:flex;flex-direction:column;gap:8px">';
       correos.slice(0,3).forEach(function(r){ch+=leadCard(r);});
       ch+='</div>';
-    }else{ch+='<div class="empty-state" style="padding:20px"><div class="emoji" style="font-size:20px">✉</div></div>';}
+    }else{ch+='<div class="empty-state" style="padding:20px"><div style="margin-bottom:8px;color:var(--text-3)"><svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></div></div>';}
     ch+='</div>';cBox.innerHTML=ch;
   }
 
@@ -500,7 +500,7 @@ function renderQueue(){
       kh+='<div style="display:flex;flex-direction:column;gap:8px">';
       casos.slice(0,3).forEach(function(r){kh+=casoCard(r);});
       kh+='</div>';
-    }else{kh+='<div class="empty-state" style="padding:20px"><div class="emoji" style="font-size:20px">📂</div></div>';}
+    }else{kh+='<div class="empty-state" style="padding:20px"><div style="margin-bottom:8px;color:var(--text-3)"><svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg></div></div>';}
     kh+='</div>';kBox.innerHTML=kh;
   }
 }
@@ -567,7 +567,7 @@ function renderCorreos(){
 function leadCard(r){
   var ls=leadScore(r);
   var h='<div class="lead-card laser-card">';
-  h+='<div class="lead-head"><div class="lead-avatar">✉</div><div class="lead-info">';
+  h+='<div class="lead-head"><div class="lead-avatar"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></div><div class="lead-info">';
   h+='<div class="lead-name">'+esc(r[0])+'</div>';
   h+='<div class="lead-role">Correo</div>';
   h+='<div class="lead-company">'+esc(r[7]||'—')+'</div>';
@@ -601,7 +601,7 @@ function renderCasos(){
 function casoCard(r){
   var ls=leadScore(r);
   var h='<div class="lead-card laser-card">';
-  h+='<div class="lead-head"><div class="lead-avatar">📂</div><div class="lead-info">';
+  h+='<div class="lead-head"><div class="lead-avatar"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg></div><div class="lead-info">';
   h+='<div class="lead-name">'+esc(r[0])+'</div>';
   h+='<div class="lead-role">Caso</div>';
   h+='<div class="lead-company">'+esc(r[7]||'—')+'</div>';
@@ -731,7 +731,7 @@ function renderDelegar(){
   delegable.forEach(function(r){
     var idx=ITEMS.indexOf(r);
     h+='<div class="deleg-item" id="deleg-'+idx+'" onclick="selectDeleg('+idx+')" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;background:var(--bg-card);border:1px solid var(--border);cursor:pointer;transition:all .15s;margin-bottom:8px">';
-    h+='<div style="width:36px;height:36px;border-radius:10px;background:var(--bg);border:1px solid var(--border-strong);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">✉</div>';
+    h+='<div style="width:36px;height:36px;border-radius:10px;background:var(--bg);border:1px solid var(--border-strong);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;color:var(--navy)"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></div>';
     h+='<div style="flex:1;min-width:0">';
     h+='<div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(r[0])+'</div>';
     var ctx=r[8]||'';if(ctx)h+='<div style="font-size:10px;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px">'+esc(ctx)+'</div>';
@@ -741,7 +741,7 @@ function renderDelegar(){
   });
   h+='</div>';
   h+='<div style="display:flex;flex-direction:column;gap:16px;padding-top:8px">';
-  h+='<div id="writerPlaceholder" style="text-align:center;padding:40px 20px;color:var(--text-3);flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center"><div style="font-size:32px;margin-bottom:12px">✉</div><div>Selecciona un correo de la izquierda</div></div>';
+  h+='<div id="writerPlaceholder" style="text-align:center;padding:40px 20px;color:var(--text-3);flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center"><div style="margin-bottom:12px;color:var(--text-2)"><svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></div><div>Selecciona un correo de la izquierda</div></div>';
   h+='<div id="writerPanel" style="display:none;flex:1;display:flex;flex-direction:column;gap:14px;background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:20px">';
   h+='<div style="font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:1.2px;font-weight:700">Correo seleccionado</div>';
   h+='<div class="email-meta" id="spMeta" style="font-size:11px;color:var(--text-3);margin-bottom:8px"></div>';
