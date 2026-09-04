@@ -49,7 +49,7 @@ body::before{content:'';position:fixed;inset:-50%;width:200%;height:200%;backgro
 
 /* STATS */
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
-.stat-card{background:var(--bg-card);backdrop-filter:blur(var(--blur));border:1px solid var(--glass-border);border-radius:12px;padding:14px;transition:all .2s}
+.stat-card{background:var(--bg-card);backdrop-filter:blur(var(--blur));border:1px solid var(--glass-border);border-radius:12px;padding:14px;transition:all .2s;cursor:pointer;text-align:left;font:inherit;color:inherit;width:100%}
 .stat-card:hover{background:var(--bg-card-hover);transform:translateY(-1px)}
 .stat-label{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
 .stat-value{font-size:26px;font-weight:800;margin-top:4px;line-height:1}
@@ -77,6 +77,7 @@ body::before{content:'';position:fixed;inset:-50%;width:200%;height:200%;backgro
 .item-body{flex:1;min-width:0}
 .item-title{font-size:13px;font-weight:600;line-height:1.3}
 .item-detail{font-size:11px;color:var(--text-muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item-status{font-size:11px;color:var(--text-secondary);margin-top:6px;padding:6px 8px;background:rgba(255,255,255,.03);border-radius:6px;border-left:2px solid var(--accent);line-height:1.5}
 .item-meta{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
 .pill{font-size:10px;font-weight:600;padding:2px 7px;border-radius:5px;white-space:nowrap}
 .pill-blue{background:rgba(79,140,255,.15);color:var(--accent)}
@@ -177,10 +178,10 @@ footer{text-align:center;padding:16px;font-size:10px;color:var(--text-muted)}
     <div class="hdr-sub" id="hdrSub">Cargando…</div>
   </div>
   <div class="stats" id="statsRow">
-    <div class="stat-card"><div class="stat-label">Total</div><div class="stat-value blue" id="statTotal">—</div></div>
-    <div class="stat-card"><div class="stat-label">Urgentes</div><div class="stat-value red" id="statUrgent">—</div></div>
-    <div class="stat-card"><div class="stat-label">Correos</div><div class="stat-value purple" id="statMail">—</div></div>
-    <div class="stat-card"><div class="stat-label">Casos</div><div class="stat-value green" id="statCases">—</div></div>
+    <button class="stat-card" onclick="showView('dashboard')"><div class="stat-label">Total</div><div class="stat-value blue" id="statTotal">—</div></button>
+    <button class="stat-card" onclick="filterUrgentes()"><div class="stat-label">Urgentes</div><div class="stat-value red" id="statUrgent">—</div></button>
+    <button class="stat-card" onclick="showView('correos')"><div class="stat-label">Correos</div><div class="stat-value purple" id="statMail">—</div></button>
+    <button class="stat-card" onclick="showView('casos')"><div class="stat-label">Casos</div><div class="stat-value green" id="statCases">—</div></button>
   </div>
   <div id="view-dashboard">
     <div id="actionQueue"><div class="empty-state"><div class="emoji">📋</div>Cargando…</div></div>
@@ -312,9 +313,11 @@ function itemCard(r,urg){
   h+='<div class="item-title">'+esc(r[0])+'</div>';
   var ctx='';if(r[8])ctx=esc(r[8]);else if(r[6])ctx=esc(r[6]);
   if(ctx)h+='<div class="item-detail">'+ctx+'</div>';
+  // Status summary
+  var summary=statusSummary(r);
+  if(summary)h+='<div class="item-status">'+statusSummaryHtml(r)+'</div>';
   // Drive link for casos
   if(norm(r[1])==='caso'){
-    var driveQuery=encodeURIComponent(r[0]);
     h+='<a class="drive-link" href="https://drive.google.com/drive/folders/1PEDAGOGICO_AMBIENTE_APOYO" target="_blank" title="Abrir en Drive">📂 Abrir en Drive</a>';
   }
   h+='<div class="item-meta">';
@@ -353,20 +356,27 @@ function renderCasos(){
   var el=document.getElementById('view-casos');
   var casos=ITEMS.filter(function(r){return norm(r[1])==='caso';});
   if(!casos.length){el.innerHTML='<div class="empty-state"><div class="emoji">📂</div>Sin casos</div>';return;}
-  var h='<div class="section"><div class="section-head"><h2><span class="dot dot-teal"></span>Casos</h2><span class="count">'+casos.length+'</span></div>';
+  // Sort: active first, then by priority
+  casos.sort(function(a,b){
+    var ea=norm(a[2])==='atendido'?1:0;var eb=norm(b[2])==='atendido'?1:0;
+    if(ea!==eb)return ea-eb;
+    return prioOrd(a[3])-prioOrd(b[3]);
+  });
+  var h='<div class="section"><div class="section-head"><h2><span class="dot dot-teal"></span>Casos</h2><span class="count">'+casos.length+' total · '+casos.filter(function(r){return norm(r[2])!=='atendido';}).length+' activos</span></div>';
   casos.forEach(function(r){
-    var idx=ITEMS.indexOf(r);
-    h+='<div class="item-card '+urgency(r)+'"><div class="item-body">';
+    var idx=ITEMS.indexOf(r);var done=norm(r[2])==='atendido';
+    var summary=statusSummary(r);
+    h+='<div class="item-card '+urgency(r)+(done?' done':'')+'"><div class="item-body">';
     h+='<div class="item-title">'+esc(r[0])+'</div>';
-    var driveQ=encodeURIComponent(r[0]);
+    if(summary)h+='<div class="item-status">'+statusSummaryHtml(r)+'</div>';
     h+='<a class="drive-link" href="https://drive.google.com/drive/folders/1PEDAGOGICO_AMBIENTE_APOYO" target="_blank">📂 Abrir carpeta en Drive</a>';
     h+='<div class="item-meta">';
     h+='<span class="pill pill-teal">📂 Caso</span>';
     var pv=norm(r[3]);if(pv==='alta'||pv==='media'||pv==='baja')h+='<span class="pill pill-'+prioColor(r[3])+'">'+esc(r[3])+'</span>';
     h+='<span class="pill pill-'+estColor(r[2])+'">'+esc(r[2])+'</span>';
-    if(r[4])h+='<span class="item-date" style="font-size:10px;color:var(--text-muted)">📅 '+esc(String(r[4]).slice(0,10))+'</span>';
+    if(r[4])h+='<span style="font-size:10px;color:var(--text-muted)">📅 '+esc(String(r[4]).slice(0,10))+'</span>';
     h+='</div></div><div class="item-actions">';
-    if(norm(r[2])!=='atendido'){h+='<div class="act-sm"><select onchange="setPrio('+idx+',this.value)"><option value="Alta"'+(pv==='alta'?' selected':'')+'>Alta</option><option value="Media"'+(pv==='media'?' selected':'')+'>Media</option><option value="Baja"'+(pv==='baja'?' selected':'')+'>Baja</option></select></div>';
+    if(!done){h+='<div class="act-sm"><select onchange="setPrio('+idx+',this.value)"><option value="Alta"'+(pv==='alta'?' selected':'')+'>Alta</option><option value="Media"'+(pv==='media'?' selected':'')+'>Media</option><option value="Baja"'+(pv==='baja'?' selected':'')+'>Baja</option></select></div>';
     h+='<button class="act-sm green" onclick="markDone('+idx+')">✓ Listo</button>';}
     h+='</div></div>';
   });h+='</div>';el.innerHTML=h;
@@ -462,6 +472,49 @@ async function sendDraft(){
 }
 
 /* ACTIONS */
+function filterUrgentes(){
+  currentView='dashboard';
+  document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active');});
+  document.querySelector('[data-view="dashboard"]').classList.add('active');
+  ['dashboard','correos','casos','calendario','delegar','config'].forEach(function(id){
+    var el=document.getElementById('view-'+id);if(el)el.style.display=id==='dashboard'?'block':'none';
+  });
+  // Show only urgent items
+  var el=document.getElementById('actionQueue');
+  var urgentes=ITEMS.filter(function(r){return urgency(r)==='ahora';});
+  if(!urgentes.length){el.innerHTML='<div class="empty-state"><div class="emoji">🎉</div>Sin urgentes</div>';return;}
+  var h='<div class="section"><div class="section-head"><h2><span class="dot dot-red"></span>Solo urgentes</h2><span class="count">'+urgentes.length+'</span></div>';
+  urgentes.forEach(function(r){h+=itemCard(r,'ahora');});h+='</div>';
+  el.innerHTML=h;
+  document.getElementById('completadosSection').innerHTML='';
+}
+
+/* STATUS SUMMARY */
+function statusSummary(r){
+  var est=norm(r[2]);var tipo=norm(r[1]);var nombre=r[0]||'';var notas=r[8]||'';
+  var lines=[];
+  if(tipo==='caso'){
+    if(est==='atendido')lines.push('✓ Caso atendido — sin acciones pendientes');
+    else if(est==='en seguimiento'){lines.push('⚙ En seguimiento — requiere revisión periódica');lines.push('📌 Verificar: ¿hay actualizaciones recientes en Drive?');}
+    else if(est==='nuevo'){lines.push('🆕 Caso nuevo — revisar carpeta en Drive');lines.push('📌 Pendiente: apertura, diagnóstico inicial, plan de acción');}
+    else lines.push('Estado: '+r[2]);
+  }else if(tipo==='correo'){
+    if(est==='atendido')lines.push('✓ Correo respondido');
+    else if(est==='nuevo'){
+      lines.push('✉ Correo nuevo — sin responder');
+      if(notas.indexOf('De:')!==-1){var rem=notas.match(/De:\s*([^|]+)/);if(rem)lines.push('De: '+rem[1].trim());}
+    }
+  }else if(tipo==='evento'){
+    if(est==='programado'){
+      var vence=r[5];if(vence)lines.push('📅 Evento programado para '+String(vence).slice(0,16));
+      lines.push('📌 Confirmar asistencia y preparar material');
+    }
+  }
+  if(r[4]){var dd=diasDesde(r[4]);if(dd!==null&&dd>0)lines.push('⏱ En el sistema hace '+dd+' día'+(dd>1?'s':''));}
+  return lines.join('\n');
+}
+function statusSummaryHtml(r){return esc(statusSummary(r)).replace(/\n/g,'<br>');}
+
 function estadoReapertura(t){t=norm(t);if(t==='evento')return'Programado';if(t==='caso')return'En seguimiento';return'Nuevo';}
 async function setPrio(idx,val){var r=ITEMS[idx];var res=await api({action:'update',sheet:'Base',row:idx+2,col:'D',value:val,expect:r[3]||'',expectNombre:r[0]||''});if(!res.ok){toast('Error');load();return;}toast('Prioridad → '+val);load();}
 async function markDone(idx){var r=ITEMS[idx];var res=await api({action:'update',sheet:'Base',row:idx+2,col:'C',value:'Atendido',expect:r[2]||'',expectNombre:r[0]||''});if(!res.ok){toast('Error');load();return;}toast('✓ '+r[0]);load();}
