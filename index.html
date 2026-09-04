@@ -95,7 +95,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--blue);outline-offse
 .item-card.hoy{border-left:3px solid var(--orange)}
 .item-card.sinprioridad{border-left:3px solid var(--muted)}
 .item-card.semana{border-left:3px solid var(--teal)}
-.item-card.done{opacity:.35}
+.item-card.done{opacity:.7}
 .item-body{flex:1;min-width:0}
 .item-title{font-size:14px;font-weight:600;color:var(--ink);line-height:1.35}
 .item-detail{font-size:12px;color:var(--text);margin-top:3px;line-height:1.45}
@@ -210,6 +210,9 @@ footer{text-align:center;padding:16px;color:var(--muted);font-size:11px;border-t
 <!-- Delegation hints -->
 <div class="shell" id="delegateSection" style="display:none"></div>
 
+<!-- Completados (colapsable) -->
+<div class="shell" id="completadosSection"></div>
+
 <footer>Coordinación Pedagógica · base tipo Notion · Google Sheets</footer>
 <div class="toast" id="toast"></div>
 
@@ -318,6 +321,7 @@ function render(){
   renderCalStrip();
   renderQueue();
   renderDelegate();
+  renderCompletados();
 }
 
 function renderCalStrip(){
@@ -428,7 +432,8 @@ function itemCard(r,urg){
   // Actions
   h+='<div class="item-actions">';
   if(done){
-    h+='<span class="pill pill-gray">✓</span>';
+    h+='<span class="pill pill-green">✓ Listo</span>';
+    h+='<button class="act-sm" onclick="reabrir('+idx+')">↩ Reabrir</button>';
   }else{
     h+='<div class="act-sm"><select onchange="setPrio('+idx+',this.value)">';
     h+='<option value="Alta"'+(priVal==='alta'?' selected':'')+'>Alta</option>';
@@ -472,6 +477,39 @@ function renderDelegate(){
   el.innerHTML=h;
 }
 
+var completadosOpen=false;
+function toggleCompletados(){completadosOpen=!completadosOpen;renderCompletados();}
+function renderCompletados(){
+  var el=document.getElementById('completadosSection');
+  var done=ITEMS.filter(function(r){var e=norm(r[2]);return e==='atendido'||e==='completado';});
+  if(!done.length){el.innerHTML='';return;}
+  var h='<div class="section">';
+  h+='<div class="section-head" style="cursor:pointer" onclick="toggleCompletados()">';
+  h+='<h2><span class="dot dot-muted"></span>Mis completados</h2>';
+  h+='<span class="count">'+done.length+' '+(completadosOpen?'▲ ocultar':'▼ ver')+'</span></div>';
+  if(completadosOpen){
+    done.forEach(function(r){h+=itemCard(r,'done');});
+  }
+  h+='</div>';
+  el.innerHTML=h;
+}
+// Estado al que vuelve un ítem reabierto — no guardamos cuál era su Estado
+// previo exacto (esto es para reabrir horas/días después, no el "Deshacer"
+// de 6s de markDone), así que se usa un default razonable según el Tipo.
+function estadoReapertura(tipo){
+  var t=norm(tipo);
+  if(t==='evento')return'Programado';
+  if(t==='caso')return'En seguimiento';
+  return'Nuevo';
+}
+async function reabrir(idx){
+  var row=idx+2;
+  var r=ITEMS[idx];
+  var nuevoEstado=estadoReapertura(r[1]);
+  var res=await api({action:'update',sheet:'Base',row:row,col:'C',value:nuevoEstado,expect:r[2]||'',expectNombre:r[0]||''});
+  if(!res.ok){toast('⚠ '+(res.error==='stale'||res.error==='fila movida'?'Alguien más lo modificó — recargando':(res.error||'Error al reabrir')));load();return;}
+  toast('↩ Reabierto → '+nuevoEstado);load();
+}
 async function setPrio(idx,val){
   var row=idx+2;
   var r=ITEMS[idx];
