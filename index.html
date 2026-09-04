@@ -165,6 +165,8 @@ footer{text-align:center;padding:16px;font-size:10px;color:var(--text-muted)}
     <button class="nav-item" data-view="delegar"><span class="icon">✦</span> Redactar con IA</button>
     <div class="nav-sep"></div>
     <button class="nav-item" data-view="config"><span class="icon">⚙</span> Configuración</button>
+    <div class="nav-sep"></div>
+    <button class="nav-item" data-view="soporte"><span class="icon">💬</span> Soporte</button>
   </div>
   <div class="sidebar-footer">
     <div class="uname">Pedro Quiroz</div>
@@ -192,6 +194,20 @@ footer{text-align:center;padding:16px;font-size:10px;color:var(--text-muted)}
   <div id="view-calendario" style="display:none"></div>
   <div id="view-delegar" style="display:none"></div>
   <div id="view-config" style="display:none"><div class="empty-state"><div class="emoji">⚙</div>Próximamente</div></div>
+  <div id="view-soporte" style="display:none">
+    <div class="delegate">
+      <h3>💬 Soporte técnico</h3>
+      <p>¿Necesitas ayuda con el ecosistema? Contacta a José directamente.</p>
+      <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="contactSupport('email')" style="flex:1;min-width:140px">✉ Enviar email</button>
+        <button class="btn btn-success" onclick="contactSupport('whatsapp')" style="flex:1;min-width:140px">📱 WhatsApp</button>
+      </div>
+      <div style="margin-top:14px">
+        <div class="split-label">Tu mensaje:</div>
+        <textarea id="supportMsg" placeholder="Describe lo que necesitas… Ej: Necesito ayuda para configurar el clasificador de correos" style="width:100%;background:rgba(255,255,255,.04);border:1px solid var(--glass-border);border-radius:8px;padding:10px;font-size:12px;color:var(--text-primary);font-family:inherit;resize:vertical;min-height:60px;outline:none"></textarea>
+      </div>
+    </div>
+  </div>
   <footer>Coordinación Pedagógica · Colegio Salesiano Valparaíso</footer>
 </div>
 <div class="toast" id="toast"></div>
@@ -230,7 +246,7 @@ function showView(v){
   currentView=v;
   document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active');});
   document.querySelector('[data-view="'+v+'"]').classList.add('active');
-  ['dashboard','correos','casos','calendario','delegar','config'].forEach(function(id){
+  ['dashboard','correos','casos','calendario','delegar','config','soporte'].forEach(function(id){
     var el=document.getElementById('view-'+id);if(el)el.style.display=id===v?'block':'none';
   });
   if(v==='correos')renderCorreos();
@@ -458,25 +474,12 @@ async function draftAI(){
 
 function hideDraft(){document.getElementById('draftBox').classList.remove('show');}
 
-async function sendDraft(){
-  var body=document.getElementById('draftText').textContent.trim();
-  if(!body){toast('Sin respuesta');return;}
-  var gmailId=extractGmailId(selectedDeleg[8]||'');
-  if(!gmailId){toast('Gmail ID no encontrado');return;}
-  try{
-    var resp=await fetch(API+'?action=sendReply&gmailId='+gmailId+'&body='+encodeURIComponent(body));
-    var data=await resp.json();
-    if(data.ok){toast('✓ Enviado');selectedDeleg=null;document.getElementById('splitPanel').classList.remove('open');load();renderDelegar();}
-    else{toast('Error: '+(data.error||'?'));}
-  }catch(e){toast('Error: '+String(e));}
-}
-
 /* ACTIONS */
 function filterUrgentes(){
   currentView='dashboard';
   document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active');});
   document.querySelector('[data-view="dashboard"]').classList.add('active');
-  ['dashboard','correos','casos','calendario','delegar','config'].forEach(function(id){
+  ['dashboard','correos','casos','calendario','delegar','config','soporte'].forEach(function(id){
     var el=document.getElementById('view-'+id);if(el)el.style.display=id==='dashboard'?'block':'none';
   });
   // Show only urgent items
@@ -518,6 +521,82 @@ function statusSummaryHtml(r){return esc(statusSummary(r)).replace(/\n/g,'<br>')
 function estadoReapertura(t){t=norm(t);if(t==='evento')return'Programado';if(t==='caso')return'En seguimiento';return'Nuevo';}
 async function setPrio(idx,val){var r=ITEMS[idx];var res=await api({action:'update',sheet:'Base',row:idx+2,col:'D',value:val,expect:r[3]||'',expectNombre:r[0]||''});if(!res.ok){toast('Error');load();return;}toast('Prioridad → '+val);load();}
 async function markDone(idx){var r=ITEMS[idx];var res=await api({action:'update',sheet:'Base',row:idx+2,col:'C',value:'Atendido',expect:r[2]||'',expectNombre:r[0]||''});if(!res.ok){toast('Error');load();return;}toast('✓ '+r[0]);load();}
+
+/* CONTACT SUPPORT */
+async function contactSupport(canal){
+  var msg=(document.getElementById('supportMsg').value||'').trim();
+  if(!msg){toast('Escribe un mensaje primero');return;}
+  if(canal==='whatsapp'){
+    var waMsg=encodeURIComponent('Hola José, necesito soporte con el Ecosistema:\n\n'+msg);
+    window.open('https://wa.me/56962670463?text='+waMsg,'_blank');
+    toast('Abriendo WhatsApp…');
+  }else{
+    try{
+      var resp=await fetch(API+'?action=contactSupport&canal=email&asunto=Soporte+Ecosistema&mensaje='+encodeURIComponent(msg));
+      var data=await resp.json();
+      if(data.ok)toast('✓ Email enviado a José');
+      else toast('Error: '+(data.error||'?'));
+    }catch(e){toast('Error: '+String(e));}
+  }
+}
+
+/* FOLLOW-UP AUTOMÁTICO */
+async function createFollowUp(nombre,notas,vence,prioridad){
+  try{
+    var resp=await fetch(API+'?action=createFollowUp&nombre='+encodeURIComponent(nombre)+'&notas='+encodeURIComponent(notas)+'&vence='+encodeURIComponent(vence||'')+'&prioridad='+encodeURIComponent(prioridad||'Media'));
+    return await resp.json();
+  }catch(e){return{ok:false,error:String(e)};}
+}
+// Hook: después de enviar un draft, preguntar si hay follow-up
+var lastSentName='';
+async function sendDraft(){
+  var body=document.getElementById('draftText').textContent.trim();
+  if(!body){toast('Sin respuesta');return;}
+  var gmailId=extractGmailId(selectedDeleg[8]||'');
+  if(!gmailId){toast('Gmail ID no encontrado');return;}
+  try{
+    var resp=await fetch(API+'?action=sendReply&gmailId='+gmailId+'&body='+encodeURIComponent(body));
+    var data=await resp.json();
+    if(data.ok){
+      toast('✓ Enviado');
+      lastSentName=selectedDeleg[0]||'';
+      selectedDeleg=null;
+      document.getElementById('splitPanel').classList.remove('open');
+      load();renderDelegar();
+      // Preguntar follow-up
+      setTimeout(function(){showFollowUpPrompt();},800);
+    }
+    else{toast('Error: '+(data.error||'?'));}
+  }catch(e){toast('Error: '+String(e));}
+}
+function showFollowUpPrompt(){
+  var el=document.getElementById('view-delegar');
+  var h='<div class="delegate" style="border:1px solid var(--warning)">';
+  h+='<h3>⚠️ ¿Hay acciones pendientes?</h3>';
+  h+='<p>Acabas de responder "<b>'+esc(lastSentName)+'</b>". Si eso genera tareas posteriores, créalas ahora antes de que se pierdan.</p>';
+  h+='<div style="margin-top:12px">';
+  h+='<div class="split-label">Acción pendiente:</div>';
+  h+='<input id="fuNombre" type="text" placeholder="Ej: Reunión con apoderado el viernes" style="width:100%;background:rgba(255,255,255,.04);border:1px solid var(--glass-border);border-radius:8px;padding:10px;font-size:12px;color:var(--text-primary);font-family:inherit;outline:none;margin-bottom:8px">';
+  h+='<div style="display:flex;gap:8px">';
+  h+='<input id="fuVence" type="date" style="background:rgba(255,255,255,.04);border:1px solid var(--glass-border);border-radius:8px;padding:8px;font-size:12px;color:var(--text-primary);font-family:inherit;outline:none;flex:1">';
+  h+='<select id="fuPrio" style="background:rgba(255,255,255,.04);border:1px solid var(--glass-border);border-radius:8px;padding:8px;font-size:12px;color:var(--text-primary);font-family:inherit;outline:none"><option value="Alta">Alta</option><option value="Media" selected>Media</option><option value="Baja">Baja</option></select>';
+  h+='</div></div>';
+  h+='<div class="split-actions" style="margin-top:12px">';
+  h+='<button class="btn btn-primary" onclick="submitFollowUp()">Crear tarea</button>';
+  h+='<button class="btn btn-ghost" onclick="skipFollowUp()">No hay seguimiento</button>';
+  h+='</div></div>';
+  el.innerHTML=h;
+}
+async function submitFollowUp(){
+  var nombre=(document.getElementById('fuNombre').value||'').trim();
+  if(!nombre){toast('Escribe la acción pendiente');return;}
+  var vence=document.getElementById('fuVence').value||'';
+  var prio=document.getElementById('fuPrio').value;
+  var res=await createFollowUp('Seguimiento: '+nombre,'Derivado de respuesta a '+lastSentName,vence,prio);
+  if(res.ok){toast('✓ Tarea creada');load();renderDelegar();}
+  else toast('Error: '+(res.error||'?'));
+}
+function skipFollowUp(){toast('OK');renderDelegar();}
 
 setupSidebar();
 load();
