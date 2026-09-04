@@ -23,7 +23,7 @@
   --lime: #34D399; /* success green para light mode */
   --text: #1A2456;
   --text-2: #5B6A9A;
-  --text-3: #828FA8;
+  --text-3: #5F6E97;
   --sidebar-w: 240px;
   
   /* Sombras 3D Soft */
@@ -66,6 +66,8 @@ a:hover{text-decoration:underline}
 
 /* ===== MAIN ===== */
 .main{margin:0 auto;padding:80px 36px 60px;position:relative;z-index:1;max-width:1400px;width:100%}
+#view-dashboard > div > *{min-width:0}
+.task-title,.task-meta{overflow-wrap:anywhere}
 
 /* ===== HEADER WORKSPACE ===== */
 .hdr{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:32px;padding-top:36px}
@@ -264,7 +266,7 @@ input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(45
 <body>
 
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
-<button class="hamburger" id="hamburger">☰</button>
+<button class="hamburger" id="hamburger" aria-label="Abrir menú">☰</button>
 <nav class="sidebar" id="sidebar">
   <div class="sidebar-brand"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg> Coord. Pedagógica</div>
   <div class="sidebar-nav">
@@ -502,6 +504,9 @@ function render(){
 }
 
 /* DASHBOARD QUEUE */
+var QUEUE_LIMIT=8;
+var queueExpanded={};
+function toggleQueueSection(key){queueExpanded[key]=!queueExpanded[key];renderQueue();}
 function renderQueue(){
   var el=document.getElementById('actionQueue');
   var groups={ahora:[],hoy:[],sinprioridad:[],semana:[]};
@@ -511,7 +516,13 @@ function renderQueue(){
   var any=false;
   secs.forEach(function(s){var items=groups[s.key];if(!items.length)return;any=true;
     h+='<div class="section"><div class="section-head" style="margin-bottom:12px"><h2><span class="dot '+s.dot+'"></span>'+s.label+'</h2><span class="count">'+items.length+'</span></div>';
-    items.forEach(function(r,i){var hot=(s.key==='ahora'&&i===0)?true:false;h+=itemCard(r,s.key,hot);});h+='</div>';});
+    var expanded=!!queueExpanded[s.key];
+    var toShow=(items.length>QUEUE_LIMIT&&!expanded)?items.slice(0,QUEUE_LIMIT):items;
+    toShow.forEach(function(r,i){var hot=(s.key==='ahora'&&i===0)?true:false;h+=itemCard(r,s.key,hot);});
+    if(items.length>QUEUE_LIMIT){
+      h+='<button class="btn-ghost" style="width:100%" onclick="toggleQueueSection(\''+s.key+'\')">'+(expanded?'Mostrar menos':'Ver '+(items.length-QUEUE_LIMIT)+' más')+'</button>';
+    }
+    h+='</div>';});
   if(!any)h='<div class="empty-state"><div style="margin-bottom:12px;color:var(--text-3)"><svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="20 6 9 17 4 12"></polyline></svg></div>Todo al día.</div>';
   el.innerHTML=h;
 
@@ -761,6 +772,10 @@ var todos_global=[];
 /* DELEGAR VIEW — SPLIT */
 function renderDelegar(){
   var el=document.getElementById('view-delegar');
+  if(!AI_API){
+    el.innerHTML='<div class="empty-state"><div class="emoji">🤖</div><p style="font-weight:700;color:var(--navy)">Redactar con IA — en preparación</p><p style="font-size:12px;color:var(--text-3);margin-top:8px;max-width:340px;margin-left:auto;margin-right:auto">Todavía falta conectar el túnel de IA. Mientras tanto, abre cualquier correo desde "Hacer ahora" o "Correos" para ver el resumen y responder directo desde Gmail.</p></div>';
+    return;
+  }
   var delegable=ITEMS.filter(function(r){var t=norm(r[1]);var p=norm(r[3]);var e=norm(r[2]);if(e==='atendido'||e==='completado')return false;if(t==='correo')return true;return false;});
   if(!delegable.length){el.innerHTML='<div class="empty-state"><div class="emoji">✦</div>Sin correos para delegar</div>';return;}
   var h='<div style="display:grid;grid-template-columns:380px 1fr;gap:24px;height:calc(100vh - 180px);align-items:start">';
