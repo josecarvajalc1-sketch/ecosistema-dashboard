@@ -21,7 +21,7 @@
   --text:#FFFFFF;
   --text-2:rgba(255,255,255,.72);
   --text-3:rgba(255,255,255,.45);
-  --sidebar-w:70px;
+  --sidebar-w:240px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{color-scheme:dark}
@@ -29,19 +29,22 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--text);background:var(-
 a{color:var(--lime);text-decoration:none}
 a:hover{text-decoration:underline}
 
-/* ===== SIDEBAR 70px ===== */
-.sidebar{position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;background:var(--bg-elev);border-right:1px solid var(--border);z-index:100;display:flex;flex-direction:column;align-items:center}
-.sidebar-brand{height:56px;width:100%;display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--border);font-size:22px}
-.sidebar-nav{flex:1;padding:16px 0;display:flex;flex-direction:column;align-items:center;gap:8px;overflow-y:auto}
-.nav-item{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:none;border:none;color:var(--text-3);font-size:20px;cursor:pointer;transition:all .15s;position:relative}
+/* ===== SIDEBAR ===== */
+.sidebar{position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;background:var(--bg-elev);border-right:1px solid var(--border);z-index:100;display:flex;flex-direction:column;align-items:stretch}
+.sidebar-brand{height:56px;width:100%;display:flex;align-items:center;justify-content:flex-start;padding-left:24px;border-bottom:1px solid var(--border);font-size:16px;font-weight:800;letter-spacing:-.5px;gap:8px}
+.sidebar-nav{flex:1;padding:16px 12px;display:flex;flex-direction:column;gap:4px;overflow-y:auto}
+.nav-item{width:100%;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:flex-start;padding-left:14px;background:none;border:none;color:var(--text-2);font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;position:relative;gap:12px}
 .nav-item:hover{background:var(--bg-hover);color:var(--text)}
 .nav-item.active{background:var(--lime-dim);color:var(--lime)}
-.nav-item.active::after{content:'';position:absolute;right:-2px;top:50%;transform:translateY(-50%);width:4px;height:24px;border-radius:0 4px 4px 0;background:var(--lime)}
-.nav-item .tip{position:absolute;left:calc(100% + 12px);top:0;background:var(--bg-elev);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-size:11px;color:var(--text);white-space:nowrap;opacity:0;pointer-events:none;transform:translateX(-4px);transition:all .15s;z-index:300}
-.nav-item:hover .tip{opacity:1;transform:translateX(0)}
-.nav-sep{width:28px;height:1px;background:var(--border);margin:8px 0}
-.sidebar-footer{width:100%;padding:16px 0;border-top:1px solid var(--border);display:flex;flex-direction:column;align-items:center;gap:4px}
-.avatar{width:36px;height:36px;border-radius:50%;background:var(--lime);color:#0B0B0D;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800}
+.nav-item.active::before{content:'';position:absolute;left:-12px;top:50%;transform:translateY(-50%);width:4px;height:24px;border-radius:0 4px 4px 0;background:var(--lime)}
+.nav-item .icon{font-size:18px;width:24px;text-align:center}
+.nav-item .tip{display:none} /* Ocultamos los tooltips porque ahora hay texto */
+.nav-sep{height:1px;background:var(--border);margin:8px 12px}
+.sidebar-footer{padding:16px 20px;border-top:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--lime);color:#0B0B0D;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;flex-shrink:0}
+.user-info{display:flex;flex-direction:column;min-width:0}
+.user-name{font-size:13px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-role{font-size:10px;color:var(--text-3);margin-top:2px}
 .hamburger{display:none;position:fixed;top:14px;left:14px;z-index:200;width:44px;height:44px;background:var(--bg-elev);border:1px solid var(--border);border-radius:12px;color:var(--text);font-size:20px;cursor:pointer;align-items:center;justify-content:center}
 .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:90}
 
@@ -53,9 +56,11 @@ a:hover{text-decoration:underline}
 .topbar-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .topbar-label{font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:1.5px;font-weight:700}
 .schedule-strip{display:flex;gap:10px;overflow-x:auto;padding:4px 4px 10px;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
-.schedule-strip::-webkit-scrollbar{height:6px}
-.schedule-strip::-webkit-scrollbar-track{background:transparent}
-.schedule-strip::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:3px}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:var(--text-3)}
+
 .sched-item{flex-shrink:0;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;min-width:150px;max-width:180px;position:relative;transition:all .2s}
 .sched-item:not(:last-child)::after{content:'';position:absolute;right:-6px;top:50%;transform:translateY(-50%);width:12px;height:3px;background:var(--lime);border-radius:2px}
 .sched-time{font-size:10px;color:var(--lime);font-weight:700;letter-spacing:.5px;margin-bottom:4px}
@@ -88,10 +93,24 @@ a:hover{text-decoration:underline}
 .dot-orange{background:var(--orange)}
 .dot-blue{background:#3B82F6}
 
+/* ===== GLOW LASER EFFECT ===== */
+@property --angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+@keyframes laser { to { --angle: 360deg; } }
+.laser-card { position: relative; border: 1px solid transparent; background-clip: padding-box; border-radius: 16px; }
+.laser-card::before {
+  content: ''; position: absolute; inset: -1px; border-radius: inherit; z-index: -1;
+  background: var(--border); transition: all 0.3s;
+}
+.laser-card:hover::before {
+  background: conic-gradient(from var(--angle), transparent 70%, var(--lime) 100%);
+  animation: laser 2s linear infinite;
+}
+
 /* ===== LEADS GRID ===== */
 .leads-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
-.lead-card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:16px;transition:all .2s}
-.lead-card:hover{background:var(--bg-hover);border-color:var(--border-strong);transform:translateY(-2px)}
+.lead-card{background:var(--bg-card);border:1px solid transparent;border-radius:16px;padding:16px;transition:all .2s;position:relative;z-index:1}
+.lead-card::after{content:'';position:absolute;inset:0;background:var(--bg-card);border-radius:15px;z-index:-1;transition:all .2s}
+.lead-card:hover::after{background:var(--bg-hover)}
 .lead-head{display:flex;align-items:center;gap:12px;margin-bottom:12px}
 .lead-avatar{width:44px;height:44px;border-radius:50%;background:var(--bg-hover);border:2px solid var(--border-strong);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
 .lead-info{flex:1;min-width:0}
@@ -109,9 +128,12 @@ a:hover{text-decoration:underline}
 
 /* ===== TASKS ===== */
 .tasks-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
-.task-card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:16px;transition:all .2s;position:relative;overflow:hidden}
-.task-card:hover{background:var(--bg-hover);border-color:var(--border-strong);transform:translateY(-2px)}
-.task-card.hot{background:var(--lime);border-color:var(--lime);color:#0B0B0D}
+.task-card{background:var(--bg-card);border:1px solid transparent;border-radius:16px;padding:16px;transition:all .2s;position:relative;z-index:1;overflow:hidden}
+.task-card::after{content:'';position:absolute;inset:0;background:var(--bg-card);border-radius:15px;z-index:-1;transition:all .2s}
+.task-card:hover::after{background:var(--bg-hover)}
+.task-card.hot{background:transparent;color:#0B0B0D}
+.task-card.hot::after{background:var(--lime)}
+.task-card.hot:hover::after{background:#d4f06b}
 .task-card.hot .task-title,.task-card.hot .task-meta,.task-card.hot .task-type,.task-card.hot .task-status{color:#0B0B0D}
 .task-card.hot .task-icon{background:rgba(11,11,13,.12);border-color:rgba(11,11,13,.25)}
 .task-card.hot .tag{background:rgba(11,11,13,.12);color:#0B0B0D;border-color:rgba(11,11,13,.2)}
@@ -163,6 +185,7 @@ input:focus,select:focus{border-color:var(--lime)}
   .kpi-row{grid-template-columns:1fr}
   .hdr-greet{font-size:24px}
   .leads-grid,.tasks-grid{grid-template-columns:1fr}
+  #view-dashboard > div{grid-template-columns:1fr!important}
 }
 </style>
 </head>
@@ -171,28 +194,28 @@ input:focus,select:focus{border-color:var(--lime)}
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 <button class="hamburger" id="hamburger">☰</button>
 <nav class="sidebar" id="sidebar">
-  <div class="sidebar-brand">🎓</div>
+  <div class="sidebar-brand"><span style="font-size:22px">🎓</span> Coordinación</div>
   <div class="sidebar-nav">
-    <button class="nav-item active" data-view="dashboard" aria-label="Dashboard"><span>◉</span><span class="tip">Dashboard</span></button>
-    <button class="nav-item" data-view="correos" aria-label="Correos"><span>✉</span><span class="tip">Correos</span></button>
-    <button class="nav-item" data-view="casos" aria-label="Casos"><span>📂</span><span class="tip">Casos</span></button>
-    <button class="nav-item" data-view="calendario" aria-label="Calendario"><span>📅</span><span class="tip">Calendario</span></button>
+    <button class="nav-item active" data-view="dashboard" aria-label="Dashboard"><span class="icon">◉</span><span class="tip">Dashboard</span><span>Dashboard</span></button>
+    <button class="nav-item" data-view="correos" aria-label="Correos"><span class="icon">✉</span><span class="tip">Correos</span><span>Correos</span></button>
+    <button class="nav-item" data-view="casos" aria-label="Casos"><span class="icon">📂</span><span class="tip">Casos</span><span>Casos</span></button>
+    <button class="nav-item" data-view="calendario" aria-label="Calendario"><span class="icon">📅</span><span class="tip">Calendario</span><span>Calendario</span></button>
     <div class="nav-sep"></div>
-    <button class="nav-item" data-view="delegar" aria-label="Redactar con IA"><span>✦</span><span class="tip">Redactar con IA</span></button>
+    <button class="nav-item" data-view="delegar" aria-label="Redactar con IA"><span class="icon">✦</span><span class="tip">Redactar con IA</span><span>Redactar IA</span></button>
     <div class="nav-sep"></div>
-    <button class="nav-item" data-view="soporte" aria-label="Soporte"><span>💬</span><span class="tip">Soporte</span></button>
-    <button class="nav-item" data-view="config" aria-label="Configuración"><span>⚙</span><span class="tip">Configuración</span></button>
+    <button class="nav-item" data-view="soporte" aria-label="Soporte"><span class="icon">💬</span><span class="tip">Soporte</span><span>Soporte</span></button>
+    <button class="nav-item" data-view="config" aria-label="Configuración"><span class="icon">⚙</span><span class="tip">Configuración</span><span>Ajustes</span></button>
   </div>
   <div class="sidebar-footer">
     <div class="avatar">P</div>
-    <div class="tip" style="position:absolute;bottom:16px;left:56px;font-size:10px;color:var(--text-3);background:none;border:none;opacity:1;transform:none;pointer-events:none">Pedro</div>
+    <div class="user-info"><div class="user-name">Pedro Quiroz</div><div class="user-role">Coord. Pedagógica</div></div>
   </div>
 </nav>
 
 <div class="main">
 
   <!-- TOP BAR - YOUR SCHEDULE -->
-  <div class="topbar" id="topbar">
+  <div class="topbar" id="topbar" style="display:none!important">
     <div class="topbar-head">
       <div class="topbar-label">Your Schedule · Hoy</div>
     </div>
@@ -230,11 +253,17 @@ input:focus,select:focus{border-color:var(--lime)}
 
   <!-- CONTENT -->
   <div id="view-dashboard">
-    <!-- HACER AHORA - combined queue -->
-    <div class="section" id="actionQueue">
-      <div class="empty-state"><div class="emoji">📋</div>Cargando…</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start">
+      <!-- HACER AHORA - combined queue -->
+      <div id="actionQueue"><div class="empty-state"><div class="emoji">📋</div>Cargando…</div></div>
+      
+      <!-- COLUMNA DERECHA: Resumen Correos y Casos -->
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <div id="dashCorreosBox"></div>
+        <div id="dashCasosBox"></div>
+        <div id="completadosSection"></div>
+      </div>
     </div>
-    <div id="completadosSection"></div>
   </div>
 
   <div id="view-correos" style="display:none"></div>
@@ -382,7 +411,7 @@ function render(){
   document.getElementById('kpiSubTotal').textContent='activos';
   document.getElementById('kpiSubDone').textContent='resueltos';
   document.getElementById('kpiSubUrgent').textContent='requieren acción';
-  renderQueue();renderCompletados();renderSchedule();
+  renderQueue();renderCompletados();
 }
 
 /* DASHBOARD QUEUE */
@@ -394,15 +423,40 @@ function renderQueue(){
   var h='';var secs=[{key:'ahora',label:'Hacer ahora',dot:'dot-red'},{key:'hoy',label:'Para hoy',dot:'dot-orange'},{key:'sinprioridad',label:'Sin priorizar',dot:'dot-blue'},{key:'semana',label:'Esta semana',dot:'dot-lime'}];
   var any=false;
   secs.forEach(function(s){var items=groups[s.key];if(!items.length)return;any=true;
-    h+='<div class="section"><div class="section-head"><h2><span class="dot '+s.dot+'"></span>'+s.label+'</h2><span class="count">'+items.length+'</span></div>';
+    h+='<div class="section"><div class="section-head" style="margin-bottom:12px"><h2><span class="dot '+s.dot+'"></span>'+s.label+'</h2><span class="count">'+items.length+'</span></div>';
     items.forEach(function(r,i){var hot=(s.key==='ahora'&&i===0)?true:false;h+=itemCard(r,s.key,hot);});h+='</div>';});
   if(!any)h='<div class="empty-state"><div class="emoji">🎉</div>Todo al día.</div>';
   el.innerHTML=h;
+
+  // Render mini boxes for Correos and Casos on the right column
+  var correos=ITEMS.filter(function(r){return norm(r[1])==='correo'&&norm(r[2])!=='atendido'&&norm(r[2])!=='completado';});
+  var cBox=document.getElementById('dashCorreosBox');
+  if(cBox){
+    var ch='<div class="section"><div class="section-head" style="margin-bottom:12px"><h2><span class="dot dot-blue"></span>Correos Pendientes</h2><button class="btn-ghost" onclick="showView(\'correos\')" style="padding:4px 8px;font-size:10px">Ver '+correos.length+'</button></div>';
+    if(correos.length){
+      ch+='<div style="display:flex;flex-direction:column;gap:8px">';
+      correos.slice(0,3).forEach(function(r){ch+=leadCard(r);});
+      ch+='</div>';
+    }else{ch+='<div class="empty-state" style="padding:20px"><div class="emoji" style="font-size:20px">✉</div></div>';}
+    ch+='</div>';cBox.innerHTML=ch;
+  }
+
+  var casos=ITEMS.filter(function(r){return norm(r[1])==='caso'&&norm(r[2])!=='atendido'&&norm(r[2])!=='completado';});
+  var kBox=document.getElementById('dashCasosBox');
+  if(kBox){
+    var kh='<div class="section"><div class="section-head" style="margin-bottom:12px"><h2><span class="dot dot-lime"></span>Casos Activos</h2><button class="btn-ghost" onclick="showView(\'casos\')" style="padding:4px 8px;font-size:10px">Ver '+casos.length+'</button></div>';
+    if(casos.length){
+      kh+='<div style="display:flex;flex-direction:column;gap:8px">';
+      casos.slice(0,3).forEach(function(r){kh+=casoCard(r);});
+      kh+='</div>';
+    }else{kh+='<div class="empty-state" style="padding:20px"><div class="emoji" style="font-size:20px">📂</div></div>';}
+    kh+='</div>';kBox.innerHTML=kh;
+  }
 }
 
 function itemCard(r,urg,hot){
   var idx=ITEMS.indexOf(r);var done=norm(r[2])==='atendido'||norm(r[2])==='completado';
-  var cls='task-card '+(done?'done ':'')+(hot?'hot ':'');
+  var cls='task-card laser-card '+(done?'done ':'')+(hot?'hot ':'');
   var ls=leadScore(r);
   var h='<div class="'+cls+'" data-idx="'+idx+'">';h+='<div class="task-icon">'+tipoIcon(r[1])+'</div>';
   h+='<div class="task-title">'+esc(r[0])+'</div>';
@@ -461,7 +515,7 @@ function renderCorreos(){
 }
 function leadCard(r){
   var ls=leadScore(r);
-  var h='<div class="lead-card">';
+  var h='<div class="lead-card laser-card">';
   h+='<div class="lead-head"><div class="lead-avatar">✉</div><div class="lead-info">';
   h+='<div class="lead-name">'+esc(r[0])+'</div>';
   h+='<div class="lead-role">Correo</div>';
@@ -495,7 +549,7 @@ function renderCasos(){
 }
 function casoCard(r){
   var ls=leadScore(r);
-  var h='<div class="lead-card">';
+  var h='<div class="lead-card laser-card">';
   h+='<div class="lead-head"><div class="lead-avatar">📂</div><div class="lead-info">';
   h+='<div class="lead-name">'+esc(r[0])+'</div>';
   h+='<div class="lead-role">Caso</div>';
