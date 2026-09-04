@@ -200,6 +200,22 @@ a:hover{text-decoration:underline}
 .filter-tab:hover{color:var(--navy);border-color:var(--navy);transform:translateY(-1px)}
 .filter-tab.active{background:var(--navy);border-color:var(--navy);color:#FFFFFF;box-shadow:0 8px 16px rgba(26,36,86,0.2)}
 
+/* ===== TRAZABILIDAD — node chain estilo n8n ===== */
+.traza-card{padding:16px 18px}
+.traza-chain{display:flex;align-items:stretch;flex-wrap:wrap;row-gap:10px}
+.traza-node{display:flex;align-items:center;gap:10px;padding:8px 12px;border:1px solid var(--border);border-radius:12px;background:var(--bg);min-width:0;flex:1 1 170px}
+.traza-node-icon{width:26px;height:26px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;border-radius:8px;background:var(--bg-elev)}
+.traza-node-icon svg{width:15px;height:15px}
+.traza-node-body{min-width:0}
+.traza-node-title{font-size:12px;font-weight:800;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.traza-node-sub{font-size:10px;color:var(--text-3);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.traza-arrow{display:flex;align-items:center;justify-content:center;padding:0 8px;color:var(--text-3);font-weight:700;flex-shrink:0}
+.traza-status{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:11px;font-weight:700;color:var(--accent)}
+.traza-status.off{color:var(--text-3)}
+.traza-dot{width:8px;height:8px;border-radius:50%;background:var(--lime)}
+.traza-status.off .traza-dot{background:var(--text-3)}
+@media(max-width:600px){.traza-node{flex:1 1 100%}.traza-arrow{width:100%;justify-content:flex-start;padding:2px 0 2px 12px}}
+
 /* ===== CALENDAR ===== */
 .cal-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
 .cal-tabs{display:flex;gap:4px;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:4px}
@@ -211,19 +227,6 @@ a:hover{text-decoration:underline}
 .btn-ghost{background:var(--bg-elev);border:1px solid var(--border-strong);color:var(--navy);padding:8px 16px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:var(--shadow-sm)}
 .btn-ghost:hover{background:var(--bg-hover);transform:translateY(-1px)}
 
-/* ===== DELEGATION — SPLIT ===== */
-.split-panel{display:none;margin-top:20px;border-top:1px solid var(--border);padding-top:20px}
-.split-panel.open{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-.split-label{font-size:11px;color:var(--text-3);text-transform:uppercase;letter-spacing:1.2px;font-weight:800;margin-bottom:10px}
-.email-meta{font-size:12px;color:var(--text-3);margin-bottom:12px;font-weight:500}
-.email-body{background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:18px;font-size:13px;color:var(--text-2);line-height:1.7;max-height:280px;overflow-y:auto;white-space:pre-wrap}
-.split-right textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:14px;font-size:13px;color:var(--text);font-family:inherit;resize:vertical;min-height:90px;outline:none;transition:border .2s;font-weight:500}
-.split-right textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(45,130,211,0.1)}
-.split-right textarea::placeholder{color:var(--text-3)}
-.pre-analysis{margin-top:12px;background:rgba(45,130,211,0.05);border:1px solid rgba(45,130,211,0.15);border-radius:14px;padding:16px}
-.split-actions{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
-.draft-box{background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:18px;font-size:13px;color:var(--text-2);line-height:1.7;max-height:260px;overflow-y:auto;white-space:pre-wrap;margin-top:12px;display:none}
-.draft-box.show{display:block}
 
 
 /* ===== TASK MODAL ===== */
@@ -274,8 +277,7 @@ input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(45
     <button class="nav-item" data-view="correos" aria-label="Correos"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg><span>Correos</span></button>
     <button class="nav-item" data-view="casos" aria-label="Casos"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg><span>Casos</span></button>
     <button class="nav-item" data-view="calendario" aria-label="Calendario"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg><span>Calendario</span></button>
-    <div class="nav-sep"></div>
-    <button class="nav-item" data-view="delegar" aria-label="Redactar con IA"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg><span>Redactar IA</span></button>
+    <button class="nav-item" data-view="trazabilidad" aria-label="Trazabilidad"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="12" r="3"></circle><path d="M6 9v6M9 6h4a3 3 0 0 1 3 3M9 18h4a3 3 0 0 0 3-3"></path></svg><span>Trazabilidad</span></button>
     <div class="nav-sep"></div>
     <button class="nav-item" data-view="soporte" aria-label="Soporte"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg><span>Soporte</span></button>
   </div>
@@ -296,7 +298,6 @@ input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(45
       <div class="hdr-greet" id="greet">Buenas tardes, Pedro</div>
       <div class="hdr-sub" id="hdrSub" style="font-size:12px;color:var(--text-3);margin-top:2px">Cargando…</div>
     </div>
-    <button class="btn-new" onclick="showView('delegar')">+ Nueva Tarea</button>
   </div>
 
   <!-- KPI ROW -->
@@ -336,7 +337,7 @@ input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(45
   <div id="view-correos" style="display:none"></div>
   <div id="view-casos" style="display:none"></div>
   <div id="view-calendario" style="display:none"></div>
-  <div id="view-delegar" style="display:none"></div>
+  <div id="view-trazabilidad" style="display:none"></div>
   <div id="view-config" style="display:none"><div class="empty-state"><div class="emoji">⚙</div>Próximamente</div></div>
   <div id="view-soporte" style="display:none">
     <div class="section">
@@ -399,10 +400,8 @@ input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(45
 
 <script>
 var API='https://script.google.com/macros/s/AKfycbx5eqWUTb-64-rWxkaf-v7jaKNdf5rvnPQQXevXUBGYB3EWo9SvY8Za6jKfHNFG1oE/exec';
-var AI_API='';
 var ITEMS=[];
 var currentView='dashboard';
-var selectedDeleg=null;
 var summaryVisible=false;
 
 function esc(s){return(s||'').replace(/[&<>\"]/g,function(c){return{'&':'&','<':'<','>':'>','"':'"'}[c]});}
@@ -431,13 +430,13 @@ function showView(v){
   currentView=v;
   document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active');});
   var nav=document.querySelector('[data-view="'+v+'"]');if(nav)nav.classList.add('active');
-  ['dashboard','correos','casos','calendario','delegar','config','soporte'].forEach(function(id){
+  ['dashboard','correos','casos','calendario','trazabilidad','config','soporte'].forEach(function(id){
     var el=document.getElementById('view-'+id);if(el)el.style.display=id===v?'block':'none';
   });
   if(v==='correos')renderCorreos();
   if(v==='casos')renderCasos();
   if(v==='calendario')renderCalendario();
-  if(v==='delegar')renderDelegar();
+  if(v==='trazabilidad')renderTrazabilidad();
 }
 
 /* DATE */
@@ -767,75 +766,111 @@ function renderCalMonth(el,title){
 }
 var todos_global=[];
 
+/* TRAZABILIDAD — vista tipo n8n: Entrada → Clasificación → Estado, por ítem real */
+var CORREOS_LOG=null;
+var trazaFilter='all';
+var trazaExpanded=false;
+var TRAZA_LIMIT=12;
 
+function fmtFechaHora(f){var d=parseFecha(f);if(!d)return'—';return d.toLocaleDateString('es-CL',{day:'2-digit',month:'short'})+' '+d.toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'});}
+function horasDesde(f){var d=parseFecha(f);if(!d)return null;return(Date.now()-d.getTime())/3600000;}
 
-/* DELEGAR VIEW — SPLIT */
-function renderDelegar(){
-  var el=document.getElementById('view-delegar');
-  if(!AI_API){
-    el.innerHTML='<div class="empty-state"><div class="emoji">🤖</div><p style="font-weight:700;color:var(--navy)">Redactar con IA — en preparación</p><p style="font-size:12px;color:var(--text-3);margin-top:8px;max-width:340px;margin-left:auto;margin-right:auto">Todavía falta conectar el túnel de IA. Mientras tanto, abre cualquier correo desde "Hacer ahora" o "Correos" para ver el resumen y responder directo desde Gmail.</p></div>';
-    return;
-  }
-  var delegable=ITEMS.filter(function(r){var t=norm(r[1]);var p=norm(r[3]);var e=norm(r[2]);if(e==='atendido'||e==='completado')return false;if(t==='correo')return true;return false;});
-  if(!delegable.length){el.innerHTML='<div class="empty-state"><div class="emoji">✦</div>Sin correos para delegar</div>';return;}
-  var h='<div style="display:grid;grid-template-columns:380px 1fr;gap:24px;height:calc(100vh - 180px);align-items:start">';
-  h+='<div style="overflow-y:auto;max-height:100%">';
-  h+='<div style="font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:12px">✉ '+delegable.length+' correos pendientes</div>';
-  delegable.forEach(function(r){
-    var idx=ITEMS.indexOf(r);
-    h+='<div class="deleg-item" id="deleg-'+idx+'" onclick="selectDeleg('+idx+')" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;background:var(--bg-card);border:1px solid var(--border);cursor:pointer;transition:all .15s;margin-bottom:8px">';
-    h+='<div style="width:36px;height:36px;border-radius:10px;background:var(--bg);border:1px solid var(--border-strong);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;color:var(--navy)"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></div>';
-    h+='<div style="flex:1;min-width:0">';
-    h+='<div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(r[0])+'</div>';
-    var ctx=r[8]||'';if(ctx)h+='<div style="font-size:10px;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px">'+esc(ctx)+'</div>';
-    h+='</div>';
-    var pv=norm(r[3]);h+='<span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;background:var(--lime-dim);color:var(--accent);flex-shrink:0">'+esc(r[3]||'Baja')+'</span>';
-    h+='</div>';
-  });
+function trazaNode(icon,title,sub,color){
+  return '<div class="traza-node"><div class="traza-node-icon" style="color:'+(color||'var(--navy)')+'">'+icon+'</div><div class="traza-node-body"><div class="traza-node-title">'+esc(String(title||'—'))+'</div>'+(sub?'<div class="traza-node-sub">'+esc(String(sub))+'</div>':'')+'</div></div>';
+}
+function trazaCard(nodes,activo,statusLabel,onclick){
+  var h='<div class="traza-card laser-card"'+(onclick?' style="cursor:pointer" onclick="'+onclick+'"':'')+'>';
+  h+='<div class="traza-chain">';
+  nodes.forEach(function(n,i){if(i>0)h+='<span class="traza-arrow">→</span>';h+=n;});
   h+='</div>';
-  h+='<div style="display:flex;flex-direction:column;gap:16px;padding-top:8px">';
-  h+='<div id="writerPlaceholder" style="text-align:center;padding:40px 20px;color:var(--text-3);flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center"><div style="margin-bottom:12px;color:var(--text-2)"><svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></div><div>Selecciona un correo de la izquierda</div></div>';
-  h+='<div id="writerPanel" style="display:none;flex:1;display:flex;flex-direction:column;gap:14px;background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:20px">';
-  h+='<div style="font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:1.2px;font-weight:700">Correo seleccionado</div>';
-  h+='<div class="email-meta" id="spMeta" style="font-size:11px;color:var(--text-3);margin-bottom:8px"></div>';
-  h+='<div class="email-body" id="spBody" style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px;font-size:12px;color:var(--text-2);line-height:1.6;max-height:200px;overflow-y:auto;white-space:pre-wrap"></div>';
-  h+='<div id="spAnalysis" style="display:none;background:rgba(45,130,211,0.05);border:1px solid rgba(45,130,211,0.15);border-radius:10px;padding:12px"><div style="font-size:10px;color:var(--accent);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:6px">🧠 Antes de responder:</div><div id="spAnalysisText" style="font-size:11px;color:var(--text-2);line-height:1.6"></div></div>';
-  h+='<div style="font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:1.2px;font-weight:700">Tu instrucción</div>';
-  h+='<textarea id="spInstruc" placeholder="¿Qué quieres que responda? Ej: Responde que revisaremos el caso en la reunión de mañana" style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px;font-size:12px;color:var(--text);font-family:inherit;resize:vertical;min-height:70px;outline:none"></textarea>';
-  h+='<div style="display:flex;gap:8px"><button class="btn-new" id="btnDraft" onclick="draftAI()" style="flex:1">🤖 Redactar con IA</button></div>';
-  h+='<div class="draft-box" id="draftBox" style="display:none;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px;font-size:12px;color:var(--text-2);line-height:1.6;max-height:220px;overflow-y:auto;white-space:pre-wrap"><div style="font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:8px">Respuesta (editable)</div><div id="draftText" contenteditable="true" style="min-height:100px;outline:none;line-height:1.6;font-size:12px;color:var(--text-2);white-space:pre-wrap"></div>';
-  h+='<div style="display:flex;gap:8px;margin-top:12px"><button class="btn-new" onclick="sendDraft()" style="flex:1;background:var(--navy);color:#FFFFFF">✓ Enviar respuesta</button><button class="btn-new" onclick="hideDraft()" style="flex:1;background:var(--bg);color:var(--text);border:1px solid var(--border)">Cancelar</button></div></div>';
-  h+='</div></div>';
+  h+='<div class="traza-status '+(activo?'':'off')+'"><span class="traza-dot"></span>'+esc(statusLabel)+'</div>';
+  h+='</div>';
+  return h;
+}
+
+function loadCorreosLog(){
+  if(CORREOS_LOG)return Promise.resolve(CORREOS_LOG);
+  return api({action:'read',sheet:'Correos'}).then(function(d){CORREOS_LOG=d.ok?(d.rows||[]).slice(1):[];return CORREOS_LOG;});
+}
+function setTrazaFilter(f){trazaFilter=f;paintTrazabilidad();}
+function toggleTrazaExpand(){trazaExpanded=!trazaExpanded;paintTrazabilidad();}
+
+function renderTrazabilidad(){
+  var el=document.getElementById('view-trazabilidad');
+  el.innerHTML='<div class="empty-state"><div class="emoji">⏳</div>Cargando trazabilidad…</div>';
+  loadCorreosLog().then(paintTrazabilidad);
+}
+
+function paintTrazabilidad(){
+  var el=document.getElementById('view-trazabilidad');
+  var base=ITEMS.slice().sort(function(a,b){return(parseFecha(b[4])||0)-(parseFecha(a[4])||0);});
+
+  var lastCorreo=CORREOS_LOG&&CORREOS_LOG.length?CORREOS_LOG[CORREOS_LOG.length-1]:null;
+  var hrs=lastCorreo?horasDesde(lastCorreo[0]):null;
+  var pipelineOn=hrs!==null&&hrs<48;
+
+  var h='<div class="section"><div class="section-head" style="margin-bottom:6px"><h2><span class="dot '+(pipelineOn?'dot-lime':'dot-red')+'"></span>Trazabilidad</h2></div>';
+  h+='<p style="font-size:12px;color:var(--text-3);margin-bottom:16px;max-width:640px">Traza de cada ítem: qué entró, cómo lo clasificó el sistema, y en qué quedó. El estado del clasificador n8n no se puede consultar en vivo desde acá porque corre en la PC de Pedro (localhost) — el indicador de abajo es una estimación según la última entrada registrada, no una conexión en tiempo real.</p>';
+  h+='<div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:20px">';
+  h+='<div class="kpi" style="flex:1;min-width:200px;padding:16px 18px"><div class="kpi-label">Clasificador n8n</div><div style="font-size:15px;font-weight:800;margin-top:6px;color:'+(hrs===null?'var(--text-3)':(pipelineOn?'var(--accent)':'var(--red)'))+'">'+(hrs===null?'Sin datos aún':(pipelineOn?'🟢 Actividad reciente':'🔴 Sin actividad reciente'))+'</div><div class="kpi-sub">'+(hrs===null?'la hoja "Correos" está vacía':'última entrada hace '+Math.round(hrs)+'h')+'</div></div>';
+  h+='<div class="kpi" style="flex:1;min-width:200px;padding:16px 18px"><div class="kpi-label">Ítems en Base</div><div style="font-size:15px;font-weight:800;color:var(--navy);margin-top:6px">'+base.length+' totales</div><div class="kpi-sub">'+base.filter(function(r){var e=norm(r[2]);return e!=='atendido'&&e!=='completado';}).length+' activos ahora mismo</div></div>';
+  h+='</div>';
+
+  var tipos=['all','correo','caso','evento','tarea'];
+  h+='<div class="filter-row">';
+  tipos.forEach(function(t){h+='<button class="filter-tab'+(trazaFilter===t?' active':'')+'" onclick="setTrazaFilter(\''+t+'\')">'+(t==='all'?'Todos':t.charAt(0).toUpperCase()+t.slice(1)+'s')+'</button>';});
+  h+='</div>';
+
+  var filtered=trazaFilter==='all'?base:base.filter(function(r){return norm(r[1])===trazaFilter;});
+  var toShow=(filtered.length>TRAZA_LIMIT&&!trazaExpanded)?filtered.slice(0,TRAZA_LIMIT):filtered;
+
+  if(!filtered.length){
+    h+='<div class="empty-state"><div class="emoji">🗂</div>Sin ítems para este filtro</div>';
+  }else{
+    h+='<div style="display:flex;flex-direction:column;gap:12px">';
+    toShow.forEach(function(r){
+      var idx=ITEMS.indexOf(r);
+      var estado=r[2]||'—';
+      var activo=norm(estado)!=='atendido'&&norm(estado)!=='completado';
+      var prioColor={alta:'var(--red)',media:'var(--orange)',baja:'var(--accent)'}[norm(r[3])]||'var(--text-3)';
+      var nodes=[
+        trazaNode(tipoIcon(r[1]),String(r[0]||'—').slice(0,42),(r[7]||'—')+' · '+fmtFechaHora(r[4]),'var(--navy)'),
+        trazaNode('⚙',r[6]||'Sin categoría',r[3]||'Sin prioridad',prioColor),
+        trazaNode(activo?'●':'✓',estado,r[5]?('vence '+String(r[5]).slice(0,10)):'',activo?'var(--accent)':'var(--text-3)')
+      ];
+      h+=trazaCard(nodes,activo,activo?'Activo':'Cerrado','openTaskModal('+idx+')');
+    });
+    h+='</div>';
+    if(filtered.length>TRAZA_LIMIT){
+      h+='<button class="btn-ghost" style="width:100%;margin-top:12px" onclick="toggleTrazaExpand()">'+(trazaExpanded?'Mostrar menos':'Ver '+(filtered.length-TRAZA_LIMIT)+' más')+'</button>';
+    }
+  }
+  h+='</div>';
+
+  h+='<div class="section" style="margin-top:28px"><div class="section-head" style="margin-bottom:6px"><h2><span class="dot dot-blue"></span>Correos — histórico del clasificador n8n</h2><span class="count">'+(CORREOS_LOG?CORREOS_LOG.length:0)+'</span></div>';
+  h+='<p style="font-size:11px;color:var(--text-3);margin-bottom:14px">Lo que escribe hoy el workflow de n8n directo en la hoja "Correos" (todavía no pasa por "Base" — está en el roadmap). Va a crecer poco hasta insertar el filtro de ruido pendiente.</p>';
+  if(!CORREOS_LOG||!CORREOS_LOG.length){
+    h+='<div class="empty-state" style="padding:20px"><div class="emoji">📭</div>Sin registros todavía</div>';
+  }else{
+    h+='<div style="display:flex;flex-direction:column;gap:12px">';
+    CORREOS_LOG.slice().reverse().slice(0,10).forEach(function(r){
+      var gmailId=r[8]||'';
+      var procesado=r[10]?('procesado '+fmtFechaHora(r[10])):'sin procesar';
+      var nodes=[
+        trazaNode('<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>',r[1]||'—',(r[2]||'')+' · '+fmtFechaHora(r[0]),'var(--navy)'),
+        trazaNode('⚙',r[5]||'Sin categoría',r[4]||'Sin prioridad','var(--accent)'),
+        trazaNode('✓',r[9]||'—',procesado,'var(--text-3)')
+      ];
+      h+=trazaCard(nodes,true,'Registrado',gmailId?('window.open(\'https://mail.google.com/mail/u/0/#all/'+gmailId+'\',\'_blank\')'):null);
+    });
+    h+='</div>';
+  }
+  h+='</div>';
+
   el.innerHTML=h;
 }
 
-function selectDeleg(idx){
-  document.querySelectorAll('.deleg-item').forEach(function(d){d.style.borderColor='var(--border)';d.style.background='var(--bg-card)';});
-  var d=document.getElementById('deleg-'+idx);if(d){d.style.borderColor='var(--accent)';d.style.background='rgba(45,130,211,0.06)';}
-  selectedDeleg=ITEMS[idx];
-  document.getElementById('writerPlaceholder').style.display='none';
-  document.getElementById('writerPanel').style.display='flex';
-  document.getElementById('spMeta').textContent='De: '+(selectedDeleg[8]||'desconocido')+' · '+selectedDeleg[2];
-  document.getElementById('spBody').textContent='Cargando…';
-  document.getElementById('spInstruc').value='';
-  document.getElementById('draftBox').style.display='none';
-  document.getElementById('spAnalysis').style.display='none';
-  var gmailId=extractGmailId(selectedDeleg[8]||'');
-  if(gmailId){
-    fetch(API+'?action=getEmail&gmailId='+gmailId).then(function(r){return r.json();}).then(function(d){
-      if(d.ok){document.getElementById('spMeta').textContent='De: '+d.from+' · '+d.subject;
-        document.getElementById('spBody').textContent=d.body||'(sin contenido)';
-        var analysis=analyzeEmail(d.subject||'',d.body||'',d.from||'');
-        if(analysis){document.getElementById('spAnalysisText').innerHTML=analysis;document.getElementById('spAnalysis').style.display='block';}
-      }
-      else{document.getElementById('spBody').textContent='No se pudo cargar: '+(d.error||'?');}
-    }).catch(function(e){document.getElementById('spBody').textContent='Error: '+String(e);});
-  }else{
-    document.getElementById('spBody').textContent='ID de correo no disponible.\n\nReferencia: '+(selectedDeleg[8]||'');
-  }
-}
-
-/* ANÁLISIS PRE-RESPUESTA */
+/* ANÁLISIS PRE-RESPUESTA (usado por el modal de tarea al abrir un correo) */
 function analyzeEmail(subject,body,from){
   var s=(subject||'').toLowerCase();var b=(body||'').toLowerCase();var f=(from||'').toLowerCase();
   var tips=[];
@@ -865,25 +900,6 @@ function analyzeEmail(subject,body,from){
     tips.push('Revisa: ¿requiere respuesta? ¿Hay plazos? ¿Quién más debe estar informado?');
   return tips.join('<br>');
 }
-
-async function draftAI(){
-  if(!selectedDeleg){toast('Selecciona un correo primero');return;}
-  var instr=document.getElementById('spInstruc').value.trim();
-  if(!instr){toast('Escribe una instrucción');return;}
-  if(!AI_API){toast('API de IA no configurada — pendiente túnel');return;}
-  var btn=document.getElementById('btnDraft');btn.disabled=true;btn.textContent='Redactando…';
-  try{
-    var gmailId=extractGmailId(selectedDeleg[8]||'');
-    var body=document.getElementById('spBody').textContent;
-    var resp=await fetch(AI_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({gmailId:gmailId,instruction:instr,emailBody:body,emailFrom:selectedDeleg[8]||'',emailSubject:selectedDeleg[0]})});
-    var data=await resp.json();
-    if(data.ok&&data.draft){document.getElementById('draftText').textContent=data.draft;document.getElementById('draftBox').style.display='block';}
-    else{toast('Error: '+(data.error||'?'));}
-  }catch(e){toast('Error: '+String(e));}
-  btn.disabled=false;btn.textContent='Redactar con IA';
-}
-
-function hideDraft(){document.getElementById('draftBox').style.display='none';}
 
 /* TASK MODAL LOGIC */
 function openTaskModal(idx){
@@ -918,11 +934,14 @@ function openTaskModal(idx){
   snipEl.textContent='';
   
   if(norm(r[1])==='correo'){
-    btn.style.display='block';
-    btn.textContent='Responder con IA';
-    btn.onclick=function(){ closeTaskModal(); showView('delegar'); selectDeleg(idx); };
-    
     var gmailId=extractGmailId(r[8]||'');
+    if(gmailId){
+      btn.style.display='block';
+      btn.textContent='Abrir en Gmail';
+      btn.onclick=function(){ window.open('https://mail.google.com/mail/u/0/#all/'+gmailId,'_blank'); };
+    }else{
+      btn.style.display='none';
+    }
     if(gmailId){
       fetch(API+'?action=getEmail&gmailId='+gmailId).then(function(res){return res.json();}).then(function(d){
         if(d.ok){
@@ -972,61 +991,6 @@ async function contactSupport(canal){
     }catch(e){toast('Error: '+String(e));}
   }
 }
-
-/* FOLLOW-UP AUTOMÁTICO */
-async function createFollowUp(nombre,notas,vence,prioridad){
-  try{
-    var resp=await fetch(API+'?action=createFollowUp&nombre='+encodeURIComponent(nombre)+'&notas='+encodeURIComponent(notas)+'&vence='+encodeURIComponent(vence||'')+'&prioridad='+encodeURIComponent(prioridad||'Media'));
-    return await resp.json();
-  }catch(e){return{ok:false,error:String(e)};}
-}
-var lastSentName='';
-async function sendDraft(){
-  var body=document.getElementById('draftText').textContent.trim();
-  if(!body){toast('Sin respuesta');return;}
-  var gmailId=extractGmailId(selectedDeleg[8]||'');
-  if(!gmailId){toast('Gmail ID no encontrado');return;}
-  try{
-    var resp=await fetch(API+'?action=sendReply&gmailId='+gmailId+'&body='+encodeURIComponent(body));
-    var data=await resp.json();
-    if(data.ok){
-      toast('✓ Enviado');
-      lastSentName=selectedDeleg[0]||'';
-      selectedDeleg=null;
-      load();renderDelegar();
-      setTimeout(function(){showFollowUpPrompt();},800);
-    }
-    else{toast('Error: '+(data.error||'?'));}
-  }catch(e){toast('Error: '+String(e));}
-}
-function showFollowUpPrompt(){
-  var el=document.getElementById('view-delegar');
-  var h='<div style="background:var(--bg-card);border:1px solid var(--border-strong);box-shadow:var(--shadow-md);border-radius:16px;padding:20px;margin-bottom:24px">';
-  h+='<h3 style="font-size:14px;font-weight:800;margin-bottom:8px;color:var(--accent)">⚠️ ¿Hay acciones pendientes?</h3>';
-  h+='<p style="color:var(--text-2);margin-bottom:16px">Acabas de responder "<b>'+esc(lastSentName)+'</b>". Si eso genera tareas posteriores, créalas ahora antes de que se pierdan.</p>';
-  h+='<div style="margin-top:12px">';
-  h+='<div style="font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:8px">Acción pendiente:</div>';
-  h+='<input id="fuNombre" type="text" placeholder="Ej: Reunión con apoderado el viernes" style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px;font-size:12px;color:var(--text);font-family:inherit;outline:none;margin-bottom:8px">';
-  h+='<div style="display:flex;gap:8px">';
-  h+='<input id="fuVence" type="date" style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:8px;font-size:12px;color:var(--text);font-family:inherit;outline:none;flex:1">';
-  h+='<select id="fuPrio" style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:8px;font-size:12px;color:var(--text);font-family:inherit;outline:none"><option value="Alta">Alta</option><option value="Media" selected>Media</option><option value="Baja">Baja</option></select>';
-  h+='</div></div>';
-  h+='<div style="display:flex;gap:8px;margin-top:16px">';
-  h+='<button class="btn-new" onclick="submitFollowUp()" style="flex:1;background:var(--navy);color:#FFFFFF">Crear tarea</button>';
-  h+='<button class="btn-new" onclick="skipFollowUp()" style="flex:1;background:var(--bg);color:var(--text);border:1px solid var(--border)">No hay seguimiento</button>';
-  h+='</div></div>';
-  el.innerHTML=h;
-}
-async function submitFollowUp(){
-  var nombre=(document.getElementById('fuNombre').value||'').trim();
-  if(!nombre){toast('Escribe la acción pendiente');return;}
-  var vence=document.getElementById('fuVence').value||'';
-  var prio=document.getElementById('fuPrio').value;
-  var res=await createFollowUp('Seguimiento: '+nombre,'Derivado de respuesta a '+lastSentName,vence,prio);
-  if(res.ok){toast('✓ Tarea creada');load();renderDelegar();}
-  else toast('Error: '+(res.error||'?'));
-}
-function skipFollowUp(){toast('OK');renderDelegar();}
 
 /* STATUS SUMMARY */
 function statusSummary(r){
