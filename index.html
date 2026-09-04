@@ -218,7 +218,24 @@ var API='https://script.google.com/macros/s/AKfycbxqBigNMmuxdcdzN0Ur4zaSEW-49hb8
 var ITEMS=[];
 
 function esc(s){return(s||'').replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]});}
-function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2200);}
+var toastTimer=null;
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(function(){t.classList.remove('show');},2200);}
+// Toast con acción "Deshacer" (patrón Gmail) — el ítem ya desapareció de la
+// lista al completarse, así que esta es la única ventana para revertir sin
+// tener que ir directo al Sheet.
+function toastUndo(m,undoFn){
+  var t=document.getElementById('toast');
+  var used=false;
+  t.innerHTML=esc(m)+' <button type="button" style="margin-left:10px;background:none;border:none;color:#8ec9ff;font-weight:700;cursor:pointer;text-decoration:underline;padding:0;font-size:inherit;font-family:inherit;">Deshacer</button>';
+  t.querySelector('button').onclick=function(){
+    if(used)return;used=true;
+    t.classList.remove('show');
+    undoFn();
+  };
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(function(){if(!used)t.classList.remove('show');},6000);
+}
 // Parser tolerante: normaliza "YYYY-MM-DD HH:MM[:SS]" a ISO con 'T' — Safari/iOS
 // no interpreta el formato con espacio y devuelve Invalid Date silenciosamente.
 function parseFecha(f){
@@ -465,9 +482,16 @@ async function setPrio(idx,val){
 async function markDone(idx){
   var row=idx+2;
   var r=ITEMS[idx];
-  var res=await api({action:'update',sheet:'Base',row:row,col:'C',value:'Atendido',expect:r[2]||'',expectNombre:r[0]||''});
+  var prevEstado=r[2]||'';
+  var nombre=r[0]||'';
+  var res=await api({action:'update',sheet:'Base',row:row,col:'C',value:'Atendido',expect:prevEstado,expectNombre:nombre});
   if(!res.ok){toast('⚠ '+(res.error==='stale'||res.error==='fila movida'?'Alguien más lo modificó — recargando':(res.error||'Error al guardar')));load();return;}
-  toast('✓ Completado');load();
+  toastUndo('✓ Completado: "'+nombre+'"',async function(){
+    var undo=await api({action:'update',sheet:'Base',row:row,col:'C',value:prevEstado,expect:'Atendido',expectNombre:nombre});
+    if(undo.ok){toast('↩ Deshecho');load();}
+    else{toast('⚠ No se pudo deshacer: '+(undo.error||'?'));}
+  });
+  load();
 }
 async function quickAdd(){
   var inp=document.getElementById('qaInput');
