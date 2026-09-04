@@ -391,6 +391,11 @@ input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(45
     <div style="flex:1"></div>
     <button class="btn-new" id="tmDone" style="background:var(--navy)">✓ Marcar Atendido</button>
   </div>
+  <div id="tmReopen" style="display:none;align-items:center;gap:10px;flex-wrap:wrap;padding-top:16px;margin-top:4px;border-top:1px solid var(--border)">
+    <span style="font-size:12px;color:var(--text-3)">Este ítem está marcado como cerrado.</span>
+    <div style="flex:1"></div>
+    <button class="btn-ghost" id="tmReopenBtn">↺ Reabrir</button>
+  </div>
   <div style="display:flex;justify-content:flex-end;gap:12px;margin-top:8px">
     <button class="btn-ghost" onclick="closeTaskModal()">Cerrar</button>
     <button class="btn-new" id="tmAction" style="display:none">Ir a Acción</button>
@@ -921,10 +926,15 @@ function openTaskModal(idx){
   var wb=document.getElementById('tmWriteback');
   var prioSel=document.getElementById('tmPrio');
   var doneBtn=document.getElementById('tmDone');
+  var reopenWrap=document.getElementById('tmReopen');
+  var reopenBtn=document.getElementById('tmReopenBtn');
   if(done){
     wb.style.display='none';
+    reopenWrap.style.display='flex';
+    reopenBtn.onclick=function(){reopenItem(idx);closeTaskModal();};
   }else{
     wb.style.display='flex';
+    reopenWrap.style.display='none';
     prioSel.value=(norm(r[3])==='alta')?'Alta':(norm(r[3])==='baja')?'Baja':'Media';
     prioSel.onchange=function(){setPrio(idx,prioSel.value);};
     doneBtn.onclick=function(){markDone(idx);closeTaskModal();};
@@ -973,6 +983,7 @@ function closeTaskModal(){
 
 async function setPrio(idx,val){var r=ITEMS[idx];var res=await api({action:'update',sheet:'Base',row:idx+2,col:'D',value:val,expect:r[3]||'',expectNombre:r[0]||''});if(!res.ok){toast('Error');load();return;}toast('Prioridad → '+val);load();}
 async function markDone(idx){var r=ITEMS[idx];var res=await api({action:'update',sheet:'Base',row:idx+2,col:'C',value:'Atendido',expect:r[2]||'',expectNombre:r[0]||''});if(!res.ok){toast('Error');load();return;}toast('✓ '+r[0]);load();}
+async function reopenItem(idx){var r=ITEMS[idx];var res=await api({action:'update',sheet:'Base',row:idx+2,col:'C',value:'Nuevo',expect:r[2]||'',expectNombre:r[0]||''});if(!res.ok){toast('Error');load();return;}toast('↺ Reabierto: '+r[0]);load();}
 
 /* CONTACT SUPPORT */
 async function contactSupport(canal){
